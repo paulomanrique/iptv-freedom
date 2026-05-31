@@ -1,24 +1,32 @@
-import { ACCOUNT, CATEGORIES } from '../data'
+import { CATEGORIES } from '../data'
 
 const SECTIONS = [
-  { key: 'movies', label: 'Filmes', count: '8.412' },
-  { key: 'series', label: 'Séries', count: '2.103' },
-  { key: 'live', label: 'Ao vivo', count: '312' },
-  { key: 'downloads', label: 'Downloads', count: '2' },
-  { key: 'accounts', label: 'Contas', count: '1' }
+  { key: 'movies', label: 'Filmes' },
+  { key: 'series', label: 'Séries' },
+  { key: 'live', label: 'Ao vivo' },
+  { key: 'downloads', label: 'Downloads' },
+  { key: 'accounts', label: 'Contas' }
 ]
 
-export default function Sidebar({ view, onNavigate }) {
+export default function Sidebar({ view, onNavigate, account }) {
+  const initials = account ? (account.name || account.host).slice(0, 2).toUpperCase() : '—'
+
   return (
     <aside className="w-52 shrink-0 bar border-r border-white/10 flex flex-col py-2 scroll overflow-y-auto">
-      <button
-        onClick={() => onNavigate('accounts')}
-        className="no-drag mx-2 px-1 py-2 flex items-center gap-2.5 rounded-lg hover:bg-white/5 transition text-left"
-      >
-        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-accent to-fuchsia-500 grid place-items-center text-2xs font-bold">A1</div>
+      <button onClick={() => onNavigate('accounts')} className="no-drag mx-2 px-1 py-2 flex items-center gap-2.5 rounded-lg hover:bg-white/5 transition text-left">
+        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-accent to-fuchsia-500 grid place-items-center text-2xs font-bold">{initials}</div>
         <div className="min-w-0">
-          <div className="text-2xs font-semibold truncate">{ACCOUNT.host}</div>
-          <div className="text-[10px] text-emerald-400">● {ACCOUNT.status} · {ACCOUNT.exp.slice(0, 5)}</div>
+          {account ? (
+            <>
+              <div className="text-2xs font-semibold truncate">{account.name || account.host}</div>
+              <div className="text-[10px] text-emerald-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Conta ativa</div>
+            </>
+          ) : (
+            <>
+              <div className="text-2xs font-semibold truncate text-white/60">Sem conta</div>
+              <div className="text-[10px] text-white/40">Clique para adicionar</div>
+            </>
+          )}
         </div>
       </button>
 
@@ -33,7 +41,6 @@ export default function Sidebar({ view, onNavigate }) {
             }`}
           >
             <span>{s.label}</span>
-            <span className="text-[10px] text-white/35">{s.count}</span>
           </div>
         ))}
       </div>

@@ -1,5 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
+import * as accountsStore from './accounts'
+import * as xtream from './xtream'
 
 let mainWindow = null
 
@@ -42,6 +44,27 @@ ipcMain.on('window:maximize', () => {
   mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize()
 })
 ipcMain.on('window:close', () => mainWindow?.close())
+
+// ---- Contas ----
+ipcMain.handle('accounts:list', () => accountsStore.load())
+ipcMain.handle('accounts:add', async (_e, account) => {
+  // Valida as credenciais antes de salvar
+  const info = await xtream.getAccountInfo(account)
+  if (!info?.user_info || Number(info.user_info.auth) !== 1) {
+    throw new Error('Credenciais inválidas (auth falhou).')
+  }
+  const entry = await accountsStore.add(account)
+  return { account: entry, info }
+})
+ipcMain.handle('accounts:remove', (_e, id) => accountsStore.remove(id))
+
+// ---- Xtream ----
+ipcMain.handle('xtream:accountInfo', (_e, account) => xtream.getAccountInfo(account))
+ipcMain.handle('xtream:categories', (_e, account, kind) => xtream.getCategories(account, kind))
+ipcMain.handle('xtream:streams', (_e, account, kind, categoryId) => xtream.getStreams(account, kind, categoryId))
+ipcMain.handle('xtream:seriesInfo', (_e, account, seriesId) => xtream.getSeriesInfo(account, seriesId))
+ipcMain.handle('xtream:vodInfo', (_e, account, vodId) => xtream.getVodInfo(account, vodId))
+ipcMain.handle('xtream:streamUrl', (_e, account, type, id, ext) => xtream.streamUrl(account, type, id, ext))
 
 app.whenReady().then(() => {
   createWindow()
