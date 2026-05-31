@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import Sidebar from './components/Sidebar'
-import ContentList from './components/ContentList'
-import PreviewPane from './components/PreviewPane'
+import LibraryView from './components/LibraryView'
 import DownloadBar from './components/DownloadBar'
 import PlayerModal from './components/PlayerModal'
 import WindowControls from './components/WindowControls'
@@ -9,17 +8,17 @@ import AccountsView from './components/AccountsView'
 import AddAccountModal from './components/AddAccountModal'
 
 const TITLES = { movies: 'Filmes', series: 'Séries', live: 'Ao vivo', downloads: 'Downloads', accounts: 'Contas' }
-const hasPreview = (mode) => mode !== 'downloads'
+const KIND = { movies: 'vod', series: 'series', live: 'live' }
+const isLibrary = (m) => m === 'movies' || m === 'series' || m === 'live'
 const ACTIVE_KEY = 'iptvfreedom.activeAccountId'
 
 export default function App() {
   const [mode, setMode] = useState('accounts')
   const [viewStyle, setViewStyle] = useState('list')
-  const [selected, setSelected] = useState(0)
+  const [query, setQuery] = useState('')
   const [player, setPlayer] = useState(null)
   const [toast, setToast] = useState(null)
 
-  // Contas
   const [accounts, setAccounts] = useState([])
   const [activeId, setActiveId] = useState(() => localStorage.getItem(ACTIVE_KEY) || null)
   const [selectedAccountId, setSelectedAccountId] = useState(null)
@@ -41,14 +40,13 @@ export default function App() {
 
   useEffect(() => {
     refreshAccounts().then((list) => {
-      // Se já houver conta, abre a biblioteca; senão, fica em Contas
       if (list.length > 0) setMode('movies')
     })
   }, [refreshAccounts])
 
   const navigate = useCallback((m) => {
     setMode(m)
-    setSelected(0)
+    setQuery('')
   }, [])
 
   const showToast = useCallback((msg) => {
@@ -57,7 +55,10 @@ export default function App() {
     window._tt = setTimeout(() => setToast(null), 2400)
   }, [])
 
-  const onDownload = useCallback((m) => showToast(`⬇︎ ${m.t} adicionado à fila`), [showToast])
+  const activeAccount = accounts.find((a) => a.id === activeId) || null
+
+  const handlePlay = useCallback((item) => setPlayer({ ...item, account: activeAccount }), [activeAccount])
+  const handleDownload = useCallback((item) => showToast(`⬇︎ ${item.name} — download em breve (próxima fase)`), [showToast])
 
   const setActive = useCallback((id) => {
     setActiveId(id)
@@ -78,13 +79,11 @@ export default function App() {
     setSelectedAccountId(null)
   }, [refreshAccounts])
 
-  const activeAccount = accounts.find((a) => a.id === activeId) || null
-
   return (
     <div className="h-screen w-screen p-3">
       <div className="glass h-full w-full rounded-2xl border border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,.85)] overflow-hidden flex flex-col ring-1 ring-black/20">
 
-        {/* Toolbar (região arrastável) */}
+        {/* Toolbar */}
         <div className="drag bar h-11 shrink-0 flex items-center px-3 gap-3 border-b border-white/10">
           {isMac && <div className="w-16" />}
           <div className="no-drag font-semibold text-white/70 text-2xs uppercase tracking-wider">{TITLES[mode]}</div>
@@ -103,7 +102,13 @@ export default function App() {
 
           <div className="no-drag relative w-56">
             <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
-            <input placeholder="Buscar…" className="w-full bg-white/10 focus:bg-white/15 rounded-md pl-8 pr-3 py-1.5 text-2xs outline-none focus:ring-2 ring-accent/60" />
+            <input
+              value={isLibrary(mode) ? query : ''}
+              onChange={(e) => isLibrary(mode) && setQuery(e.target.value)}
+              disabled={!isLibrary(mode)}
+              placeholder="Buscar…"
+              className="w-full bg-white/10 focus:bg-white/15 rounded-md pl-8 pr-3 py-1.5 text-2xs outline-none focus:ring-2 ring-accent/60 disabled:opacity-40"
+            />
           </div>
 
           <WindowControls />
@@ -113,7 +118,7 @@ export default function App() {
         <div className="flex-1 flex min-h-0">
           <Sidebar view={mode} onNavigate={navigate} account={activeAccount} />
 
-          {mode === 'accounts' ? (
+          {mode === 'accounts' && (
             <AccountsView
               accounts={accounts}
               activeId={activeId}
@@ -123,17 +128,30 @@ export default function App() {
               onRemove={onRemoveAccount}
               onSetActive={setActive}
             />
-          ) : (
-            <>
-              <section className="flex-1 min-w-0 scroll overflow-y-auto">
-                <ContentList mode={mode} viewStyle={viewStyle} selected={selected} onSelect={setSelected} onPlay={setPlayer} />
+          )}
+
+          {isLibrary(mode) && (
+            activeAccount ? (
+              <LibraryView
+                key={activeAccount.id + mode}
+                account={activeAccount}
+                kind={KIND[mode]}
+                viewStyle={viewStyle}
+                query={query}
+                onPlay={handlePlay}
+                onDownload={handleDownload}
+              />
+            ) : (
+              <section className="flex-1 grid place-items-center text-2xs text-white/45">
+                Adicione e ative uma conta em <button className="underline ml-1" onClick={() => navigate('accounts')}>Contas</button>.
               </section>
-              {hasPreview(mode) && (
-                <aside className="w-80 shrink-0 bar border-l border-white/10 scroll overflow-y-auto">
-                  <PreviewPane mode={mode} selected={selected} onPlay={setPlayer} onDownload={onDownload} />
-                </aside>
-              )}
-            </>
+            )
+          )}
+
+          {mode === 'downloads' && (
+            <section className="flex-1 grid place-items-center text-2xs text-white/45 text-center px-8">
+              Gerenciador de downloads — em implementação (próxima fase).<br />Fila de 1 conexão, com retomada.
+            </section>
           )}
         </div>
 
@@ -141,13 +159,10 @@ export default function App() {
       </div>
 
       <PlayerModal item={player} onClose={() => setPlayer(null)} />
-
       {showAddAccount && <AddAccountModal onClose={() => setShowAddAccount(false)} onAdded={onAccountAdded} />}
 
       {toast && (
-        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[60] glass border border-white/10 rounded-lg px-4 py-2 text-2xs shadow-2xl">
-          {toast}
-        </div>
+        <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[60] glass border border-white/10 rounded-lg px-4 py-2 text-2xs shadow-2xl">{toast}</div>
       )}
     </div>
   )

@@ -1,5 +1,3 @@
-import { CATEGORIES } from '../data'
-
 const SECTIONS = [
   { key: 'movies', label: 'Filmes' },
   { key: 'series', label: 'Séries' },
@@ -41,16 +39,6 @@ export default function Sidebar({ view, onNavigate, account }) {
             }`}
           >
             <span>{s.label}</span>
-          </div>
-        ))}
-      </div>
-
-      <div className="px-3 pt-4 pb-1 text-[10px] uppercase tracking-wider text-white/35">Categorias</div>
-      <div className="px-2 space-y-0.5 text-2xs text-white/65">
-        {CATEGORIES.map((g) => (
-          <div key={g} className="px-3 py-1.5 rounded-md hover:bg-white/10 cursor-pointer flex items-center gap-2">
-            <span className="h-2 w-2 rounded-sm bg-white/25" />
-            {g}
           </div>
         ))}
       </div>
