@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IPTV Freedom — Modelo 5 (Claro)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={theme:{extend:{colors:{accent:'#0a84ff'},keyframes:{fadein:{'0%':{opacity:0,transform:'scale(.98)'},'100%':{opacity:1,transform:'scale(1)'}}},animation:{fadein:'fadein .18s ease-out'}}}}</script>
+<style>
+  html,body{height:100%}
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter',system-ui,sans-serif;overflow:hidden;
+    background:
+      radial-gradient(1100px 800px at 0% 0%,#cfe0ff 0%,transparent 55%),
+      radial-gradient(900px 700px at 100% 0%,#ffd9ec 0%,transparent 50%),
+      radial-gradient(900px 900px at 60% 100%,#d7f5e6 0%,transparent 55%),
+      #eef0f5;}
+  .glass{background:rgba(255,255,255,.62);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%)}
+  .bar{background:rgba(255,255,255,.55);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%)}
+  .card{background:rgba(255,255,255,.7)}
+  .poster{background-size:cover;background-position:center}
+  .scroll::-webkit-scrollbar{width:8px}.scroll::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:8px}.scroll::-webkit-scrollbar-track{background:transparent}
+  .rail{scrollbar-width:none}.rail::-webkit-scrollbar{display:none}
+  .nav.active{background:rgba(10,132,255,.12);color:#0a6}
+  .nav.active{color:#0a84ff}
+</style>
+</head>
+<body class="text-slate-800 antialiased">
+
+<div class="h-screen w-screen p-5">
+  <div class="glass h-full w-full rounded-[22px] border border-white/60 shadow-[0_40px_90px_-25px_rgba(30,40,80,.35)] overflow-hidden flex flex-col ring-1 ring-black/5">
+
+    <!-- Titlebar -->
+    <div class="bar h-12 shrink-0 flex items-center px-4 border-b border-black/5 select-none">
+      <div class="flex items-center gap-2"><span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span><span class="h-3 w-3 rounded-full bg-[#febc2e]"></span><span class="h-3 w-3 rounded-full bg-[#28c840]"></span></div>
+      <div class="flex-1 text-center text-[13px] font-semibold text-slate-500">IPTV Freedom</div>
+      <div class="relative w-64"><svg class="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input onfocus="go('search')" placeholder="Buscar…" class="w-full bg-black/5 focus:bg-black/[.08] rounded-lg pl-8 pr-3 py-1.5 text-[13px] placeholder:text-slate-400 outline-none focus:ring-2 ring-accent/50 transition"/></div>
+    </div>
+
+    <div class="flex-1 flex min-h-0">
+      <!-- Sidebar -->
+      <aside class="w-60 shrink-0 bar border-r border-black/5 flex flex-col">
+        <button onclick="go('accounts')" class="m-3 mb-1 flex items-center gap-3 rounded-xl p-2.5 hover:bg-black/5 transition text-left">
+          <div class="h-9 w-9 rounded-full bg-gradient-to-br from-accent to-fuchsia-500 grid place-items-center text-sm font-bold text-white">A1</div>
+          <div class="min-w-0"><div class="text-[13px] font-semibold truncate">a1a12.com</div><div class="text-[11px] text-emerald-600 flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>Ativa · 24/06</div></div>
+        </button>
+        <nav id="nav" class="px-2 mt-2 space-y-0.5 text-[13px] flex-1 scroll overflow-y-auto"></nav>
+        <div class="p-3 text-[11px] text-slate-400 border-t border-black/5">1 conexão · 1 ativa</div>
+      </aside>
+
+      <main id="main" class="flex-1 min-w-0 scroll overflow-y-auto"></main>
+    </div>
+  </div>
+</div>
+
+<div id="detail" class="hidden fixed inset-0 z-40 grid place-items-center p-8"><div class="absolute inset-0 bg-black/30" onclick="closeDetail()"></div><div class="glass relative w-full max-w-3xl rounded-[22px] border border-white/60 overflow-hidden shadow-2xl ring-1 ring-black/5 animate-fadein"></div></div>
+<div id="player" class="hidden fixed inset-0 z-50 grid place-items-center p-8"><div class="absolute inset-0 bg-black/70" onclick="closePlayer()"></div><div class="relative w-full max-w-5xl rounded-[22px] overflow-hidden shadow-2xl bg-black animate-fadein"></div></div>
+<div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] glass border border-white/60 rounded-xl px-4 py-2.5 text-[13px] shadow-2xl ring-1 ring-black/5"></div>
+
+<script>
+const PAL=[['#8e7bff','#5b3df0'],['#ff8a9b','#ff5f6d'],['#34d6c0','#11998e'],['#ffc06b','#f7971e'],['#5ec6e0','#2193b0'],['#ff7eae','#cc2b5e'],['#7d6bd6','#42275a'],['#4aa3e8','#005c97'],['#ff9bc0','#dd5e89'],['#5fbf99','#1f4037']];
+const titles=['De Férias com Você','Dinheiro Suspeito','Caju, Meu Amigo','O Falsário','Verdade e Traição','Um Dia Extraordinário','Davi: Nasce Um Rei','Dupla Perigosa','Cidade em Chamas','O Último Refúgio','Noite Sem Fim','Coração Selvagem','Protocolo Zero','A Herança'];
+const series=['The Crown','Ruptura','O Urso','Sucessão','Round 6','Dark','Sandman','The Last of Us'];
+const live=['Globo HD','SporTV 2','Telecine','HBO Max','ESPN','Premiere','Discovery','GloboNews'];
+const NAV=[['home','Início'],['live','Ao vivo'],['movies','Filmes'],['series','Séries'],['search','Buscar'],['downloads','Downloads'],['accounts','Contas']];
+const ICONS={home:'M3 9.5 12 3l9 6.5|M5 10v10h14V10',live:'M2 7h20v13H2z|m8 3 4 4 4-4',movies:'M3 4h18v16H3z|M7 4v16|M17 4v16',series:'M2 7h20v13H2z|M8 3l4 4 4-4',search:'M11 4a7 7 0 100 14 7 7 0 000-14z|m21 21-4.3-4.3',downloads:'M12 3v12|m8 11 4 4 4-4|M5 21h14',accounts:'M12 4a4 4 0 100 8 4 4 0 000-8z|M4 21c0-4 4-6 8-6s8 2 8 6'};
+function ic(k){return `<svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${ICONS[k].split('|').map(d=>`<path d="${d}"/>`).join('')}</svg>`;}
+function buildNav(){document.getElementById('nav').innerHTML=NAV.map(([k,l])=>`<a onclick="go('${k}')" data-nav="${k}" class="nav flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-black/5 cursor-pointer text-slate-600">${ic(k)}<span>${l}</span>${k==='downloads'?'<span class="ml-auto text-[11px] bg-accent text-white rounded-full px-1.5">2</span>':''}</a>`).join('');}
+
+function poster(i,label,sub){const[a,b]=PAL[i%PAL.length];return `<div onclick="openDetail('${label.replace(/'/g,'')}')" class="poster aspect-[2/3] min-w-[150px] rounded-2xl ring-1 ring-black/5 relative overflow-hidden group cursor-pointer shrink-0 shadow-sm hover:shadow-xl transition" style="background:linear-gradient(150deg,${a},${b})">
+  <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 bg-black/25 grid place-items-center transition"><div class="h-11 w-11 rounded-full bg-white text-slate-900 grid place-items-center shadow"><svg class="h-5 w-5 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+  <div class="absolute bottom-0 p-2.5 text-white"><div class="text-[12px] font-semibold leading-tight line-clamp-2">${label}</div><div class="text-[10px] text-white/75">${sub}</div></div></div>`;}
+function movies(n,off=0){let s='';for(let i=0;i<n;i++)s+=poster(i+off,titles[(i+off)%titles.length],`2026 · ${['4K','HD'][i%2]}`);return s;}
+function seriesC(n){let s='';for(let i=0;i<n;i++)s+=poster(i+3,series[i%series.length],`${1+i%5} temporadas`);return s;}
+function rail(items){return `<div class="rail flex gap-4 overflow-x-auto pb-1">${items}</div>`;}
+function gridW(items){return `<div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-4">${items}</div>`;}
+
+const views={
+  home:()=>`<div class="p-7 space-y-8">
+    <div class="relative h-64 rounded-[22px] overflow-hidden poster shadow-lg" style="background:linear-gradient(120deg,#5b3df0,#ff5f6d)">
+      <div class="absolute inset-0 bg-gradient-to-tr from-black/65 to-transparent"></div>
+      <div class="absolute bottom-0 p-7 max-w-lg text-white"><span class="text-[11px] font-bold uppercase tracking-widest">Em destaque</span><h1 class="text-4xl font-bold mt-1.5">Davi: Nasce Um Rei</h1><p class="text-[13px] text-white/80 mt-2 line-clamp-2">Épico bíblico em 4K · lançamento 2026 · 2h14.</p>
+      <div class="flex gap-3 mt-5"><button onclick="openPlayer('Davi: Nasce Um Rei')" class="bg-white text-slate-900 font-semibold rounded-xl px-5 py-2.5 text-[13px] flex items-center gap-2 shadow"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Assistir</button><button onclick="download('Davi: Nasce Um Rei')" class="bg-white/20 backdrop-blur hover:bg-white/30 text-white font-semibold rounded-xl px-5 py-2.5 text-[13px] flex items-center gap-2"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>Baixar</button></div></div>
+    </div>
+    ${block('Continuar assistindo',rail(movies(7,2)))}
+    ${block('Lançamentos 2026',rail(movies(9,0)))}
+    ${block('Séries populares',rail(seriesC(8)))}
+  </div>`,
+  movies:()=>head('Filmes','8.412 títulos')+`<div class="px-7 pb-8">${chips(['Lançamentos 2026','Ação','Marvel e DC','Cinema','Terror','Comédia'])}${gridW(movies(24))}</div>`,
+  series:()=>head('Séries','2.103 títulos')+`<div class="px-7 pb-8">${chips(['Netflix','Disney+','HBO Max','Prime','Apple TV+','Animes'])}${gridW(seriesC(20))}</div>`,
+  live:()=>head('Ao vivo','312 canais')+`<div class="px-7 pb-8 grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">${live.concat(live).map((c,i)=>`<div onclick="openPlayer('${c}')" class="card rounded-2xl p-3 flex items-center gap-3 ring-1 ring-black/5 shadow-sm hover:shadow-md hover:ring-accent/40 cursor-pointer transition"><div class="h-11 w-11 rounded-xl grid place-items-center text-[11px] font-bold text-white" style="background:linear-gradient(135deg,${PAL[i%PAL.length][0]},${PAL[i%PAL.length][1]})">${c.slice(0,3).toUpperCase()}</div><div class="min-w-0 flex-1"><div class="text-[13px] font-semibold truncate">${c}</div><div class="text-[11px] text-slate-500 flex items-center gap-1"><span class="h-1.5 w-1.5 rounded-full bg-red-500"></span>AO VIVO</div></div></div>`).join('')}</div>`,
+  search:()=>head('Buscar','')+`<div class="px-7 pb-8"><div class="relative max-w-xl mb-6"><svg class="absolute left-3.5 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input autofocus placeholder="Buscar filmes, séries, canais…" class="w-full bg-black/5 focus:bg-black/[.08] rounded-xl pl-11 pr-4 py-3 text-[14px] outline-none focus:ring-2 ring-accent/50"/></div><p class="text-[13px] text-slate-500 mb-3">Resultados</p>${gridW(movies(18))}</div>`,
+  downloads:()=>head('Downloads','Fila · 1 conexão (limite do provedor)')+`<div class="px-7 pb-8 max-w-3xl space-y-3">${dl('O Falsário (2026)','mp4 · 2.1 GB',62,'8,4 MB/s',1)}${dl('Dupla Perigosa (2026)','mp4 · 1.7 GB',0,'Na fila',0)}${dl('Round 6 · S03E01','mkv · 780 MB',100,'Concluído',2)}${dl('Cidade em Chamas (2025)','mp4 · 2.4 GB',100,'Concluído',2)}</div>`,
+  accounts:()=>head('Contas','Provedores IPTV')+`<div class="px-7 pb-8 max-w-2xl space-y-4"><div class="card rounded-[22px] p-6 ring-1 ring-accent/30 shadow-sm"><div class="flex items-center gap-4"><div class="h-12 w-12 rounded-2xl bg-gradient-to-br from-accent to-fuchsia-500 grid place-items-center font-bold text-white">A1</div><div class="flex-1"><div class="font-bold text-lg">a1a12.com</div><div class="text-[12px] text-slate-500">usuário 166123265</div></div><span class="text-[12px] text-emerald-600 bg-emerald-500/10 rounded-full px-3 py-1">Ativa</span></div><div class="grid grid-cols-3 gap-3 mt-5"><div class="bg-black/[.04] rounded-xl py-4 text-center"><div class="text-lg font-bold">24/06/26</div><div class="text-[11px] text-slate-500">Validade</div></div><div class="bg-black/[.04] rounded-xl py-4 text-center"><div class="text-lg font-bold">1 / 1</div><div class="text-[11px] text-slate-500">Conexões</div></div><div class="bg-black/[.04] rounded-xl py-4 text-center"><div class="text-lg font-bold">TS</div><div class="text-[11px] text-slate-500">Formato</div></div></div></div><button class="w-full border-2 border-dashed border-black/15 rounded-[22px] p-6 text-slate-500 hover:bg-black/[.03] hover:text-slate-700 transition flex items-center justify-center gap-2 text-[14px]"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Adicionar conta</button></div>`
+};
+function head(t,s){return `<div class="px-7 pt-8 pb-4"><h1 class="text-3xl font-bold">${t}</h1>${s?`<p class="text-[13px] text-slate-500 mt-1">${s}</p>`:''}</div>`;}
+function block(t,inner){return `<div><div class="flex items-center justify-between mb-3"><h2 class="text-[17px] font-semibold">${t}</h2><button class="text-[12px] text-accent hover:underline">Ver tudo</button></div>${inner}</div>`;}
+function chips(a){return `<div class="flex flex-wrap gap-2 mb-5">${a.map((g,i)=>`<button class="px-3.5 py-1.5 rounded-full text-[12px] font-medium ${i===0?'bg-accent text-white':'bg-black/5 hover:bg-black/10 text-slate-600'} transition">${g}</button>`).join('')}</div>`;}
+function dl(t,m,p,s,st){return `<div class="card rounded-2xl p-4 ring-1 ring-black/5 shadow-sm flex items-center gap-4"><div class="h-12 w-9 rounded-md shrink-0" style="background:linear-gradient(135deg,${PAL[t.length%PAL.length][0]},${PAL[t.length%PAL.length][1]})"></div><div class="flex-1 min-w-0"><div class="flex justify-between gap-3"><span class="text-[13px] font-semibold truncate">${t}</span><span class="text-[11px] ${st===2?'text-emerald-600':'text-slate-500'} shrink-0">${s}</span></div><div class="text-[11px] text-slate-400 mb-2">${m}</div><div class="h-1.5 rounded-full bg-black/10 overflow-hidden"><div class="h-full ${st===2?'bg-emerald-500':'bg-accent'}" style="width:${p}%"></div></div></div><button class="h-8 w-8 grid place-items-center rounded-lg hover:bg-black/5 text-slate-500">${st===2?'✓':st===1?'<svg class=\\'h-4 w-4\\' viewBox=\\'0 0 24 24\\' fill=\\'currentColor\\'><path d=\\'M6 5h4v14H6zM14 5h4v14h-4z\\'/></svg>':'▶'}</button></div>`;}
+
+function go(v){document.getElementById('main').innerHTML=views[v]();document.getElementById('main').scrollTop=0;document.querySelectorAll('[data-nav]').forEach(n=>n.classList.toggle('active',n.dataset.nav===v));}
+function openDetail(title){const[a,b]=PAL[title.length%PAL.length];document.querySelector('#detail > div').innerHTML=`<div class="relative h-52 poster" style="background:linear-gradient(120deg,${a},${b})"><div class="absolute inset-0 bg-gradient-to-t from-white/95 to-transparent"></div><button onclick="closeDetail()" class="absolute top-3 right-3 h-8 w-8 rounded-full bg-black/20 hover:bg-black/40 text-white grid place-items-center">✕</button></div><div class="p-7 -mt-16 relative"><h2 class="text-3xl font-bold">${title}</h2><div class="flex items-center gap-3 text-[12px] text-slate-500 mt-2"><span class="text-emerald-600 font-semibold">96%</span><span>2026</span><span>2h11</span><span class="border border-black/15 rounded px-1.5">4K</span><span>Ação · Suspense</span></div><p class="text-sm text-slate-600 mt-4 max-w-2xl">Thriller eletrizante em 4K Dolby Vision com áudio 5.1.</p><div class="flex gap-3 mt-6"><button onclick="openPlayer('${title}')" class="bg-accent text-white font-semibold rounded-xl px-6 py-2.5 text-sm flex items-center gap-2 shadow"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Assistir</button><button onclick="download('${title}')" class="bg-black/5 hover:bg-black/10 font-semibold rounded-xl px-6 py-2.5 text-sm flex items-center gap-2"><svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>Baixar arquivo</button></div><p class="text-[11px] text-slate-400 mt-4">⚠︎ 1 conexão — assistir e baixar ao mesmo tempo indisponível.</p></div>`;document.getElementById('detail').classList.remove('hidden');}
+function closeDetail(){document.getElementById('detail').classList.add('hidden');}
+function openPlayer(title){closeDetail();document.querySelector('#player > div').innerHTML=`<div class="relative aspect-video bg-black grid place-items-center"><div class="absolute inset-0 poster opacity-50" style="background:linear-gradient(120deg,#5b3df0,#2193b0)"></div><button class="relative h-20 w-20 rounded-full bg-white text-slate-900 grid place-items-center shadow-2xl hover:scale-105 transition"><svg class="h-10 w-10 ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><button onclick="closePlayer()" class="absolute top-3 right-3 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 text-white grid place-items-center">✕</button><div class="absolute top-4 left-4 text-[12px] bg-black/40 text-white rounded-full px-3 py-1 flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>mpegts.js · MSE</div><div class="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-black/80 to-transparent text-white"><div class="h-1 rounded-full bg-white/30 mb-3"><div class="h-full w-1/3 bg-accent rounded-full"></div></div><div class="flex items-center gap-4"><button><svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><span class="text-[12px] tabular-nums">12:04 / 2:11:33</span><div class="flex-1"></div><span class="text-[13px]">${title}</span></div></div></div>`;document.getElementById('player').classList.remove('hidden');}
+function closePlayer(){document.getElementById('player').classList.add('hidden');}
+function download(title){const t=document.getElementById('toast');t.innerHTML=`⬇︎ <b>${title}</b> adicionado à fila`;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.add('hidden'),2600);}
+buildNav();go('home');
+</script>
+</body>
+</html>

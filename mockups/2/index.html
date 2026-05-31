@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>IPTV Freedom — Modelo 2 (Apple TV)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors:{ accent:'#0a84ff' },
+    keyframes:{ fadein:{'0%':{opacity:0,transform:'translateY(8px)'},'100%':{opacity:1,transform:'translateY(0)'}} },
+    animation:{ fadein:'fadein .25s ease-out' }
+  }}}
+</script>
+<style>
+  html,body{height:100%}
+  body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Inter',system-ui,sans-serif;background:#070709;overflow:hidden}
+  .vibrancy{background:rgba(18,18,24,.6);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%)}
+  .vibrancy-bar{background:rgba(10,10,14,.5);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%)}
+  .poster{background-size:cover;background-position:center}
+  .rail{scrollbar-width:none}.rail::-webkit-scrollbar{display:none}
+  .scroll::-webkit-scrollbar{width:9px}.scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px}.scroll::-webkit-scrollbar-track{background:transparent}
+  .tab.active{color:#fff}.tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-13px;height:2px;background:#fff;border-radius:2px}
+</style>
+</head>
+<body class="text-white/90 antialiased">
+
+<div class="h-screen w-screen p-4">
+  <div class="vibrancy h-full w-full rounded-[20px] border border-white/10 shadow-[0_40px_100px_-20px_rgba(0,0,0,.9)] overflow-hidden flex flex-col">
+
+    <!-- Topbar com tabs -->
+    <div class="vibrancy-bar h-14 shrink-0 flex items-center px-5 gap-6 border-b border-white/10 relative z-30">
+      <div class="flex items-center gap-2 mr-2">
+        <span class="h-3 w-3 rounded-full bg-[#ff5f57]"></span><span class="h-3 w-3 rounded-full bg-[#febc2e]"></span><span class="h-3 w-3 rounded-full bg-[#28c840]"></span>
+      </div>
+      <div class="font-bold tracking-tight text-[15px] mr-4">IPTV&nbsp;Freedom</div>
+      <nav class="flex items-center gap-7 text-[14px] text-white/55 font-medium relative">
+        <button onclick="go('home')"   data-tab="home"   class="tab active relative">Início</button>
+        <button onclick="go('movies')" data-tab="movies" class="tab relative">Filmes</button>
+        <button onclick="go('series')" data-tab="series" class="tab relative">Séries</button>
+        <button onclick="go('live')"   data-tab="live"   class="tab relative">Ao vivo</button>
+      </nav>
+      <div class="flex-1"></div>
+      <div class="relative w-56">
+        <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input onfocus="go('search')" placeholder="Buscar…" class="w-full bg-white/10 focus:bg-white/15 rounded-full pl-8 pr-3 py-1.5 text-[13px] outline-none focus:ring-2 ring-accent/60 transition"/>
+      </div>
+      <button onclick="go('downloads')" class="relative h-9 w-9 grid place-items-center rounded-full hover:bg-white/10"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg><span class="absolute -top-0.5 -right-0.5 h-4 min-w-4 px-1 text-[10px] bg-accent rounded-full grid place-items-center">2</span></button>
+      <button onclick="go('accounts')" class="h-9 w-9 rounded-full bg-gradient-to-br from-accent to-fuchsia-500 grid place-items-center text-[12px] font-bold">A1</button>
+    </div>
+
+    <main id="main" class="flex-1 min-h-0 scroll overflow-y-auto"></main>
+  </div>
+</div>
+
+<!-- Modais -->
+<div id="detail" class="hidden fixed inset-0 z-40 grid place-items-center p-8"><div class="absolute inset-0 bg-black/60" onclick="closeDetail()"></div><div class="relative w-full max-w-4xl rounded-2xl overflow-hidden border border-white/10 shadow-2xl vibrancy animate-fadein"></div></div>
+<div id="player" class="hidden fixed inset-0 z-50 grid place-items-center p-6"><div class="absolute inset-0 bg-black/85" onclick="closePlayer()"></div><div class="relative w-full max-w-6xl rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-black animate-fadein"></div></div>
+<div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] vibrancy border border-white/10 rounded-xl px-4 py-2.5 text-[13px] shadow-2xl"></div>
+
+<script>
+const PAL=[['#7b4dff','#3a1d8a'],['#ff5f6d','#7a1f3d'],['#11998e','#0a4a47'],['#f7971e','#7a4a0a'],['#2193b0','#0a3a4a'],['#cc2b5e','#5a1230'],['#42275a','#1a0f2a'],['#005c97','#0a2a4a'],['#dd5e89','#5a2540'],['#1f4037','#0a201a']];
+const titles=['De Férias com Você','Dinheiro Suspeito','Caju, Meu Amigo','O Falsário','Verdade e Traição','Um Dia Extraordinário','Davi: Nasce Um Rei','Dupla Perigosa','Cidade em Chamas','O Último Refúgio','Noite Sem Fim','Coração Selvagem','Protocolo Zero','A Herança','Tempestade','Vingança Fria'];
+const series=['The Crown','Ruptura','O Urso','Sucessão','Round 6','Dark','Sandman','The Last of Us','Loki','Andor'];
+const live=['Globo HD','SporTV 2','Telecine Action','HBO Max 24h','ESPN Brasil','Premiere','Discovery','Cartoon','GloboNews','Band Sports','TNT','Megapix'];
+
+function card(i,label,sub,wide){const[a,b]=PAL[i%PAL.length];return `<div onclick="openDetail('${label.replace(/'/g,'')}')" class="poster ${wide?'aspect-video min-w-[300px]':'aspect-[2/3] min-w-[160px]'} rounded-xl ring-1 ring-white/10 relative overflow-hidden group cursor-pointer shrink-0 transition hover:scale-[1.04] hover:ring-white/30" style="background:linear-gradient(150deg,${a},${b})">
+  <div class="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent"></div>
+  <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-black/30 grid place-items-center"><div class="h-12 w-12 rounded-full bg-white/90 text-black grid place-items-center"><svg class="h-6 w-6 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>
+  <div class="absolute bottom-0 p-3"><div class="text-[13px] font-semibold leading-tight line-clamp-2">${label}</div><div class="text-[10px] text-white/55 mt-0.5">${sub}</div></div>
+</div>`;}
+function rail(title,items){return `<section class="mb-8"><div class="flex items-center justify-between px-8 mb-3"><h2 class="text-[19px] font-bold">${title}</h2><button class="text-[12px] text-white/45 hover:text-white">Ver tudo ›</button></div>
+  <div class="rail flex gap-3.5 overflow-x-auto px-8 pb-1">${items}</div></section>`;}
+function movieCards(n,off=0,wide){let s='';for(let i=0;i<n;i++){const t=titles[(i+off)%titles.length];s+=card(i+off,t,`2026 · ${['4K','HD','Dolby'][i%3]}`,wide);}return s;}
+function seriesCards(n){let s='';for(let i=0;i<n;i++)s+=card(i+3,series[i%series.length],`${1+i%5} temporadas`);return s;}
+function gridWrap(items){return `<div class="grid grid-cols-[repeat(auto-fill,minmax(168px,1fr))] gap-4 px-8 pb-10">${items.match(/<div[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g)?items:items}</div>`;}
+
+const views={
+  home:()=>`
+    <div class="relative h-[58vh] min-h-[380px] poster" style="background:linear-gradient(110deg,#3a1d8a 0%,#7a1f3d 60%,#1c3a6b 100%)">
+      <div class="absolute inset-0 bg-gradient-to-t from-[#070709] via-[#070709]/30 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-[#070709]/80 to-transparent"></div>
+      <div class="absolute bottom-12 left-8 max-w-xl animate-fadein">
+        <span class="text-[12px] font-bold uppercase tracking-[0.2em] text-white/70">Lançamento 2026</span>
+        <h1 class="text-6xl font-black mt-3 leading-none">Davi<span class="text-accent">.</span></h1>
+        <p class="text-[15px] text-white/75 mt-4 leading-relaxed">A jornada do jovem pastor que desafiou um gigante e se tornou rei. Épico em 4K Dolby Vision · 2h14.</p>
+        <div class="flex gap-3 mt-6">
+          <button onclick="openPlayer('Davi: Nasce Um Rei')" class="bg-white text-black font-semibold rounded-xl px-7 py-3 text-[15px] flex items-center gap-2 hover:bg-white/90 transition"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Assistir</button>
+          <button onclick="download('Davi: Nasce Um Rei')" class="vibrancy border border-white/20 hover:bg-white/10 font-semibold rounded-xl px-7 py-3 text-[15px] flex items-center gap-2"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>Baixar</button>
+        </div>
+      </div>
+    </div>
+    <div class="-mt-10 relative pt-2">
+      ${rail('Continuar assistindo', movieCards(6,2,true))}
+      ${rail('Em alta hoje', movieCards(10,0))}
+      ${rail('Séries do momento', seriesCards(10))}
+      ${rail('Porque você assistiu Ação', movieCards(10,5))}
+    </div>`,
+  movies:()=>pageHead('Filmes')+`<div class="px-8 pb-3">${chips(['Lançamentos 2026','Ação','Marvel e DC','Cinema','Terror','Comédia','Ficção'])}</div>`+gridWrap(movieCards(24)),
+  series:()=>pageHead('Séries')+`<div class="px-8 pb-3">${chips(['Netflix','Disney+','HBO Max','Prime Video','Apple TV+','Animes','Doramas'])}</div>`+gridWrap(seriesCards(21)),
+  live:()=>pageHead('Ao vivo')+`<div class="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3 px-8 pb-10">${live.concat(live).map((c,i)=>`
+      <div onclick="openPlayer('${c}')" class="vibrancy rounded-xl p-3.5 flex items-center gap-3 ring-1 ring-white/10 hover:ring-accent/60 cursor-pointer transition group">
+        <div class="h-12 w-12 rounded-xl grid place-items-center text-[12px] font-bold shrink-0" style="background:linear-gradient(135deg,${PAL[i%PAL.length][0]},${PAL[i%PAL.length][1]})">${c.slice(0,3).toUpperCase()}</div>
+        <div class="min-w-0 flex-1"><div class="text-[13px] font-semibold truncate">${c}</div><div class="text-[11px] text-white/50 truncate">Agora: Programação ao vivo</div></div>
+        <span class="text-[10px] font-bold text-red-400 flex items-center gap-1 shrink-0"><span class="h-1.5 w-1.5 rounded-full bg-red-500 animate-pulse"></span>LIVE</span>
+      </div>`).join('')}</div>`,
+  search:()=>pageHead('Buscar')+`<div class="px-8 pb-10">
+      <div class="relative max-w-2xl mb-6"><svg class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-white/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input autofocus placeholder="Buscar filmes, séries, canais…" class="w-full bg-white/10 focus:bg-white/15 rounded-2xl pl-12 pr-4 py-3.5 text-[15px] outline-none focus:ring-2 ring-accent/60"/></div>
+      <p class="text-[13px] text-white/45 mb-4">Resultados</p>${gridWrap(movieCards(18))}</div>`,
+  downloads:()=>pageHead('Downloads')+`<div class="px-8 pb-10 max-w-3xl space-y-3"><p class="text-[12px] text-amber-300/80 bg-amber-400/10 rounded-lg px-3 py-2 mb-2">⚠︎ Provedor permite 1 conexão — downloads rodam em fila, um de cada vez.</p>
+      ${dl('O Falsário (2026)','mp4 · 2.1 GB',62,'8,4 MB/s · 4min',1)}
+      ${dl('Dupla Perigosa (2026)','mp4 · 1.7 GB',0,'Na fila',0)}
+      ${dl('Round 6 · S03E01','mkv · 780 MB',100,'Concluído',2)}
+      ${dl('Cidade em Chamas (2025)','mp4 · 2.4 GB',100,'Concluído',2)}</div>`,
+  accounts:()=>pageHead('Contas')+`<div class="px-8 pb-10 max-w-2xl space-y-4">
+      <div class="vibrancy rounded-2xl p-6 ring-1 ring-accent/40">
+        <div class="flex items-center gap-4"><div class="h-14 w-14 rounded-2xl bg-gradient-to-br from-accent to-fuchsia-500 grid place-items-center font-bold text-lg">A1</div>
+        <div class="flex-1"><div class="font-bold text-lg">a1a12.com</div><div class="text-[13px] text-white/50">usuário 166123265</div></div>
+        <span class="text-[12px] text-emerald-400 bg-emerald-400/10 rounded-full px-3 py-1.5">● Ativa</span></div>
+        <div class="grid grid-cols-3 gap-3 mt-5"><div class="bg-white/5 rounded-xl py-4 text-center"><div class="text-xl font-bold">24/06</div><div class="text-[11px] text-white/45 mt-0.5">Validade 2026</div></div><div class="bg-white/5 rounded-xl py-4 text-center"><div class="text-xl font-bold">1 / 1</div><div class="text-[11px] text-white/45 mt-0.5">Conexões</div></div><div class="bg-white/5 rounded-xl py-4 text-center"><div class="text-xl font-bold">TS</div><div class="text-[11px] text-white/45 mt-0.5">Formato</div></div></div>
+      </div>
+      <button class="w-full border border-dashed border-white/20 rounded-2xl p-6 text-white/55 hover:bg-white/5 hover:text-white transition flex items-center justify-center gap-2 text-[15px]"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Adicionar conta</button></div>`
+};
+function pageHead(t){return `<div class="px-8 pt-10 pb-5"><h1 class="text-4xl font-black">${t}</h1></div>`;}
+function chips(a){return `<div class="flex flex-wrap gap-2 mb-3">${a.map((g,i)=>`<button class="px-4 py-1.5 rounded-full text-[13px] font-medium ${i===0?'bg-white text-black':'bg-white/10 hover:bg-white/20'} transition">${g}</button>`).join('')}</div>`;}
+function dl(t,m,p,s,st){return `<div class="vibrancy rounded-xl p-4 ring-1 ring-white/10 flex items-center gap-4"><div class="h-14 w-10 rounded-md shrink-0" style="background:linear-gradient(135deg,${PAL[t.length%PAL.length][0]},${PAL[t.length%PAL.length][1]})"></div>
+  <div class="flex-1 min-w-0"><div class="flex justify-between gap-3"><span class="text-[14px] font-semibold truncate">${t}</span><span class="text-[11px] ${st===2?'text-emerald-400':'text-white/45'} shrink-0">${s}</span></div><div class="text-[11px] text-white/40 mb-2">${m}</div>
+  <div class="h-1.5 rounded-full bg-white/10 overflow-hidden"><div class="h-full ${st===2?'bg-emerald-400':'bg-accent'}" style="width:${p}%"></div></div></div>
+  <button class="h-9 w-9 grid place-items-center rounded-lg hover:bg-white/10 text-white/60">${st===2?'✓':st===1?'<svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>':'<svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'}</button></div>`;}
+
+function go(v){document.getElementById('main').innerHTML=views[v]();document.getElementById('main').scrollTop=0;document.querySelectorAll('[data-tab]').forEach(t=>t.classList.toggle('active',t.dataset.tab===v));}
+function openDetail(title){const[a,b]=PAL[title.length%PAL.length];const box=document.querySelector('#detail > div');box.innerHTML=`
+  <div class="relative h-64 poster" style="background:linear-gradient(120deg,${a},${b})"><div class="absolute inset-0 bg-gradient-to-t from-[rgba(18,18,24,.98)] to-transparent"></div><button onclick="closeDetail()" class="absolute top-3 right-3 h-9 w-9 rounded-full bg-black/40 hover:bg-black/60 grid place-items-center">✕</button></div>
+  <div class="p-8 -mt-20 relative"><h2 class="text-4xl font-black">${title}</h2>
+    <div class="flex items-center gap-3 text-[13px] text-white/55 mt-3"><span class="text-emerald-400 font-semibold">96% relevante</span><span>2026</span><span>2h 11min</span><span class="border border-white/25 rounded px-1.5 text-[11px]">4K</span><span>Ação · Suspense</span></div>
+    <p class="text-[15px] text-white/70 mt-4 max-w-2xl leading-relaxed">Um thriller eletrizante em alta produção, disponível em 4K Dolby Vision com áudio 5.1.</p>
+    <div class="flex gap-3 mt-7"><button onclick="openPlayer('${title}')" class="bg-white text-black font-semibold rounded-xl px-7 py-3 text-[15px] flex items-center gap-2 hover:bg-white/90"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>Assistir</button>
+    <button onclick="download('${title}')" class="bg-white/15 hover:bg-white/25 font-semibold rounded-xl px-7 py-3 text-[15px] flex items-center gap-2"><svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>Baixar arquivo</button></div>
+    <p class="text-[11px] text-white/35 mt-4">⚠︎ 1 conexão disponível — assistir e baixar ao mesmo tempo não é possível.</p></div>`;
+  document.getElementById('detail').classList.remove('hidden');}
+function closeDetail(){document.getElementById('detail').classList.add('hidden');}
+function openPlayer(title){closeDetail();const box=document.querySelector('#player > div');box.innerHTML=`
+  <div class="relative aspect-video bg-black grid place-items-center"><div class="absolute inset-0 poster opacity-40" style="background:linear-gradient(120deg,#1c3a6b,#3a1d8a)"></div>
+  <button class="relative h-20 w-20 rounded-full bg-white/90 text-black grid place-items-center shadow-2xl hover:scale-105 transition"><svg class="h-10 w-10 ml-1" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+  <button onclick="closePlayer()" class="absolute top-3 right-3 h-9 w-9 rounded-full bg-black/50 hover:bg-black/70 grid place-items-center">✕</button>
+  <div class="absolute top-4 left-4 text-[12px] bg-black/50 rounded-full px-3 py-1 flex items-center gap-2"><span class="h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>mpegts.js · MSE</div>
+  <div class="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-black/85 to-transparent"><div class="h-1 rounded-full bg-white/25 mb-3"><div class="h-full w-1/3 bg-accent rounded-full"></div></div>
+  <div class="flex items-center gap-4 text-white/85"><button><svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button><span class="text-[12px] tabular-nums">12:04 / 2:11:33</span><div class="flex-1"></div><span class="text-[13px]">${title}</span></div></div></div>`;
+  document.getElementById('player').classList.remove('hidden');}
+function closePlayer(){document.getElementById('player').classList.add('hidden');}
+function download(title){const t=document.getElementById('toast');t.innerHTML=`⬇︎ <b>${title}</b> adicionado à fila`;t.classList.remove('hidden');clearTimeout(window._tt);window._tt=setTimeout(()=>t.classList.add('hidden'),2600);}
+go('home');
+</script>
+</body>
+</html>
