@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { getSeriesInfo } from '../catalog'
 import { gradient } from '../data'
 import { smartTitleCase } from '../format'
@@ -101,6 +101,19 @@ export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) 
   const seasons = info ? Object.keys(info.episodes || {}) : []
   const eps = info?.episodes?.[season] || []
 
+  // Todos os episódios (todas as temporadas), para o "Baixar todos"
+  const allEpisodes = useMemo(() => {
+    return Object.entries(info?.episodes || {}).flatMap(([s, list]) =>
+      (list || []).map((ep) => ({ ep, season: s }))
+    )
+  }, [info])
+
+  const downloadAll = () => {
+    allEpisodes.forEach(({ ep, season: s }) =>
+      onDownload({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} T${s}E${ep.episode_num}`, icon: item.icon })
+    )
+  }
+
   return (
     <div className="p-4">
       <Poster icon={item.icon} seed={seed} className="aspect-[2/3] w-full mb-4" />
@@ -118,6 +131,16 @@ export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) 
             <button key={s} onClick={() => setSeason(s)} className={`px-2.5 py-1 rounded-md text-[10px] font-medium ${s === season ? 'bg-white text-black' : 'bg-white/10 hover:bg-white/20'}`}>T{s}</button>
           ))}
         </div>
+      )}
+
+      {allEpisodes.length > 0 && (
+        <button
+          onClick={downloadAll}
+          className="w-full mb-3 bg-white/12 hover:bg-white/20 font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2"
+        >
+          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
+          Baixar todos os episódios ({allEpisodes.length})
+        </button>
       )}
 
       <div className="space-y-1.5">
