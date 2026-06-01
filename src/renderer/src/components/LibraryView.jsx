@@ -134,9 +134,14 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
         if (!alive) return
         // Os nomes vêm com espaços extras e em CAIXA ALTA — normaliza (trim + title case)
         const cleaned = (cats || []).map((c) => ({ ...c, category_name: smartTitleCase(c.category_name) }))
-        cleaned.sort((a, b) =>
-          a.category_name.localeCompare(b.category_name, 'pt-BR', { sensitivity: 'base', numeric: true })
-        )
+        // Categorias adultas (começam com "18+") vão sempre para o fim da lista
+        const isAdult = (name) => /^18\+/.test(name)
+        cleaned.sort((a, b) => {
+          const ad = isAdult(a.category_name)
+          const bd = isAdult(b.category_name)
+          if (ad !== bd) return ad ? 1 : -1
+          return a.category_name.localeCompare(b.category_name, 'pt-BR', { sensitivity: 'base', numeric: true })
+        })
         setCategories(cleaned)
         setCatId(cleaned[0]?.category_id || null)
       })
