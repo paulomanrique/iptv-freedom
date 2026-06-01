@@ -1,10 +1,13 @@
-import { app, shell, BrowserWindow, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, ipcMain, Menu } from 'electron'
 import { join } from 'path'
 import * as accountsStore from './accounts'
 import * as xtream from './xtream'
 import * as downloads from './downloads'
 
 let mainWindow = null
+
+// Remove o menu nativo do app (não é usado)
+Menu.setApplicationMenu(null)
 
 function createWindow() {
   mainWindow = new BrowserWindow({

@@ -33,6 +33,33 @@ export function formatSpeed(bytesPerSec) {
   return `${formatBytes(bytesPerSec)}/s`
 }
 
+// Title case "inteligente": capitaliza palavras, mantém conectores minúsculos,
+// preserva siglas conhecidas e tokens com número (18+, 2022, 1080p).
+const SMALL_WORDS = new Set(['de', 'da', 'do', 'das', 'dos', 'e', 'a', 'o', 'as', 'os', 'com', 'para', 'na', 'no', 'nas', 'nos', 'em', 'di', 'del', 'la', 'le', 'of', 'the', 'and'])
+const ACRONYMS = new Set(['DC', 'HD', 'SD', 'FHD', 'UHD', '4K', '8K', '3D', 'TV', 'HQ', 'BR', 'EUA', 'US', 'UK', 'NBA', 'NFL', 'MLB', 'NHL', 'UFC', 'WWE', 'MMA', 'F1', 'VOD', 'PPV', 'XXX', 'BBB', 'EUA', 'KIDS'])
+
+function capWord(w) {
+  return w
+    .split('-')
+    .map((seg) => (seg ? seg.charAt(0).toUpperCase() + seg.slice(1).toLowerCase() : seg))
+    .join('-')
+}
+
+export function smartTitleCase(str) {
+  const clean = String(str || '').trim().replace(/\s+/g, ' ')
+  if (!clean) return clean
+  const words = clean.split(' ')
+  return words
+    .map((w, i) => {
+      const upper = w.toUpperCase()
+      if (ACRONYMS.has(upper)) return upper
+      if (/\d/.test(w)) return w // 18+, 2022, 1080p, 007 — preserva como veio
+      if (i > 0 && SMALL_WORDS.has(w.toLowerCase())) return w.toLowerCase()
+      return capWord(w)
+    })
+    .join(' ')
+}
+
 const DL_LABELS = {
   queued: 'Na fila', downloading: 'Baixando', paused: 'Pausado',
   done: 'Concluído', error: 'Erro', canceled: 'Cancelado'

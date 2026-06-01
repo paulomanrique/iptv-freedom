@@ -41,7 +41,7 @@ export default function App() {
 
   useEffect(() => {
     refreshAccounts().then((list) => {
-      if (list.length > 0) setMode('movies')
+      if (list.length > 0) setMode('live')
     })
   }, [refreshAccounts])
 

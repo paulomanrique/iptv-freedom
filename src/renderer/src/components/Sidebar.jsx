@@ -1,7 +1,7 @@
 const SECTIONS = [
+  { key: 'live', label: 'Ao vivo' },
   { key: 'movies', label: 'Filmes' },
   { key: 'series', label: 'Séries' },
-  { key: 'live', label: 'Ao vivo' },
   { key: 'downloads', label: 'Downloads' },
   { key: 'accounts', label: 'Contas' }
 ]

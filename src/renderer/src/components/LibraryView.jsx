@@ -1,6 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import { getCategories, getStreams, getSeriesInfo, normalize } from '../catalog'
 import { gradient } from '../data'
+import { smartTitleCase } from '../format'
 
 const MAX_RESULTS = 400
 
@@ -131,8 +132,8 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
     getCategories(account, kind)
       .then((cats) => {
         if (!alive) return
-        // Os nomes vêm com espaços extras no início/fim — limpa antes de ordenar/exibir
-        const cleaned = (cats || []).map((c) => ({ ...c, category_name: (c.category_name || '').trim() }))
+        // Os nomes vêm com espaços extras e em CAIXA ALTA — normaliza (trim + title case)
+        const cleaned = (cats || []).map((c) => ({ ...c, category_name: smartTitleCase(c.category_name) }))
         cleaned.sort((a, b) =>
           a.category_name.localeCompare(b.category_name, 'pt-BR', { sensitivity: 'base', numeric: true })
         )
