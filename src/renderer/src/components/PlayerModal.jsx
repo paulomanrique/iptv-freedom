@@ -33,6 +33,8 @@ const BUFFER_KEY = 'iptvfreedom.bufferPreset'
 export default function PlayerModal({ item, onClose }) {
   const videoRef = useRef(null)
   const hideTimer = useRef(null)
+  const statsRef = useRef({}) // última info do STATISTICS_INFO (speed em KB/s, etc.)
+  const [stats, setStats] = useState(null)
   const [status, setStatus] = useState('loading') // loading | playing | error
   const [error, setError] = useState(null)
   const [chrome, setChrome] = useState(true) // overlay (topo) visível
@@ -69,6 +71,7 @@ export default function PlayerModal({ item, onClose }) {
           mpegtsPlayer.on(mpegts.Events.ERROR, (type, detail) => {
             if (!cancelled) { setError(`${type}: ${detail}`); setStatus('error') }
           })
+          mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (info) => { statsRef.current = info })
           mpegtsPlayer.load()
           video.play().catch(() => {})
         } else {
@@ -100,6 +103,29 @@ export default function PlayerModal({ item, onClose }) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [item, onClose])
+
+  // Estatísticas do ao vivo (velocidade de download + buffer à frente)
+  useEffect(() => {
+    if (!item || !isLive) { setStats(null); return }
+    statsRef.current = {}
+    const id = setInterval(() => {
+      const v = videoRef.current
+      let buffer = 0
+      if (v && v.buffered && v.buffered.length) {
+        for (let i = 0; i < v.buffered.length; i++) {
+          if (v.currentTime >= v.buffered.start(i) && v.currentTime <= v.buffered.end(i)) {
+            buffer = v.buffered.end(i) - v.currentTime
+            break
+          }
+        }
+      }
+      const info = statsRef.current || {}
+      // info.speed vem em KB/s; converte para Mbps
+      const mbps = info.speed ? (info.speed * 8) / 1000 : 0
+      setStats({ mbps, buffer, dropped: info.droppedFrames || 0 })
+    }, 1000)
+    return () => clearInterval(id)
+  }, [item, isLive])
 
   // Auto-ocultar o chrome após inatividade do mouse
   const pokeChrome = () => {
@@ -149,8 +175,18 @@ export default function PlayerModal({ item, onClose }) {
           {/* Chrome superior (auto-oculta) */}
           <div className={`absolute top-0 inset-x-0 px-4 py-3 flex items-center gap-3 bg-gradient-to-b from-black/75 via-black/30 to-transparent transition-opacity duration-300 ${chrome ? 'opacity-100' : 'opacity-0'}`}>
             {isLive && (
-              <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-white bg-red-600/90 rounded-full px-2.5 py-1 shadow">
+              <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-white bg-red-600/90 rounded-full px-2.5 py-1 shadow shrink-0">
                 <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />AO VIVO
+              </span>
+            )}
+            {isLive && stats && (
+              <span className="flex items-center gap-2 text-[11px] tabular-nums text-white/90 bg-black/40 backdrop-blur rounded-full px-2.5 py-1 shrink-0">
+                <span title="Velocidade de download do stream">↓ {stats.mbps.toFixed(1)} Mbps</span>
+                <span className="text-white/30">·</span>
+                <span title="Segundos de vídeo em buffer à frente" className={stats.buffer < 1 ? 'text-red-300' : stats.buffer < 2.5 ? 'text-amber-300' : 'text-emerald-300'}>
+                  buffer {stats.buffer.toFixed(1)}s
+                </span>
+                {stats.dropped > 0 && <><span className="text-white/30">·</span><span className="text-white/60" title="Quadros descartados">{stats.dropped} drops</span></>}
               </span>
             )}
             <div className="flex-1 min-w-0">
