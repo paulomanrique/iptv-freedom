@@ -1,4 +1,5 @@
 const SECTIONS = [
+  { key: 'favorites', label: 'Favoritos' },
   { key: 'live', label: 'Ao vivo' },
   { key: 'movies', label: 'Filmes' },
   { key: 'series', label: 'Séries' },

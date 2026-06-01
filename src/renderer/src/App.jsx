@@ -6,9 +6,12 @@ import DownloadsView from './components/DownloadsView'
 import PlayerModal from './components/PlayerModal'
 import AccountsView from './components/AccountsView'
 import AddAccountModal from './components/AddAccountModal'
+import FavoritesView from './components/FavoritesView'
 import { useDownloads } from './useDownloads'
+import { useFavorites } from './useFavorites'
+import { loadFavorites } from './favorites'
 
-const TITLES = { movies: 'Filmes', series: 'Séries', live: 'Ao vivo', downloads: 'Downloads', accounts: 'Contas' }
+const TITLES = { favorites: 'Favoritos', movies: 'Filmes', series: 'Séries', live: 'Ao vivo', downloads: 'Downloads', accounts: 'Contas' }
 const KIND = { movies: 'vod', series: 'series', live: 'live' }
 const isLibrary = (m) => m === 'movies' || m === 'series' || m === 'live'
 const ACTIVE_KEY = 'iptvfreedom.activeAccountId'
@@ -26,6 +29,7 @@ export default function App() {
   const [showAddAccount, setShowAddAccount] = useState(false)
 
   const dl = useDownloads()
+  const fav = useFavorites(activeId)
 
   const refreshAccounts = useCallback(async () => {
     const list = await window.api.accounts.list()
@@ -41,7 +45,12 @@ export default function App() {
 
   useEffect(() => {
     refreshAccounts().then((list) => {
-      if (list.length > 0) setMode('live')
+      if (list.length === 0) return
+      // Conta ativa inicial (a salva, se válida; senão a primeira)
+      const stored = localStorage.getItem(ACTIVE_KEY)
+      const initialId = stored && list.some((a) => a.id === stored) ? stored : list[0]?.id
+      // Abre em Favoritos se houver ao menos um; senão em Ao vivo
+      setMode(loadFavorites(initialId).length > 0 ? 'favorites' : 'live')
     })
   }, [refreshAccounts])
 
@@ -121,6 +130,23 @@ export default function App() {
         <div className="flex-1 flex min-h-0">
           <Sidebar view={mode} onNavigate={navigate} account={activeAccount} />
 
+          {mode === 'favorites' && (
+            activeAccount ? (
+              <FavoritesView
+                key={activeAccount.id}
+                account={activeAccount}
+                favorites={fav.favorites}
+                onPlay={handlePlay}
+                onDownload={handleDownload}
+                fav={fav}
+              />
+            ) : (
+              <section className="flex-1 grid place-items-center text-2xs text-white/45">
+                Adicione e ative uma conta em <button className="underline ml-1" onClick={() => navigate('accounts')}>Contas</button>.
+              </section>
+            )
+          )}
+
           {mode === 'accounts' && (
             <AccountsView
               accounts={accounts}
@@ -143,6 +169,7 @@ export default function App() {
                 query={query}
                 onPlay={handlePlay}
                 onDownload={handleDownload}
+                fav={fav}
               />
             ) : (
               <section className="flex-1 grid place-items-center text-2xs text-white/45">
