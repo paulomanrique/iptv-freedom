@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import * as accountsStore from './accounts'
 import * as xtream from './xtream'
+import * as downloads from './downloads'
 
 let mainWindow = null
 
@@ -23,6 +24,9 @@ function createWindow() {
   })
 
   mainWindow.on('ready-to-show', () => mainWindow.show())
+
+  // Envia eventos de download para o renderer
+  downloads.setSender((channel, payload) => mainWindow?.webContents.send(channel, payload))
 
   // Abrir links externos no navegador padrão, nunca dentro do app
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -65,6 +69,14 @@ ipcMain.handle('xtream:streams', (_e, account, kind, categoryId) => xtream.getSt
 ipcMain.handle('xtream:seriesInfo', (_e, account, seriesId) => xtream.getSeriesInfo(account, seriesId))
 ipcMain.handle('xtream:vodInfo', (_e, account, vodId) => xtream.getVodInfo(account, vodId))
 ipcMain.handle('xtream:streamUrl', (_e, account, type, id, ext) => xtream.streamUrl(account, type, id, ext))
+
+// ---- Downloads ----
+ipcMain.handle('download:list', () => downloads.list())
+ipcMain.handle('download:add', (_e, item) => downloads.add(item))
+ipcMain.handle('download:pause', (_e, id) => downloads.pause(id))
+ipcMain.handle('download:resume', (_e, id) => downloads.resume(id))
+ipcMain.handle('download:cancel', (_e, id) => downloads.cancel(id))
+ipcMain.handle('download:openFolder', (_e, id) => downloads.openFolder(id))
 
 app.whenReady().then(() => {
   createWindow()

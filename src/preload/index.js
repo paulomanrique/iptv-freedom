@@ -20,6 +20,24 @@ const api = {
     seriesInfo: (account, seriesId) => ipcRenderer.invoke('xtream:seriesInfo', account, seriesId),
     vodInfo: (account, vodId) => ipcRenderer.invoke('xtream:vodInfo', account, vodId),
     streamUrl: (account, type, id, ext) => ipcRenderer.invoke('xtream:streamUrl', account, type, id, ext)
+  },
+  downloads: {
+    list: () => ipcRenderer.invoke('download:list'),
+    add: (item) => ipcRenderer.invoke('download:add', item),
+    pause: (id) => ipcRenderer.invoke('download:pause', id),
+    resume: (id) => ipcRenderer.invoke('download:resume', id),
+    cancel: (id) => ipcRenderer.invoke('download:cancel', id),
+    openFolder: (id) => ipcRenderer.invoke('download:openFolder', id),
+    onProgress: (cb) => {
+      const fn = (_e, p) => cb(p)
+      ipcRenderer.on('download:progress', fn)
+      return () => ipcRenderer.removeListener('download:progress', fn)
+    },
+    onChanged: (cb) => {
+      const fn = (_e, list) => cb(list)
+      ipcRenderer.on('download:changed', fn)
+      return () => ipcRenderer.removeListener('download:changed', fn)
+    }
   }
 }
 

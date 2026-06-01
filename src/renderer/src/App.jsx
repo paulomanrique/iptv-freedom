@@ -2,10 +2,12 @@ import { useState, useEffect, useCallback } from 'react'
 import Sidebar from './components/Sidebar'
 import LibraryView from './components/LibraryView'
 import DownloadBar from './components/DownloadBar'
+import DownloadsView from './components/DownloadsView'
 import PlayerModal from './components/PlayerModal'
 import WindowControls from './components/WindowControls'
 import AccountsView from './components/AccountsView'
 import AddAccountModal from './components/AddAccountModal'
+import { useDownloads } from './useDownloads'
 
 const TITLES = { movies: 'Filmes', series: 'Séries', live: 'Ao vivo', downloads: 'Downloads', accounts: 'Contas' }
 const KIND = { movies: 'vod', series: 'series', live: 'live' }
@@ -24,6 +26,7 @@ export default function App() {
   const [selectedAccountId, setSelectedAccountId] = useState(null)
   const [showAddAccount, setShowAddAccount] = useState(false)
 
+  const dl = useDownloads()
   const isMac = window.api?.platform === 'darwin'
 
   const refreshAccounts = useCallback(async () => {
@@ -58,7 +61,13 @@ export default function App() {
   const activeAccount = accounts.find((a) => a.id === activeId) || null
 
   const handlePlay = useCallback((item) => setPlayer({ ...item, account: activeAccount }), [activeAccount])
-  const handleDownload = useCallback((item) => showToast(`⬇︎ ${item.name} — download em breve (próxima fase)`), [showToast])
+  const handleDownload = useCallback(
+    (item) => {
+      dl.add({ ...item, account: activeAccount })
+      showToast(`⬇︎ ${item.name} adicionado à fila`)
+    },
+    [dl, activeAccount, showToast]
+  )
 
   const setActive = useCallback((id) => {
     setActiveId(id)
@@ -149,13 +158,17 @@ export default function App() {
           )}
 
           {mode === 'downloads' && (
-            <section className="flex-1 grid place-items-center text-2xs text-white/45 text-center px-8">
-              Gerenciador de downloads — em implementação (próxima fase).<br />Fila de 1 conexão, com retomada.
-            </section>
+            <DownloadsView
+              downloads={dl.items}
+              onPause={dl.pause}
+              onResume={dl.resume}
+              onCancel={dl.cancel}
+              onOpen={dl.openFolder}
+            />
           )}
         </div>
 
-        <DownloadBar onOpen={() => navigate('downloads')} />
+        <DownloadBar downloads={dl.items} onOpen={() => navigate('downloads')} />
       </div>
 
       <PlayerModal item={player} onClose={() => setPlayer(null)} />
