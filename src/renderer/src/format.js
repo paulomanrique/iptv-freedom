@@ -53,6 +53,15 @@ function capWord(w) {
     .join('-')
 }
 
+// Normaliza texto para busca: remove acentos e caixa ("Pânico" -> "panico").
+export function normalizeSearch(s) {
+  return String(s || '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim()
+}
+
 export function smartTitleCase(str) {
   const clean = String(str || '').trim().replace(/\s+/g, ' ')
   if (!clean) return clean

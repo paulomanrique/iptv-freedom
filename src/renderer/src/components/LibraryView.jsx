@@ -1,11 +1,11 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { getCategories, getStreams, normalize } from '../catalog'
 import { smartTitleCase } from '../format'
 import { Poster, MoviePreview, LivePreview, SeriesPreview } from './Previews'
 
 const MAX_RESULTS = 400
 
-export default function LibraryView({ account, kind, viewStyle, query, onPlay, onDownload, fav }) {
+export default function LibraryView({ account, kind, viewStyle, onPlay, onDownload, fav }) {
   const [categories, setCategories] = useState([])
   const [catLoading, setCatLoading] = useState(true)
   const [catId, setCatId] = useState(null)
@@ -13,8 +13,6 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
   const [selectedId, setSelectedId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-
-  const searching = query.trim().length > 0
 
   // Carrega categorias quando muda a conta/tipo
   useEffect(() => {
@@ -42,14 +40,13 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
     return () => { alive = false }
   }, [account.id, kind])
 
-  // Carrega streams (categoria selecionada, ou TODOS quando buscando)
+  // Carrega streams da categoria selecionada
   useEffect(() => {
     let alive = true
+    if (!catId) { setItems([]); setLoading(false); return }
     setLoading(true)
     setError(null)
-    const cat = searching ? null : catId
-    if (!searching && !catId) { setItems([]); setLoading(false); return }
-    getStreams(account, kind, cat)
+    getStreams(account, kind, catId)
       .then((list) => {
         if (!alive) return
         const norm = (list || []).map((x) => normalize(x, kind))
@@ -60,15 +57,9 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
       .catch((e) => alive && setError(String(e?.message || e)))
       .finally(() => alive && setLoading(false))
     return () => { alive = false }
-  }, [account.id, kind, catId, searching])
+  }, [account.id, kind, catId])
 
-  const filtered = useMemo(() => {
-    if (!searching) return items
-    const q = query.trim().toLowerCase()
-    return items.filter((i) => i.name?.toLowerCase().includes(q)).slice(0, MAX_RESULTS)
-  }, [items, query, searching])
-
-  const visible = searching ? filtered : items.slice(0, MAX_RESULTS)
+  const visible = items.slice(0, MAX_RESULTS)
   const selected = visible.find((i) => i.id === selectedId) || visible[0]
   const seedOf = (i) => (visible.indexOf(i) + 1) * 3
   const useGrid = viewStyle === 'grid'
@@ -82,7 +73,7 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
         <div className="flex-1 scroll overflow-y-auto py-1">
           {catLoading && <div className="flex items-center gap-2 text-2xs text-white/45 px-3 py-2"><span className="h-3 w-3 rounded-full border-2 border-white/30 border-t-white animate-spin" />Carregando…</div>}
           {categories.map((c) => {
-            const active = !searching && c.category_id === catId
+            const active = c.category_id === catId
             return (
               <button
                 key={c.category_id}
@@ -97,17 +88,17 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
         </div>
       </div>
 
-      {/* Coluna 2: conteúdo da categoria (ou resultados da busca) */}
+      {/* Coluna 2: conteúdo da categoria */}
       <section className="flex-1 min-w-0 flex flex-col">
         <div className="px-4 py-2 text-2xs text-white/50 border-b border-white/10 truncate shrink-0">
-          {searching ? `Busca: “${query}”` : currentCat?.category_name || '—'}
+          {currentCat?.category_name || '—'}
           {!loading && <span className="text-white/30"> · {visible.length}{visible.length === MAX_RESULTS ? '+' : ''}</span>}
         </div>
 
         <div className="flex-1 scroll overflow-y-auto">
           {error && <div className="m-4 text-2xs text-red-300 bg-red-500/10 rounded-lg px-3 py-2">Erro: {error}</div>}
           {loading && <div className="flex items-center gap-2 text-2xs text-white/45 p-4"><span className="h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />Carregando…</div>}
-          {!loading && visible.length === 0 && !error && <div className="p-6 text-2xs text-white/45 text-center">Nada encontrado.</div>}
+          {!loading && visible.length === 0 && !error && <div className="p-6 text-2xs text-white/45 text-center">Nada aqui.</div>}
 
           {!loading && visible.length > 0 && (useGrid ? (
             <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 p-4">
@@ -130,7 +121,7 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
               ))}
             </div>
           ))}
-          {visible.length === MAX_RESULTS && <div className="px-4 py-2 text-[10px] text-white/35">Mostrando os primeiros {MAX_RESULTS} resultados.</div>}
+          {visible.length === MAX_RESULTS && <div className="px-4 py-2 text-[10px] text-white/35">Mostrando os primeiros {MAX_RESULTS} itens.</div>}
         </div>
       </section>
 
