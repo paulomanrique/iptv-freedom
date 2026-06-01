@@ -103,7 +103,7 @@ export default function App() {
           <div className="font-semibold text-white/70 text-2xs uppercase tracking-wider">{TITLES[mode]}</div>
           <div className="flex-1" />
 
-          {(mode === 'movies' || mode === 'series') && (
+          {isLibrary(mode) && (
             <div className="bar flex rounded-lg p-0.5 border border-white/10">
               <button onClick={() => setViewStyle('list')} className={`h-6 w-7 grid place-items-center rounded-md ${viewStyle === 'list' ? 'bg-white/15' : 'text-white/50'}`}>
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" /></svg>

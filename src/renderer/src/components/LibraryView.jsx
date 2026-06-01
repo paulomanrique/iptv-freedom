@@ -70,7 +70,7 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
   const visible = searching ? filtered : items.slice(0, MAX_RESULTS)
   const selected = visible.find((i) => i.id === selectedId) || visible[0]
   const seedOf = (i) => (visible.indexOf(i) + 1) * 3
-  const useGrid = viewStyle === 'grid' || kind === 'series'
+  const useGrid = viewStyle === 'grid'
   const currentCat = categories.find((c) => c.category_id === catId)
 
   return (
@@ -112,7 +112,7 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
             <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 p-4">
               {visible.map((m) => (
                 <div key={m.id} className={`cursor-pointer rounded-lg p-1 ${m.id === selected?.id ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)}>
-                  <Poster icon={m.icon} seed={seedOf(m)} className="aspect-[2/3] w-full" />
+                  <Poster icon={m.icon} seed={seedOf(m)} className={kind === 'live' ? 'aspect-video w-full' : 'aspect-[2/3] w-full'} />
                   <div className="text-2xs font-medium truncate mt-1 px-0.5">{m.name}</div>
                 </div>
               ))}
