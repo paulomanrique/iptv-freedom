@@ -36,7 +36,15 @@ export function formatSpeed(bytesPerSec) {
 // Title case "inteligente": capitaliza palavras, mantém conectores minúsculos,
 // preserva siglas conhecidas e tokens com número (18+, 2022, 1080p).
 const SMALL_WORDS = new Set(['de', 'da', 'do', 'das', 'dos', 'e', 'a', 'o', 'as', 'os', 'com', 'para', 'na', 'no', 'nas', 'nos', 'em', 'di', 'del', 'la', 'le', 'of', 'the', 'and'])
-const ACRONYMS = new Set(['DC', 'HD', 'SD', 'FHD', 'UHD', '4K', '8K', '3D', 'TV', 'HQ', 'BR', 'EUA', 'US', 'UK', 'NBA', 'NFL', 'MLB', 'NHL', 'UFC', 'WWE', 'MMA', 'F1', 'VOD', 'PPV', 'XXX', 'BBB', 'EUA', 'KIDS'])
+const ACRONYMS = new Set([
+  // qualidade / formato
+  'DC', 'HD', 'SD', 'FHD', 'UHD', '4K', '8K', '3D', 'HQ', 'VOD', 'PPV', 'XXX',
+  // países / esportes / diversos
+  'TV', 'BR', 'EUA', 'US', 'UK', 'NBA', 'NFL', 'MLB', 'NHL', 'UFC', 'WWE', 'MMA', 'F1', 'BBB', 'KIDS', 'PPV',
+  // canais comuns
+  'HBO', 'HBO2', 'MAX', 'ESPN', 'TNT', 'SBT', 'AXN', 'FOX', 'FX', 'FXX', 'GNT', 'AMC', 'MTV', 'CNN',
+  'BBC', 'TLC', 'NGC', 'USA', 'CBS', 'NBC', 'ABC', 'CW', 'TBS', 'TCM', 'SYFY', 'AE', 'NHK', 'RAI', 'RT', 'DW'
+])
 
 function capWord(w) {
   return w

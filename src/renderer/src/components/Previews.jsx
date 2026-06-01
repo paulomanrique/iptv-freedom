@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getSeriesInfo } from '../catalog'
 import { gradient } from '../data'
+import { smartTitleCase } from '../format'
 
 export function Poster({ icon, seed, className }) {
   const [failed, setFailed] = useState(false)
@@ -122,7 +123,7 @@ export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) 
       <div className="space-y-1.5">
         {eps.map((ep) => (
           <div key={ep.id} className="flex items-center gap-2 rounded-md hover:bg-white/5 px-2 py-1.5">
-            <div className="flex-1 min-w-0"><div className="text-2xs font-medium truncate">{ep.episode_num}. {ep.title || `Episódio ${ep.episode_num}`}</div></div>
+            <div className="flex-1 min-w-0"><div className="text-2xs font-medium truncate">{ep.episode_num}. {ep.title ? smartTitleCase(ep.title) : `Episódio ${ep.episode_num}`}</div></div>
             <button title="Assistir" onClick={() => onPlay({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} · T${season}E${ep.episode_num}` })} className="h-7 w-7 grid place-items-center rounded-md bg-white/10 hover:bg-white/20">
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
             </button>

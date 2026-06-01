@@ -1,5 +1,6 @@
 // Cache em memória do catálogo (categorias e streams) por conta.
 // Evita refazer requisições a cada navegação/tecla na busca.
+import { smartTitleCase } from './format'
 
 const cache = new Map() // key -> Promise
 
@@ -40,7 +41,7 @@ export function clearAccount(accountId) {
 export function normalize(item, kind) {
   return {
     id: item.stream_id ?? item.series_id,
-    name: item.name,
+    name: smartTitleCase(item.name),
     icon: item.stream_icon || item.cover || item.cover_big || null,
     ext: item.container_extension || null,
     rating: item.rating || item.rating_5based || null,
