@@ -53,6 +53,7 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
       .then((list) => {
         if (!alive) return
         const norm = (list || []).map((x) => normalize(x, kind))
+        norm.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base', numeric: true }))
         setItems(norm)
         setSelectedId(norm[0]?.id ?? null)
       })

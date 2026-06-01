@@ -9,7 +9,10 @@ export default function FavoritesView({ account, favorites, onPlay, onDownload, 
 
   // Grupo ativo (default: o primeiro disponível)
   const activeGroup = groups.find((g) => g.kind === groupKind) || groups[0]
-  const items = activeGroup?.items || []
+  const items = useMemo(
+    () => [...(activeGroup?.items || [])].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base', numeric: true })),
+    [activeGroup]
+  )
   const selected = items.find((i) => String(i.id) === String(selectedId)) || items[0]
   const seedOf = (i) => (items.indexOf(i) + 1) * 3
   // Grade para filmes/séries, lista para canais ao vivo
