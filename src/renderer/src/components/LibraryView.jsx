@@ -131,8 +131,11 @@ export default function LibraryView({ account, kind, viewStyle, query, onPlay, o
     getCategories(account, kind)
       .then((cats) => {
         if (!alive) return
-        setCategories(cats)
-        setCatId(cats[0]?.category_id || null)
+        const sorted = [...(cats || [])].sort((a, b) =>
+          (a.category_name || '').localeCompare(b.category_name || '', 'pt-BR', { sensitivity: 'base', numeric: true })
+        )
+        setCategories(sorted)
+        setCatId(sorted[0]?.category_id || null)
       })
       .catch((e) => alive && setError(String(e?.message || e)))
       .finally(() => alive && setCatLoading(false))
