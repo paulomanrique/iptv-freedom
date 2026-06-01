@@ -52,21 +52,34 @@ function Row({ d, seed, onPause, onResume, onCancel, onOpen }) {
   )
 }
 
-export default function DownloadsView({ downloads, onPause, onResume, onCancel, onOpen }) {
+export default function DownloadsView({ downloads, onPause, onResume, onCancel, onOpen, onClearCompleted }) {
+  const completedCount = downloads.filter((d) => d.status === 'done').length
+
   return (
-    <section className="flex-1 min-w-0 scroll overflow-y-auto">
-      <div className="px-4 py-2 text-[10px] text-amber-300/70 bg-amber-400/10 border-b border-white/10">
-        Limite do provedor: 1 conexão. Os downloads rodam um de cada vez (em fila).
+    <section className="flex-1 min-w-0 flex flex-col">
+      <div className="px-4 py-2 border-b border-white/10 flex items-center justify-between shrink-0">
+        <span className="text-2xs text-white/50">{downloads.length} {downloads.length === 1 ? 'item' : 'itens'}</span>
+        <button
+          onClick={onClearCompleted}
+          disabled={completedCount === 0}
+          className="text-2xs px-2.5 py-1 rounded-md bg-white/10 hover:bg-white/20 text-white/80 disabled:opacity-40 disabled:hover:bg-white/10 flex items-center gap-1.5"
+        >
+          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" /></svg>
+          Limpar concluídos{completedCount > 0 ? ` (${completedCount})` : ''}
+        </button>
       </div>
-      {downloads.length === 0 ? (
-        <div className="p-10 text-2xs text-white/45 text-center">Nenhum download ainda. Use o botão “Baixar arquivo” em um filme ou episódio.</div>
-      ) : (
-        <div className="divide-y divide-white/5">
-          {downloads.map((d, i) => (
-            <Row key={d.id} d={d} seed={i + 1} onPause={onPause} onResume={onResume} onCancel={onCancel} onOpen={onOpen} />
-          ))}
-        </div>
-      )}
+
+      <div className="flex-1 scroll overflow-y-auto">
+        {downloads.length === 0 ? (
+          <div className="p-10 text-2xs text-white/45 text-center">Nenhum download ainda. Use o botão “Baixar arquivo” em um filme ou episódio.</div>
+        ) : (
+          <div className="divide-y divide-white/5">
+            {downloads.map((d, i) => (
+              <Row key={d.id} d={d} seed={i + 1} onPause={onPause} onResume={onResume} onCancel={onCancel} onOpen={onOpen} />
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   )
 }

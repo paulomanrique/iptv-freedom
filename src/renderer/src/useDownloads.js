@@ -23,6 +23,7 @@ export function useDownloads() {
   const resume = useCallback((id) => window.api.downloads.resume(id), [])
   const cancel = useCallback((id) => window.api.downloads.cancel(id), [])
   const openFolder = useCallback((id) => window.api.downloads.openFolder(id), [])
+  const clearCompleted = useCallback(() => window.api.downloads.clearCompleted(), [])
 
-  return { items, add, pause, resume, cancel, openFolder }
+  return { items, add, pause, resume, cancel, openFolder, clearCompleted }
 }

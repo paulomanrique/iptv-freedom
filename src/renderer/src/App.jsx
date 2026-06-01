@@ -215,6 +215,7 @@ export default function App() {
               onResume={dl.resume}
               onCancel={dl.cancel}
               onOpen={dl.openFolder}
+              onClearCompleted={dl.clearCompleted}
             />
           )}
         </div>

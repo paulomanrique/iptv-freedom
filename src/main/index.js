@@ -70,6 +70,7 @@ ipcMain.handle('download:pause', (_e, id) => downloads.pause(id))
 ipcMain.handle('download:resume', (_e, id) => downloads.resume(id))
 ipcMain.handle('download:cancel', (_e, id) => downloads.cancel(id))
 ipcMain.handle('download:openFolder', (_e, id) => downloads.openFolder(id))
+ipcMain.handle('download:clearCompleted', () => downloads.clearCompleted())
 
 app.whenReady().then(() => {
   createWindow()

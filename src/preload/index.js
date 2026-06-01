@@ -23,6 +23,7 @@ const api = {
     resume: (id) => ipcRenderer.invoke('download:resume', id),
     cancel: (id) => ipcRenderer.invoke('download:cancel', id),
     openFolder: (id) => ipcRenderer.invoke('download:openFolder', id),
+    clearCompleted: () => ipcRenderer.invoke('download:clearCompleted'),
     onProgress: (cb) => {
       const fn = (_e, p) => cb(p)
       ipcRenderer.on('download:progress', fn)
