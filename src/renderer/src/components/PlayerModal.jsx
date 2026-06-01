@@ -28,6 +28,10 @@ const BUFFER_PRESETS = {
   }
 }
 const BUFFER_KEY = 'iptvfreedom.bufferPreset'
+const AUTO_KEY = 'iptvfreedom.bufferAuto'
+const BUFFER_ORDER = ['low', 'balanced', 'high']
+const AUTO_WINDOW_MS = 20000 // janela de observação de travadas
+const AUTO_MAX_STALLS = 2 // travadas dentro da janela para subir de nível
 
 // Reproduz VOD (.mp4) com <video> nativo e ao vivo (.ts) via mpegts.js (MSE).
 export default function PlayerModal({ item, onClose }) {
@@ -38,13 +42,33 @@ export default function PlayerModal({ item, onClose }) {
   const [status, setStatus] = useState('loading') // loading | playing | error
   const [error, setError] = useState(null)
   const [chrome, setChrome] = useState(true) // overlay (topo) visível
-  const [buffer, setBuffer] = useState(() => localStorage.getItem(BUFFER_KEY) || 'balanced')
+  const rebufferTimes = useRef([])
+  const loadStamp = useRef(0)
+  const [auto, setAuto] = useState(() => localStorage.getItem(AUTO_KEY) !== 'false')
+  const [buffer, setBuffer] = useState(() =>
+    localStorage.getItem(AUTO_KEY) !== 'false' ? 'low' : localStorage.getItem(BUFFER_KEY) || 'balanced'
+  )
+  const [notice, setNotice] = useState(null)
 
   const isLive = item?.live || item?.type === 'live' || item?.ext === 'ts'
 
-  const changeBuffer = (key) => {
+  // Seleção manual de buffer (desliga o modo automático)
+  const pickBuffer = (key) => {
+    setAuto(false)
+    localStorage.setItem(AUTO_KEY, 'false')
     localStorage.setItem(BUFFER_KEY, key)
     setBuffer(key)
+  }
+
+  // Liga/desliga o modo automático (começa em baixa latência e sobe se travar)
+  const toggleAuto = () => {
+    const next = !auto
+    setAuto(next)
+    localStorage.setItem(AUTO_KEY, String(next))
+    if (next) {
+      rebufferTimes.current = []
+      setBuffer('low')
+    }
   }
 
   useEffect(() => {
@@ -53,6 +77,7 @@ export default function PlayerModal({ item, onClose }) {
     let cancelled = false
     setStatus('loading')
     setError(null)
+    rebufferTimes.current = []
 
     async function start() {
       try {
@@ -78,6 +103,7 @@ export default function PlayerModal({ item, onClose }) {
           video.src = url
           video.play().catch(() => {})
         }
+        loadStamp.current = Date.now()
         if (!cancelled) setStatus('playing')
       } catch (e) {
         if (!cancelled) { setError(String(e?.message || e)); setStatus('error') }
@@ -127,6 +153,37 @@ export default function PlayerModal({ item, onClose }) {
     return () => clearInterval(id)
   }, [item, isLive])
 
+  // Modo automático: sobe de nível de buffer quando trava demais
+  useEffect(() => {
+    if (!item || !isLive || !auto) return
+    const v = videoRef.current
+    if (!v) return
+    const onWaiting = () => {
+      if (Date.now() - loadStamp.current < 3000) return // ignora o buffering inicial
+      const now = Date.now()
+      rebufferTimes.current = rebufferTimes.current.filter((t) => now - t < AUTO_WINDOW_MS)
+      rebufferTimes.current.push(now)
+      if (rebufferTimes.current.length >= AUTO_MAX_STALLS) {
+        const i = BUFFER_ORDER.indexOf(buffer)
+        if (i < BUFFER_ORDER.length - 1) {
+          const next = BUFFER_ORDER[i + 1]
+          rebufferTimes.current = []
+          setBuffer(next) // reinicia o stream com mais buffer
+          setNotice(`Travando muito — aumentando buffer: ${BUFFER_PRESETS[next].label}`)
+        }
+      }
+    }
+    v.addEventListener('waiting', onWaiting)
+    return () => v.removeEventListener('waiting', onWaiting)
+  }, [item, isLive, auto, buffer])
+
+  // Esconde o aviso automaticamente
+  useEffect(() => {
+    if (!notice) return
+    const t = setTimeout(() => setNotice(null), 3500)
+    return () => clearTimeout(t)
+  }, [notice])
+
   // Auto-ocultar o chrome após inatividade do mouse
   const pokeChrome = () => {
     setChrome(true)
@@ -172,6 +229,13 @@ export default function PlayerModal({ item, onClose }) {
             </div>
           )}
 
+          {notice && (
+            <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-2xs text-white bg-black/70 backdrop-blur rounded-full px-3.5 py-1.5 shadow-lg flex items-center gap-2">
+              <svg className="h-3.5 w-3.5 text-amber-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
+              {notice}
+            </div>
+          )}
+
           {/* Chrome superior (auto-oculta) */}
           <div className={`absolute top-0 inset-x-0 px-4 py-3 flex items-center gap-3 bg-gradient-to-b from-black/75 via-black/30 to-transparent transition-opacity duration-300 ${chrome ? 'opacity-100' : 'opacity-0'}`}>
             {isLive && (
@@ -193,16 +257,26 @@ export default function PlayerModal({ item, onClose }) {
               <div className="text-[15px] font-semibold text-white truncate drop-shadow">{item.name}</div>
             </div>
             {isLive && (
-              <div className="flex items-center gap-0.5 bg-black/40 backdrop-blur rounded-full p-0.5 shrink-0" title="Pré-cache / buffer">
-                {Object.entries(BUFFER_PRESETS).map(([key, p]) => (
-                  <button
-                    key={key}
-                    onClick={() => changeBuffer(key)}
-                    className={`text-[11px] px-2.5 py-1 rounded-full transition ${buffer === key ? 'bg-white text-black font-semibold' : 'text-white/70 hover:text-white'}`}
-                  >
-                    {p.label}
-                  </button>
-                ))}
+              <div className="flex items-center gap-0.5 bg-black/40 backdrop-blur rounded-full p-0.5 shrink-0" title="Pré-cache / buffer (Auto sobe o buffer se travar)">
+                <button
+                  onClick={toggleAuto}
+                  className={`text-[11px] px-2.5 py-1 rounded-full transition ${auto ? 'bg-accent text-white font-semibold' : 'text-white/70 hover:text-white'}`}
+                >
+                  Auto
+                </button>
+                {BUFFER_ORDER.map((key) => {
+                  const manualActive = !auto && buffer === key
+                  const autoAt = auto && buffer === key
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => pickBuffer(key)}
+                      className={`text-[11px] px-2.5 py-1 rounded-full transition ${manualActive ? 'bg-white text-black font-semibold' : 'text-white/70 hover:text-white'} ${autoAt ? 'ring-1 ring-accent/70 text-white' : ''}`}
+                    >
+                      {BUFFER_PRESETS[key].label}
+                    </button>
+                  )
+                })}
               </div>
             )}
             <button
