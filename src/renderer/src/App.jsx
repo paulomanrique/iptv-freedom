@@ -4,7 +4,6 @@ import LibraryView from './components/LibraryView'
 import DownloadBar from './components/DownloadBar'
 import DownloadsView from './components/DownloadsView'
 import PlayerModal from './components/PlayerModal'
-import WindowControls from './components/WindowControls'
 import AccountsView from './components/AccountsView'
 import AddAccountModal from './components/AddAccountModal'
 import { useDownloads } from './useDownloads'
@@ -27,7 +26,6 @@ export default function App() {
   const [showAddAccount, setShowAddAccount] = useState(false)
 
   const dl = useDownloads()
-  const isMac = window.api?.platform === 'darwin'
 
   const refreshAccounts = useCallback(async () => {
     const list = await window.api.accounts.list()
@@ -89,17 +87,15 @@ export default function App() {
   }, [refreshAccounts])
 
   return (
-    <div className="h-screen w-screen p-3">
-      <div className="glass h-full w-full rounded-2xl border border-white/10 shadow-[0_30px_80px_-20px_rgba(0,0,0,.85)] overflow-hidden flex flex-col ring-1 ring-black/20">
+    <div className="h-screen w-screen glass flex flex-col overflow-hidden">
 
         {/* Toolbar */}
-        <div className="drag bar h-11 shrink-0 flex items-center px-3 gap-3 border-b border-white/10">
-          {isMac && <div className="w-16" />}
-          <div className="no-drag font-semibold text-white/70 text-2xs uppercase tracking-wider">{TITLES[mode]}</div>
+        <div className="bar h-11 shrink-0 flex items-center px-3 gap-3 border-b border-white/10">
+          <div className="font-semibold text-white/70 text-2xs uppercase tracking-wider">{TITLES[mode]}</div>
           <div className="flex-1" />
 
           {(mode === 'movies' || mode === 'series') && (
-            <div className="no-drag bar flex rounded-lg p-0.5 border border-white/10">
+            <div className="bar flex rounded-lg p-0.5 border border-white/10">
               <button onClick={() => setViewStyle('list')} className={`h-6 w-7 grid place-items-center rounded-md ${viewStyle === 'list' ? 'bg-white/15' : 'text-white/50'}`}>
                 <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" /></svg>
               </button>
@@ -109,7 +105,7 @@ export default function App() {
             </div>
           )}
 
-          <div className="no-drag relative w-56">
+          <div className="relative w-56">
             <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-white/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
             <input
               value={isLibrary(mode) ? query : ''}
@@ -119,8 +115,6 @@ export default function App() {
               className="w-full bg-white/10 focus:bg-white/15 rounded-md pl-8 pr-3 py-1.5 text-2xs outline-none focus:ring-2 ring-accent/60 disabled:opacity-40"
             />
           </div>
-
-          <WindowControls />
         </div>
 
         {/* Corpo */}
@@ -169,7 +163,6 @@ export default function App() {
         </div>
 
         <DownloadBar downloads={dl.items} onOpen={() => navigate('downloads')} />
-      </div>
 
       <PlayerModal item={player} onClose={() => setPlayer(null)} />
       {showAddAccount && <AddAccountModal onClose={() => setShowAddAccount(false)} onAdded={onAccountAdded} />}

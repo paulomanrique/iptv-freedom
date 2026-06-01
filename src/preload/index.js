@@ -3,11 +3,6 @@ import { contextBridge, ipcRenderer } from 'electron'
 // API mínima e segura exposta ao renderer.
 const api = {
   platform: process.platform,
-  window: {
-    minimize: () => ipcRenderer.send('window:minimize'),
-    maximize: () => ipcRenderer.send('window:maximize'),
-    close: () => ipcRenderer.send('window:close')
-  },
   accounts: {
     list: () => ipcRenderer.invoke('accounts:list'),
     add: (account) => ipcRenderer.invoke('accounts:add', account),

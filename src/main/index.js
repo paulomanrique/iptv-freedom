@@ -13,9 +13,7 @@ function createWindow() {
     minWidth: 960,
     minHeight: 600,
     show: false,
-    frame: false,
-    titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
-    trafficLightPosition: { x: 14, y: 15 },
+    title: 'IPTV Freedom',
     backgroundColor: '#0b0d13',
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -40,14 +38,6 @@ function createWindow() {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
 }
-
-// ---- Controles de janela (frameless) ----
-ipcMain.on('window:minimize', () => mainWindow?.minimize())
-ipcMain.on('window:maximize', () => {
-  if (!mainWindow) return
-  mainWindow.isMaximized() ? mainWindow.unmaximize() : mainWindow.maximize()
-})
-ipcMain.on('window:close', () => mainWindow?.close())
 
 // ---- Contas ----
 ipcMain.handle('accounts:list', () => accountsStore.load())

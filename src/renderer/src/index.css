@@ -34,14 +34,6 @@ body {
   background-position: center;
 }
 
-/* Região arrastável da janela (frameless) */
-.drag {
-  -webkit-app-region: drag;
-}
-.no-drag {
-  -webkit-app-region: no-drag;
-}
-
 /* Scrollbars discretas estilo macOS */
 .scroll::-webkit-scrollbar {
   width: 8px;
