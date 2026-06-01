@@ -53,6 +53,11 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
   const useGrid = activeGroup ? activeGroup.kind !== 'live' : false
   const totalResults = groups.reduce((n, g) => n + g.total, 0)
 
+  const playItem = (m) => {
+    if (m.kind === 'live') onPlay({ type: 'live', id: m.id, name: m.name, live: true })
+    else if (m.kind === 'vod') onPlay({ type: 'movie', id: m.id, ext: m.ext, name: m.name })
+  }
+
   if (loading) {
     return (
       <section className="flex-1 grid place-items-center text-2xs text-white/45">
@@ -103,7 +108,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
           {useGrid ? (
             <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 p-4">
               {items.map((m) => (
-                <div key={`${m.kind}:${m.id}`} className={`cursor-pointer rounded-lg p-1 ${String(m.id) === String(selected?.id) ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)}>
+                <div key={`${m.kind}:${m.id}`} className={`cursor-pointer rounded-lg p-1 ${String(m.id) === String(selected?.id) ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
                   <Poster icon={m.icon} seed={seedOf(m)} className="aspect-[2/3] w-full" />
                   <div className="text-2xs font-medium truncate mt-1 px-0.5">{m.name}</div>
                 </div>
@@ -112,7 +117,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
           ) : (
             <div className="divide-y divide-white/5">
               {items.map((m) => (
-                <div key={`${m.kind}:${m.id}`} className={`flex items-center gap-3 px-4 py-2 cursor-pointer ${String(m.id) === String(selected?.id) ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)}>
+                <div key={`${m.kind}:${m.id}`} className={`flex items-center gap-3 px-4 py-2 cursor-pointer ${String(m.id) === String(selected?.id) ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
                   <Poster icon={m.icon} seed={seedOf(m)} className="h-8 w-8" />
                   <div className="flex-1 min-w-0"><div className="font-medium truncate">{m.name}</div></div>
                   <span className="text-[10px] text-red-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />LIVE</span>
