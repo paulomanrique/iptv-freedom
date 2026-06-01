@@ -6,24 +6,22 @@ import mpegts from 'mpegts.js'
 const BUFFER_PRESETS = {
   low: {
     label: 'Baixa latência',
-    enableStashBuffer: false,
-    stashInitialSize: 128 * 1024,
-    liveBufferLatencyChasing: true,
-    liveBufferLatencyMaxLatency: 1.5,
-    liveBufferLatencyMinRemain: 0.3
-  },
-  balanced: {
-    label: 'Equilibrado',
     enableStashBuffer: true,
     stashInitialSize: 384 * 1024,
     liveBufferLatencyChasing: true,
     liveBufferLatencyMaxLatency: 4.0,
     liveBufferLatencyMinRemain: 1.0
   },
+  balanced: {
+    label: 'Equilibrado',
+    enableStashBuffer: true,
+    stashInitialSize: 1024 * 1024,
+    liveBufferLatencyChasing: false
+  },
   high: {
     label: 'Mais buffer',
     enableStashBuffer: true,
-    stashInitialSize: 1024 * 1024,
+    stashInitialSize: 4 * 1024 * 1024,
     liveBufferLatencyChasing: false
   }
 }
