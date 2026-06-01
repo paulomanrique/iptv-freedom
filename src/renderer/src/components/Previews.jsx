@@ -48,7 +48,7 @@ export function MoviePreview({ item, seed, onPlay, onDownload, fav }) {
         <button onClick={() => onPlay({ type: 'movie', id: item.id, ext: item.ext, name: item.name })} className="bg-white text-black font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2 hover:bg-white/90">
           <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>Assistir
         </button>
-        <button onClick={() => onDownload({ type: 'movie', id: item.id, ext: item.ext, name: item.name })} className="bg-white/12 hover:bg-white/20 font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2">
+        <button onClick={() => onDownload({ type: 'movie', id: item.id, ext: item.ext, name: item.name, icon: item.icon })} className="bg-white/12 hover:bg-white/20 font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2">
           <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>Baixar arquivo
         </button>
       </div>
@@ -127,7 +127,7 @@ export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) 
             <button title="Assistir" onClick={() => onPlay({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} · T${season}E${ep.episode_num}` })} className="h-7 w-7 grid place-items-center rounded-md bg-white/10 hover:bg-white/20">
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
             </button>
-            <button title="Baixar" onClick={() => onDownload({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} T${season}E${ep.episode_num}` })} className="h-7 w-7 grid place-items-center rounded-md bg-white/10 hover:bg-white/20">
+            <button title="Baixar" onClick={() => onDownload({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} T${season}E${ep.episode_num}`, icon: item.icon })} className="h-7 w-7 grid place-items-center rounded-md bg-white/10 hover:bg-white/20">
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
             </button>
           </div>

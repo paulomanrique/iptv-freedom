@@ -1,4 +1,4 @@
-import { gradient } from '../data'
+import { Poster } from './Previews'
 import { formatBytes, formatSpeed, downloadLabel } from '../format'
 
 function Row({ d, seed, onPause, onResume, onCancel, onOpen }) {
@@ -9,7 +9,7 @@ function Row({ d, seed, onPause, onResume, onCancel, onOpen }) {
 
   return (
     <div className="flex items-center gap-3 px-4 py-2.5">
-      <div className="h-9 w-6 rounded-md shrink-0" style={{ background: gradient(seed) }} />
+      <Poster icon={d.icon} seed={seed} className="h-10 w-7" />
       <div className="flex-1 min-w-0">
         <div className="flex justify-between gap-2">
           <span className="font-medium truncate">{d.name}</span>
