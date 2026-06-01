@@ -1,6 +1,34 @@
 import { useEffect, useRef, useState } from 'react'
 import mpegts from 'mpegts.js'
 
+// Presets de pré-cache (buffer) para o ao vivo via mpegts.js.
+// stashInitialSize = buffer inicial; latencyChasing corta buffer p/ baixar a latência.
+const BUFFER_PRESETS = {
+  low: {
+    label: 'Baixa latência',
+    enableStashBuffer: false,
+    stashInitialSize: 128 * 1024,
+    liveBufferLatencyChasing: true,
+    liveBufferLatencyMaxLatency: 1.5,
+    liveBufferLatencyMinRemain: 0.3
+  },
+  balanced: {
+    label: 'Equilibrado',
+    enableStashBuffer: true,
+    stashInitialSize: 384 * 1024,
+    liveBufferLatencyChasing: true,
+    liveBufferLatencyMaxLatency: 4.0,
+    liveBufferLatencyMinRemain: 1.0
+  },
+  high: {
+    label: 'Mais buffer',
+    enableStashBuffer: true,
+    stashInitialSize: 1024 * 1024,
+    liveBufferLatencyChasing: false
+  }
+}
+const BUFFER_KEY = 'iptvfreedom.bufferPreset'
+
 // Reproduz VOD (.mp4) com <video> nativo e ao vivo (.ts) via mpegts.js (MSE).
 export default function PlayerModal({ item, onClose }) {
   const videoRef = useRef(null)
@@ -8,8 +36,14 @@ export default function PlayerModal({ item, onClose }) {
   const [status, setStatus] = useState('loading') // loading | playing | error
   const [error, setError] = useState(null)
   const [chrome, setChrome] = useState(true) // overlay (topo) visível
+  const [buffer, setBuffer] = useState(() => localStorage.getItem(BUFFER_KEY) || 'balanced')
 
   const isLive = item?.live || item?.type === 'live' || item?.ext === 'ts'
+
+  const changeBuffer = (key) => {
+    localStorage.setItem(BUFFER_KEY, key)
+    setBuffer(key)
+  }
 
   useEffect(() => {
     if (!item) return
@@ -26,9 +60,10 @@ export default function PlayerModal({ item, onClose }) {
         if (!video) return
 
         if (isLive && mpegts.isSupported()) {
+          const { label, ...cfg } = BUFFER_PRESETS[buffer] || BUFFER_PRESETS.balanced
           mpegtsPlayer = mpegts.createPlayer(
             { type: 'mpegts', isLive: true, url },
-            { liveBufferLatencyChasing: true, lazyLoad: false }
+            { lazyLoad: false, ...cfg }
           )
           mpegtsPlayer.attachMediaElement(video)
           mpegtsPlayer.on(mpegts.Events.ERROR, (type, detail) => {
@@ -56,7 +91,7 @@ export default function PlayerModal({ item, onClose }) {
       const v = videoRef.current
       if (v) { try { v.pause(); v.removeAttribute('src'); v.load() } catch { /* noop */ } }
     }
-  }, [item])
+  }, [item, buffer])
 
   // Fechar com ESC
   useEffect(() => {
@@ -121,6 +156,19 @@ export default function PlayerModal({ item, onClose }) {
             <div className="flex-1 min-w-0">
               <div className="text-[15px] font-semibold text-white truncate drop-shadow">{item.name}</div>
             </div>
+            {isLive && (
+              <div className="flex items-center gap-0.5 bg-black/40 backdrop-blur rounded-full p-0.5 shrink-0" title="Pré-cache / buffer">
+                {Object.entries(BUFFER_PRESETS).map(([key, p]) => (
+                  <button
+                    key={key}
+                    onClick={() => changeBuffer(key)}
+                    className={`text-[11px] px-2.5 py-1 rounded-full transition ${buffer === key ? 'bg-white text-black font-semibold' : 'text-white/70 hover:text-white'}`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            )}
             <button
               onClick={onClose}
               title="Fechar (Esc)"
