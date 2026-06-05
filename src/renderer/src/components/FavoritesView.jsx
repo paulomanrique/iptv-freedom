@@ -36,7 +36,7 @@ export default function FavoritesView({ account, favorites, onPlay, onDownload, 
   return (
     <>
       {/* Coluna 1: grupos (Ao vivo / Filmes / Séries) */}
-      <div className="w-56 shrink-0 bar border-r border-white/10 flex flex-col">
+      <div className="w-56 shrink-0 bar border-e border-white/10 flex flex-col">
         <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/35 border-b border-white/10">{t('nav.favorites')}</div>
         <div className="flex-1 scroll overflow-y-auto py-1">
           {groups.map((g) => {
@@ -45,7 +45,7 @@ export default function FavoritesView({ account, favorites, onPlay, onDownload, 
               <button
                 key={g.kind}
                 onClick={() => { setGroupKind(g.kind); setSelectedId(null) }}
-                className={`w-full text-left px-3 py-1.5 text-2xs flex items-center justify-between gap-2 transition ${active ? 'bg-accent/25 text-white' : 'text-white/70 hover:bg-white/5'}`}
+                className={`w-full text-start px-3 py-1.5 text-2xs flex items-center justify-between gap-2 transition ${active ? 'bg-accent/25 text-white' : 'text-white/70 hover:bg-white/5'}`}
               >
                 <span className="truncate">{g.label}</span>
                 <span className="text-[10px] text-white/35">{g.items.length}</span>
@@ -86,7 +86,7 @@ export default function FavoritesView({ account, favorites, onPlay, onDownload, 
       </section>
 
       {/* Coluna 3: prévia */}
-      <aside className="w-80 shrink-0 bar border-l border-white/10 scroll overflow-y-auto">
+      <aside className="w-80 shrink-0 bar border-s border-white/10 scroll overflow-y-auto">
         {selected ? (
           selected.kind === 'live' ? (
             <LivePreview item={selected} seed={seedOf(selected)} onPlay={onPlay} fav={fav} />

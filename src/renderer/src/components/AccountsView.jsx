@@ -154,7 +154,7 @@ export default function AccountsView({ accounts, activeId, selectedId, onSelect,
         </div>
       </section>
 
-      <aside className="w-80 shrink-0 bar border-l border-white/10 scroll overflow-y-auto">
+      <aside className="w-80 shrink-0 bar border-s border-white/10 scroll overflow-y-auto">
         {selected ? (
           <Detail account={selected} onRemove={onRemove} onSetActive={onSetActive} isActive={selected.id === activeId} />
         ) : (

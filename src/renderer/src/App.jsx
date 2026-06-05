@@ -130,7 +130,7 @@ export default function App() {
           )}
 
           <form onSubmit={submitSearch} className="relative w-64">
-            <button type="submit" disabled={!activeAccount} title={t('toolbar.search')} className="absolute left-2 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center text-white/40 hover:text-white disabled:hover:text-white/40">
+            <button type="submit" disabled={!activeAccount} title={t('toolbar.search')} className="absolute start-2 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center text-white/40 hover:text-white disabled:hover:text-white/40">
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
             </button>
             <input
@@ -138,10 +138,10 @@ export default function App() {
               onChange={(e) => setSearchInput(e.target.value)}
               disabled={!activeAccount}
               placeholder={t('toolbar.searchPlaceholder')}
-              className="w-full bg-white/10 focus:bg-white/15 rounded-md pl-8 pr-7 py-1.5 text-2xs outline-none focus:ring-2 ring-accent/60 disabled:opacity-40"
+              className="w-full bg-white/10 focus:bg-white/15 rounded-md ps-8 pe-7 py-1.5 text-2xs outline-none focus:ring-2 ring-accent/60 disabled:opacity-40"
             />
             {searchInput && (
-              <button type="button" title={t('toolbar.clear')} onClick={() => setSearchInput('')} className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center text-white/40 hover:text-white">
+              <button type="button" title={t('toolbar.clear')} onClick={() => setSearchInput('')} className="absolute end-2 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center text-white/40 hover:text-white">
                 <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M18 6 6 18" /></svg>
               </button>
             )}

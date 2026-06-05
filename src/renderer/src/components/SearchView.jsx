@@ -77,7 +77,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
   return (
     <>
       {/* Coluna 1: tipos de resultado */}
-      <div className="w-56 shrink-0 bar border-r border-white/10 flex flex-col">
+      <div className="w-56 shrink-0 bar border-e border-white/10 flex flex-col">
         <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/35 border-b border-white/10 truncate">
           {t('search.results', { query })}
         </div>
@@ -88,7 +88,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
               <button
                 key={g.kind}
                 onClick={() => { setGroupKind(g.kind); setSelectedId(null) }}
-                className={`w-full text-left px-3 py-1.5 text-2xs flex items-center justify-between gap-2 transition ${active ? 'bg-accent/25 text-white' : 'text-white/70 hover:bg-white/5'}`}
+                className={`w-full text-start px-3 py-1.5 text-2xs flex items-center justify-between gap-2 transition ${active ? 'bg-accent/25 text-white' : 'text-white/70 hover:bg-white/5'}`}
               >
                 <span className="truncate">{labelFor(g.kind)}</span>
                 <span className="text-[10px] text-white/35">{g.total > g.items.length ? `${g.items.length}+` : g.items.length}</span>
@@ -129,7 +129,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
       </section>
 
       {/* Coluna 3: prévia */}
-      <aside className="w-80 shrink-0 bar border-l border-white/10 scroll overflow-y-auto">
+      <aside className="w-80 shrink-0 bar border-s border-white/10 scroll overflow-y-auto">
         {selected ? (
           selected.kind === 'live' ? (
             <LivePreview item={selected} seed={seedOf(selected)} onPlay={onPlay} fav={fav} />

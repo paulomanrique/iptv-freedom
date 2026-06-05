@@ -7,8 +7,8 @@ export default function Sidebar({ view, onNavigate, account }) {
   const initials = account ? (account.name || account.host).slice(0, 2).toUpperCase() : '—'
 
   return (
-    <aside className="w-52 shrink-0 bar border-r border-white/10 flex flex-col py-2 scroll overflow-y-auto">
-      <button onClick={() => onNavigate('accounts')} className="no-drag mx-2 px-1 py-2 flex items-center gap-2.5 rounded-lg hover:bg-white/5 transition text-left">
+    <aside className="w-52 shrink-0 bar border-e border-white/10 flex flex-col py-2 scroll overflow-y-auto">
+      <button onClick={() => onNavigate('accounts')} className="no-drag mx-2 px-1 py-2 flex items-center gap-2.5 rounded-lg hover:bg-white/5 transition text-start">
         <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-accent to-fuchsia-500 grid place-items-center text-2xs font-bold">{initials}</div>
         <div className="min-w-0">
           {account ? (

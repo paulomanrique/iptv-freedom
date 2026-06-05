@@ -17,6 +17,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Espelha o brilho ambiente para o canto inicial nos idiomas RTL (ar/ur) */
+[dir='rtl'] body {
+  background: radial-gradient(900px 600px at 0% 0%, #2a2340 0%, transparent 55%), #0b0d13;
+}
+
 /* Vibrancy emulada (gradiente + blur sobre painéis translúcidos) */
 .glass {
   background: rgba(22, 24, 32, 0.7);

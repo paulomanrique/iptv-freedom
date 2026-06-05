@@ -43,13 +43,13 @@ export default function LanguageMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full mt-1 z-[70] w-44 max-h-80 overflow-y-auto scroll glass border border-white/10 rounded-lg shadow-2xl p-1 animate-fadein">
+        <div className="absolute end-0 top-full mt-1 z-[70] w-44 max-h-80 overflow-y-auto scroll glass border border-white/10 rounded-lg shadow-2xl p-1 animate-fadein">
           {LANGUAGES.map((l) => (
             <button
               key={l.code}
               onClick={() => choose(l.code)}
               dir={l.dir}
-              className={`w-full text-left px-3 py-1.5 rounded-md text-2xs flex items-center justify-between gap-2 transition ${
+              className={`w-full text-start px-3 py-1.5 rounded-md text-2xs flex items-center justify-between gap-2 transition ${
                 l.code === current ? 'bg-accent/25 text-white' : 'text-white/70 hover:bg-white/5'
               }`}
             >
