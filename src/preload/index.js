@@ -6,6 +6,7 @@ const api = {
   accounts: {
     list: () => ipcRenderer.invoke('accounts:list'),
     add: (account) => ipcRenderer.invoke('accounts:add', account),
+    update: (id, account) => ipcRenderer.invoke('accounts:update', id, account),
     remove: (id) => ipcRenderer.invoke('accounts:remove', id)
   },
   xtream: {

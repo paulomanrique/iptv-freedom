@@ -36,7 +36,8 @@
     "fillFields": "Rellena host, usuario y contraseña.",
     "validating": "Validando…",
     "add": "Añadir",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "save": "Guardar"
   },
   "accounts": {
     "empty": "Aún no hay cuentas añadidas.",
@@ -56,7 +57,8 @@
     "makeActive": "Activar",
     "isActive": "✓ Cuenta activa",
     "remove": "Eliminar cuenta",
-    "selectPrompt": "Añade una cuenta para empezar."
+    "selectPrompt": "Añade una cuenta para empezar.",
+    "edit": "Editar cuenta"
   },
   "library": {
     "categories": "Categorías",

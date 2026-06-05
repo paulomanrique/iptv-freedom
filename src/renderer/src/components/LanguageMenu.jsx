@@ -43,7 +43,7 @@ export default function LanguageMenu() {
       </button>
 
       {open && (
-        <div className="absolute end-0 top-full mt-1 z-[70] w-44 max-h-80 overflow-y-auto scroll glass border border-white/10 rounded-lg shadow-2xl p-1 animate-fadein">
+        <div className="absolute end-0 top-full mt-1 z-[70] w-44 max-h-80 overflow-y-auto scroll bg-[#1b1e27] border border-white/10 rounded-lg shadow-2xl p-1 animate-fadein">
           {LANGUAGES.map((l) => (
             <button
               key={l.code}

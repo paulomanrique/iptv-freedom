@@ -30,7 +30,8 @@ export default function App() {
   const [accounts, setAccounts] = useState([])
   const [activeId, setActiveId] = useState(() => localStorage.getItem(ACTIVE_KEY) || null)
   const [selectedAccountId, setSelectedAccountId] = useState(null)
-  const [showAddAccount, setShowAddAccount] = useState(false)
+  // null = fechado; { account: null } = adicionar; { account } = editar
+  const [accountModal, setAccountModal] = useState(null)
 
   const dl = useDownloads()
   const fav = useFavorites(activeId)
@@ -97,10 +98,11 @@ export default function App() {
     showToast(t('toast.activeUpdated'))
   }, [showToast, t])
 
-  const onAccountAdded = useCallback((account) => {
+  const onAccountSaved = useCallback((account, _info, isEdit) => {
     refreshAccounts().then(() => {
       setSelectedAccountId(account.id)
-      setActive(account.id)
+      // Conta nova entra como ativa; edição preserva a conta ativa atual.
+      if (!isEdit) setActive(account.id)
     })
   }, [refreshAccounts, setActive])
 
@@ -177,7 +179,8 @@ export default function App() {
               activeId={activeId}
               selectedId={selectedAccountId}
               onSelect={setSelectedAccountId}
-              onAdd={() => setShowAddAccount(true)}
+              onAdd={() => setAccountModal({ account: null })}
+              onEdit={(account) => setAccountModal({ account })}
               onRemove={onRemoveAccount}
               onSetActive={setActive}
             />
@@ -227,7 +230,7 @@ export default function App() {
         <DownloadBar downloads={dl.items} onOpen={() => navigate('downloads')} />
 
       <PlayerModal item={player} onClose={() => setPlayer(null)} />
-      {showAddAccount && <AddAccountModal onClose={() => setShowAddAccount(false)} onAdded={onAccountAdded} />}
+      {accountModal && <AddAccountModal account={accountModal.account} onClose={() => setAccountModal(null)} onSaved={onAccountSaved} />}
 
       {toast && (
         <div className="fixed bottom-12 left-1/2 -translate-x-1/2 z-[60] glass border border-white/10 rounded-lg px-4 py-2 text-2xs shadow-2xl">{toast}</div>

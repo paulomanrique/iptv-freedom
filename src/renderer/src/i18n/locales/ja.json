@@ -36,7 +36,8 @@
     "fillFields": "ホスト、ユーザー名、パスワードを入力してください。",
     "validating": "確認中…",
     "add": "追加",
-    "cancel": "キャンセル"
+    "cancel": "キャンセル",
+    "save": "保存"
   },
   "accounts": {
     "empty": "まだアカウントが追加されていません。",
@@ -56,7 +57,8 @@
     "makeActive": "アクティブにする",
     "isActive": "✓ アクティブなアカウント",
     "remove": "アカウントを削除",
-    "selectPrompt": "アカウントを追加して始めましょう。"
+    "selectPrompt": "アカウントを追加して始めましょう。",
+    "edit": "アカウントを編集"
   },
   "library": {
     "categories": "カテゴリ",

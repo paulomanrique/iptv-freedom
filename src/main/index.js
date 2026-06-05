@@ -54,6 +54,20 @@ ipcMain.handle('accounts:add', async (_e, account) => {
   const entry = await accountsStore.add(account)
   return { account: entry, info }
 })
+ipcMain.handle('accounts:update', async (_e, id, account) => {
+  // Revalida as credenciais (podem ter mudado) antes de gravar
+  const info = await xtream.getAccountInfo(account)
+  if (!info?.user_info || Number(info.user_info.auth) !== 1) {
+    throw new Error('auth_failed')
+  }
+  const entry = await accountsStore.update(id, {
+    name: account.name?.trim() || account.host,
+    host: account.host.trim(),
+    username: account.username.trim(),
+    password: account.password
+  })
+  return { account: entry, info }
+})
 ipcMain.handle('accounts:remove', (_e, id) => accountsStore.remove(id))
 
 // ---- Xtream ----

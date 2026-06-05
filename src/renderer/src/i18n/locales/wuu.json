@@ -36,7 +36,8 @@
     "fillFields": "请填主机、用户名搭密码。",
     "validating": "勒辣验证…",
     "add": "添加",
-    "cancel": "取消"
+    "cancel": "取消",
+    "save": "保存"
   },
   "accounts": {
     "empty": "还呒没添加账户。",
@@ -56,7 +57,8 @@
     "makeActive": "设为当前",
     "isActive": "✓ 当前账户",
     "remove": "移除账户",
-    "selectPrompt": "添加一只账户就好开始。"
+    "selectPrompt": "添加一只账户就好开始。",
+    "edit": "编辑账户"
   },
   "library": {
     "categories": "分类",

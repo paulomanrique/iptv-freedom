@@ -36,7 +36,8 @@
     "fillFields": "Sunucu, kullanıcı adı ve parolayı doldurun.",
     "validating": "Doğrulanıyor…",
     "add": "Ekle",
-    "cancel": "İptal"
+    "cancel": "İptal",
+    "save": "Kaydet"
   },
   "accounts": {
     "empty": "Henüz hesap eklenmedi.",
@@ -56,7 +57,8 @@
     "makeActive": "Etkinleştir",
     "isActive": "✓ Etkin hesap",
     "remove": "Hesabı kaldır",
-    "selectPrompt": "Başlamak için bir hesap ekleyin."
+    "selectPrompt": "Başlamak için bir hesap ekleyin.",
+    "edit": "Hesabı düzenle"
   },
   "library": {
     "categories": "Kategoriler",

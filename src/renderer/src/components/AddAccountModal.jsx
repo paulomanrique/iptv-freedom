@@ -1,9 +1,17 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export default function AddAccountModal({ onClose, onAdded }) {
+// `account` definido => modo edição (pré-preenche e chama accounts.update);
+// ausente => modo adição (accounts.add).
+export default function AddAccountModal({ account, onClose, onSaved }) {
   const { t } = useTranslation()
-  const [form, setForm] = useState({ name: '', host: '', username: '', password: '' })
+  const isEdit = !!account
+  const [form, setForm] = useState({
+    name: account?.name || '',
+    host: account?.host || '',
+    username: account?.username || '',
+    password: account?.password || ''
+  })
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(null)
 
@@ -18,8 +26,10 @@ export default function AddAccountModal({ onClose, onAdded }) {
     }
     setBusy(true)
     try {
-      const { account, info } = await window.api.accounts.add(form)
-      onAdded(account, info)
+      const { account: saved, info } = isEdit
+        ? await window.api.accounts.update(account.id, form)
+        : await window.api.accounts.add(form)
+      onSaved(saved, info, isEdit)
       onClose()
     } catch (err) {
       const msg = String(err?.message || err).replace('Error: ', '')
@@ -36,7 +46,7 @@ export default function AddAccountModal({ onClose, onAdded }) {
     <div className="fixed inset-0 z-50 grid place-items-center p-8">
       <div className="absolute inset-0 bg-black/55" onClick={busy ? undefined : onClose} />
       <form onSubmit={submit} className="glass relative w-full max-w-md rounded-2xl border border-white/10 shadow-2xl p-6 animate-fadein">
-        <h2 className="text-lg font-bold mb-1">{t('addAccount.title')}</h2>
+        <h2 className="text-lg font-bold mb-1">{isEdit ? t('accounts.edit') : t('addAccount.title')}</h2>
         <p className="text-2xs text-white/45 mb-5">{t('addAccount.subtitle')}</p>
 
         <div className="space-y-3">
@@ -64,7 +74,7 @@ export default function AddAccountModal({ onClose, onAdded }) {
           <button type="button" onClick={onClose} disabled={busy} className="flex-1 py-2 rounded-lg bg-white/10 hover:bg-white/15 text-[13px] font-medium disabled:opacity-50">{t('addAccount.cancel')}</button>
           <button type="submit" disabled={busy} className="flex-1 py-2 rounded-lg bg-accent hover:bg-accent-soft text-white text-[13px] font-semibold disabled:opacity-60 flex items-center justify-center gap-2">
             {busy && <span className="h-3.5 w-3.5 rounded-full border-2 border-white/40 border-t-white animate-spin" />}
-            {busy ? t('addAccount.validating') : t('addAccount.add')}
+            {busy ? t('addAccount.validating') : isEdit ? t('addAccount.save') : t('addAccount.add')}
           </button>
         </div>
       </form>

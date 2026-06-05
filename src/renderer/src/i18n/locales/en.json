@@ -36,7 +36,8 @@
     "fillFields": "Fill in host, username and password.",
     "validating": "Validating…",
     "add": "Add",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "save": "Save"
   },
   "accounts": {
     "empty": "No accounts added yet.",
@@ -56,7 +57,8 @@
     "makeActive": "Make active",
     "isActive": "✓ Active account",
     "remove": "Remove account",
-    "selectPrompt": "Add an account to get started."
+    "selectPrompt": "Add an account to get started.",
+    "edit": "Edit account"
   },
   "library": {
     "categories": "Categories",

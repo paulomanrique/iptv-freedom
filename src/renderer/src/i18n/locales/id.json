@@ -36,7 +36,8 @@
     "fillFields": "Isi host, nama pengguna, dan kata sandi.",
     "validating": "Memvalidasi…",
     "add": "Tambah",
-    "cancel": "Batal"
+    "cancel": "Batal",
+    "save": "Simpan"
   },
   "accounts": {
     "empty": "Belum ada akun yang ditambahkan.",
@@ -56,7 +57,8 @@
     "makeActive": "Jadikan aktif",
     "isActive": "✓ Akun aktif",
     "remove": "Hapus akun",
-    "selectPrompt": "Tambahkan akun untuk memulai."
+    "selectPrompt": "Tambahkan akun untuk memulai.",
+    "edit": "Edit akun"
   },
   "library": {
     "categories": "Kategori",

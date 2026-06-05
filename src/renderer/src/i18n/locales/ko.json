@@ -36,7 +36,8 @@
     "fillFields": "호스트, 사용자 이름, 비밀번호를 입력하세요.",
     "validating": "확인 중…",
     "add": "추가",
-    "cancel": "취소"
+    "cancel": "취소",
+    "save": "저장"
   },
   "accounts": {
     "empty": "아직 추가된 계정이 없습니다.",
@@ -56,7 +57,8 @@
     "makeActive": "활성으로 설정",
     "isActive": "✓ 활성 계정",
     "remove": "계정 제거",
-    "selectPrompt": "시작하려면 계정을 추가하세요."
+    "selectPrompt": "시작하려면 계정을 추가하세요.",
+    "edit": "계정 편집"
   },
   "library": {
     "categories": "카테고리",
