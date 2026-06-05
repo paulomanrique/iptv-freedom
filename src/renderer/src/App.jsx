@@ -113,8 +113,8 @@ export default function App() {
   return (
     <div className="h-screen w-screen glass flex flex-col overflow-hidden">
 
-        {/* Toolbar */}
-        <div className="bar h-11 shrink-0 flex items-center px-3 gap-3 border-b border-white/10">
+        {/* Toolbar (relative z-30: garante que dropdowns ancorados aqui — ex.: idioma — fiquem acima do corpo) */}
+        <div className="bar relative z-30 h-11 shrink-0 flex items-center px-3 gap-3 border-b border-white/10">
           <div className="font-semibold text-white/70 text-2xs uppercase tracking-wider">{t(`nav.${mode}`)}</div>
           <div className="flex-1" />
 
