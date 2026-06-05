@@ -33,7 +33,6 @@
     font-size:17px; line-height:1.6; letter-spacing:-.01em;
     -webkit-font-smoothing:antialiased; overflow-x:hidden;
   }
-  /* Atmosfera: glows radiais + grão */
   body::before{
     content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
     background:
@@ -70,6 +69,27 @@
   .btn-ghost:hover{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.06)}
   .nav-cta{display:flex;gap:10px;align-items:center}
 
+  /* LANG SWITCHER */
+  .lang-menu{position:relative}
+  .lang-btn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 10px;border-radius:11px;
+    border:1px solid var(--line2);background:var(--panel);color:var(--muted);cursor:pointer;font-family:inherit;
+    font-size:13px;font-weight:600;transition:color .2s,border-color .2s,background .2s}
+  .lang-btn:hover{color:var(--ink);border-color:rgba(255,255,255,.3)}
+  .lang-btn svg{width:16px;height:16px}
+  .lang-btn .code{text-transform:uppercase;letter-spacing:.03em;font-family:"JetBrains Mono",monospace;font-size:12px}
+  .lang-pop{position:absolute;top:calc(100% + 8px);inset-inline-end:0;width:210px;max-height:340px;overflow-y:auto;
+    background:#13151c;border:1px solid var(--line2);border-radius:13px;padding:6px;
+    box-shadow:0 24px 60px -16px rgba(0,0,0,.85);display:none;z-index:60}
+  .lang-pop.open{display:block;animation:pop .16s var(--ease)}
+  @keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .lang-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;
+    padding:9px 12px;border-radius:9px;border:0;background:transparent;color:var(--muted);cursor:pointer;
+    font-family:inherit;font-size:14px;font-weight:600;text-align:start;transition:background .15s,color .15s}
+  .lang-opt:hover{background:rgba(255,255,255,.05);color:var(--ink)}
+  .lang-opt[aria-selected="true"]{background:rgba(59,141,255,.18);color:#fff}
+  .lang-opt em{font-style:normal;color:var(--faint);font-family:"JetBrains Mono",monospace;font-size:11px}
+  .lang-opt[aria-selected="true"] em{color:var(--blue2)}
+
   /* HERO */
   .hero{padding:74px 0 40px;position:relative}
   .eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:12.5px;color:var(--blue2);
@@ -98,15 +118,14 @@
   .winbar .r{background:#ff5f57}.winbar .y{background:#febc2e}.winbar .g{background:#28c840}
   .winbar span{margin:0 auto;font-size:12px;color:var(--faint);font-family:"JetBrains Mono",monospace}
   .window img{display:block;width:100%;height:auto}
-  /* chips flutuantes */
   .chip{position:absolute;z-index:3;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
     padding:9px 14px;border-radius:12px;border:1px solid var(--line2);
     background:rgba(17,20,28,.78);backdrop-filter:blur(10px);box-shadow:0 14px 36px -14px rgba(0,0,0,.8);
     animation:float 6s ease-in-out infinite}
   .chip svg{width:15px;height:15px}
-  .chip-1{top:8%;left:-2%;color:#bcd6ff}
-  .chip-2{top:42%;right:-3%;color:#f6c6ee;animation-delay:-2s}
-  .chip-3{bottom:9%;left:5%;color:#bff0d0;animation-delay:-4s}
+  .chip-1{top:8%;inset-inline-start:-2%;color:#bcd6ff}
+  .chip-2{top:42%;inset-inline-end:-3%;color:#f6c6ee;animation-delay:-2s}
+  .chip-3{bottom:9%;inset-inline-start:5%;color:#bff0d0;animation-delay:-4s}
   @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 
   /* STATS */
@@ -136,7 +155,7 @@
   .ic svg{width:21px;height:21px}
   .card h3{font-family:"Bricolage Grotesque";font-weight:700;font-size:21px;letter-spacing:-.02em}
   .card p{color:var(--muted);font-size:15.5px;margin-top:9px}
-  .card .tag{position:absolute;top:22px;right:22px;font-size:11px;color:var(--faint);font-family:"JetBrains Mono",monospace}
+  .card .tag{position:absolute;top:22px;inset-inline-end:22px;font-size:11px;color:var(--faint);font-family:"JetBrains Mono",monospace}
 
   /* LANGUAGES */
   .langs{margin-top:120px;padding:74px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -149,8 +168,10 @@
   .langs:hover .track{animation-play-state:paused}
   .lang{flex:0 0 auto;font-size:20px;font-weight:600;padding:13px 24px;border-radius:14px;
     border:1px solid var(--line);background:rgba(255,255,255,.03);white-space:nowrap;font-family:"Bricolage Grotesque";letter-spacing:-.01em}
-  .lang em{color:var(--faint);font-style:normal;font-size:13px;font-family:"JetBrains Mono",monospace;margin-left:9px}
+  .lang em{color:var(--faint);font-style:normal;font-size:13px;font-family:"JetBrains Mono",monospace;margin-inline-start:9px}
   @keyframes scroll{to{transform:translateX(-50%)}}
+  [dir="rtl"] .track{animation-direction:reverse}
+  [dir="rtl"] .track.rev{animation-direction:normal}
 
   /* CTA */
   .cta{margin:120px 0 0;text-align:center}
@@ -184,7 +205,7 @@
     .features{grid-template-columns:1fr}
     .card,.card.big{grid-column:span 1}
     .window{transform:none}
-    .chip-1{left:auto;right:-1%;top:4%}.chip-3{display:none}
+    .chip-1{inset-inline-start:auto;inset-inline-end:-1%;top:4%}.chip-3{display:none}
     .sec{padding:88px 0 0}
   }
 </style>
@@ -200,12 +221,19 @@
       </a>
       <div class="spacer"></div>
       <div class="nav-links">
-        <a href="#recursos">Recursos</a>
-        <a href="#idiomas">Idiomas</a>
+        <a href="#recursos" data-i18n="nav_features">Recursos</a>
+        <a href="#idiomas" data-i18n="nav_languages">Idiomas</a>
         <a href="https://github.com/paulomanrique/iptv-freedom" target="_blank" rel="noopener">GitHub</a>
       </div>
       <div class="nav-cta">
-        <a class="btn btn-primary" href="https://github.com/paulomanrique/iptv-freedom/releases/latest" target="_blank" rel="noopener">Baixar</a>
+        <div class="lang-menu">
+          <button class="lang-btn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" title="Idioma">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg>
+            <span class="code" id="langCode">PT</span>
+          </button>
+          <div class="lang-pop" id="langPop" role="listbox" aria-label="Idioma"></div>
+        </div>
+        <a class="btn btn-primary" href="https://github.com/paulomanrique/iptv-freedom/releases/latest" target="_blank" rel="noopener" data-i18n="nav_download">Baixar</a>
       </div>
     </nav>
   </div>
@@ -216,43 +244,41 @@
   <!-- HERO -->
   <section class="hero">
     <div class="wrap">
-      <span class="eyebrow mono reveal"><span class="dot"></span>Cliente desktop · padrão Xtream Codes</span>
-      <h1 class="reveal" style="--d:.05s">A sua IPTV num app<br><span class="grad-text">de verdade.</span></h1>
-      <p class="lede reveal" style="--d:.1s">Ao vivo, filmes, séries, downloads e favoritos num único lugar — <b>rápido, bonito e em 20 idiomas</b>. Conecte qualquer provedor no padrão Xtream Codes; suas credenciais ficam só no seu computador.</p>
+      <span class="eyebrow mono reveal"><span class="dot"></span><span data-i18n="hero_eyebrow">Cliente desktop · padrão Xtream Codes</span></span>
+      <h1 class="reveal" style="--d:.05s" data-i18n-html="hero_h1">A sua IPTV num app<br><span class="grad-text">de verdade.</span></h1>
+      <p class="lede reveal" style="--d:.1s" data-i18n-html="hero_lede">Ao vivo, filmes, séries, downloads e favoritos num único lugar — <b>rápido, bonito e em 20 idiomas</b>. Conecte qualquer provedor no padrão Xtream Codes; suas credenciais ficam só no seu computador.</p>
       <div class="hero-cta reveal" style="--d:.15s">
         <a class="btn btn-primary btn-lg" href="https://github.com/paulomanrique/iptv-freedom/releases/latest" target="_blank" rel="noopener">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
-          Baixar para desktop
+          <span data-i18n="hero_cta_download">Baixar para desktop</span>
         </a>
         <a class="btn btn-ghost btn-lg" href="https://github.com/paulomanrique/iptv-freedom" target="_blank" rel="noopener">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49l-.01-1.9c-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.36 1.12 2.94.86.09-.67.35-1.12.63-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.4 9.4 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9l-.01 2.82c0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg>
-          Ver no GitHub
+          <span data-i18n="hero_cta_github">Ver no GitHub</span>
         </a>
       </div>
       <div class="hero-meta reveal" style="--d:.2s">
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg>Grátis e open source</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5L20 7"/></svg><span data-i18n="hero_meta1">Grátis e open source</span></span>
         <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/></svg>Windows · macOS · Linux</span>
-        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Credenciais 100% locais</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-i18n="hero_meta3">Credenciais 100% locais</span></span>
       </div>
 
-      <!-- screenshot -->
       <div class="shot-wrap reveal" style="--d:.28s">
         <div class="glowring"></div>
-        <span class="chip chip-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg>20 idiomas</span>
-        <span class="chip chip-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Sem servidor no meio</span>
-        <span class="chip chip-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>Baixe e assista offline</span>
+        <span class="chip chip-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 2.5 15.3 0 18M12 3c-2.5 2.7-2.5 15.3 0 18"/></svg><span data-i18n="chip1">20 idiomas</span></span>
+        <span class="chip chip-2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span data-i18n="chip2">Sem servidor no meio</span></span>
+        <span class="chip chip-3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg><span data-i18n="chip3">Baixe e assista offline</span></span>
         <div class="window">
           <div class="winbar"><i class="r"></i><i class="y"></i><i class="g"></i><span>IPTV Freedom</span></div>
-          <img src="ss.png" alt="Interface do IPTV Freedom mostrando a seção Ao vivo, com a lista de categorias, canais e o painel de prévia com botão Assistir." loading="eager" />
+          <img src="ss.png" data-i18n-attr="alt:shot_alt" alt="Interface do IPTV Freedom mostrando a seção Ao vivo, com a lista de categorias, canais e o painel de prévia com botão Assistir." loading="eager" />
         </div>
       </div>
 
-      <!-- stats -->
       <div class="stats reveal">
-        <div class="stat"><div class="n grad-text">20</div><div class="l">idiomas, com detecção automática e suporte RTL</div></div>
-        <div class="stat"><div class="n">3&nbsp;em&nbsp;1</div><div class="l">ao vivo, filmes e séries num só app</div></div>
-        <div class="stat"><div class="n">0</div><div class="l">dados enviados para a nuvem</div></div>
-        <div class="stat"><div class="n">MIT</div><div class="l">código aberto, seu para auditar</div></div>
+        <div class="stat"><div class="n grad-text">20</div><div class="l" data-i18n="stat1_l">idiomas, com detecção automática e suporte RTL</div></div>
+        <div class="stat"><div class="n" data-i18n="stat2_n">3&nbsp;em&nbsp;1</div><div class="l" data-i18n="stat2_l">ao vivo, filmes e séries num só app</div></div>
+        <div class="stat"><div class="n">0</div><div class="l" data-i18n="stat3_l">dados enviados para a nuvem</div></div>
+        <div class="stat"><div class="n">MIT</div><div class="l" data-i18n="stat4_l">código aberto, seu para auditar</div></div>
       </div>
     </div>
   </section>
@@ -260,36 +286,36 @@
   <!-- FEATURES -->
   <section class="sec" id="recursos">
     <div class="wrap">
-      <span class="kicker reveal">Por que IPTV Freedom</span>
-      <h2 class="reveal" style="--d:.05s">Feito para quem<br>leva a sério o que assiste.</h2>
-      <p class="sub reveal" style="--d:.1s">Players de IPTV costumam ser lentos, feios e cheios de anúncios. Este é o oposto: nativo, focado e respeitoso com você e com o seu provedor.</p>
+      <span class="kicker reveal" data-i18n="feat_kicker">Por que IPTV Freedom</span>
+      <h2 class="reveal" style="--d:.05s" data-i18n-html="feat_h2">Feito para quem<br>leva a sério o que assiste.</h2>
+      <p class="sub reveal" style="--d:.1s" data-i18n="feat_sub">Players de IPTV costumam ser lentos, feios e cheios de anúncios. Este é o oposto: nativo, focado e respeitoso com você e com o seu provedor.</p>
 
       <div class="features">
         <div class="card big reveal">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
-          <h3>Tudo em um layout estilo Finder</h3>
-          <p>Três painéis: categorias, lista e prévia. Navegue por Ao vivo, Filmes e Séries com a fluidez de um app nativo do macOS — listas ou grade, do seu jeito.</p>
+          <h3 data-i18n="card1_h3">Tudo em um layout estilo Finder</h3>
+          <p data-i18n="card1_p">Três painéis: categorias, lista e prévia. Navegue por Ao vivo, Filmes e Séries com a fluidez de um app nativo do macOS — listas ou grade, do seu jeito.</p>
         </div>
         <div class="card big reveal" style="--d:.06s">
           <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div>
-          <h3>Player que aguenta o tranco</h3>
-          <p>Ao vivo via <span class="mono">mpegts.js</span> com baixa latência e <b style="color:var(--ink)">buffer automático</b> que sobe sozinho quando a transmissão trava. Filmes em <span class="mono">.mp4</span> com o player nativo.</p>
+          <h3 data-i18n="card2_h3">Player que aguenta o tranco</h3>
+          <p data-i18n-html="card2_p">Ao vivo via <span class="mono">mpegts.js</span> com baixa latência e <b style="color:var(--ink)">buffer automático</b> que sobe sozinho quando a transmissão trava. Filmes em <span class="mono">.mp4</span> com o player nativo.</p>
           <span class="tag">LIVE · VOD</span>
         </div>
         <div class="card reveal">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg></div>
-          <h3>Baixe e guarde</h3>
-          <p>Downloads de filmes e séries com retomada e fila que respeita o limite de conexões do provedor. Uma temporada inteira em um clique.</p>
+          <h3 data-i18n="card3_h3">Baixe e guarde</h3>
+          <p data-i18n="card3_p">Downloads de filmes e séries com retomada e fila que respeita o limite de conexões do provedor. Uma temporada inteira em um clique.</p>
         </div>
         <div class="card f reveal" style="--d:.06s">
           <div class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.8 6.2 21l1.1-6.5L2.6 9.8l6.5-.9z"/></svg></div>
-          <h3>Favoritos &amp; busca</h3>
-          <p>Estrele canais, filmes e séries para voltar rápido. Busca global em tudo: é só apertar Enter.</p>
+          <h3 data-i18n="card4_h3">Favoritos &amp; busca</h3>
+          <p data-i18n="card4_p">Estrele canais, filmes e séries para voltar rápido. Busca global em tudo: é só apertar Enter.</p>
         </div>
         <div class="card reveal" style="--d:.12s">
           <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
-          <h3>Privacidade de verdade</h3>
-          <p>Suas credenciais Xtream ficam salvas localmente, no seu computador. Sem cadastro, sem servidor intermediário, sem rastreio.</p>
+          <h3 data-i18n="card5_h3">Privacidade de verdade</h3>
+          <p data-i18n="card5_p">Suas credenciais Xtream ficam salvas localmente, no seu computador. Sem cadastro, sem servidor intermediário, sem rastreio.</p>
         </div>
       </div>
     </div>
@@ -298,9 +324,9 @@
   <!-- LANGUAGES -->
   <section class="langs" id="idiomas">
     <div class="wrap">
-      <span class="kicker reveal">Multilíngue de nascença</span>
-      <h2 class="reveal" style="--d:.05s">Fala a língua de <span class="grad-text">todo mundo.</span></h2>
-      <p class="sub reveal" style="--d:.1s;margin-left:auto;margin-right:auto">Os 20 idiomas mais falados do planeta, com detecção automática do idioma do sistema, pluralização correta e layout espelhado (RTL) para árabe e urdu.</p>
+      <span class="kicker reveal" data-i18n="langs_kicker">Multilíngue de nascença</span>
+      <h2 class="reveal" style="--d:.05s" data-i18n-html="langs_h2">Fala a língua de <span class="grad-text">todo mundo.</span></h2>
+      <p class="sub reveal" style="--d:.1s;margin-left:auto;margin-right:auto" data-i18n="langs_sub">Os 20 idiomas mais falados do planeta, com detecção automática do idioma do sistema, pluralização correta e layout espelhado (RTL) para árabe e urdu.</p>
     </div>
     <div class="marquee reveal" style="--d:.15s" aria-hidden="true">
       <div class="track">
@@ -314,7 +340,6 @@
         <span class="lang">Русский<em>ru</em></span>
         <span class="lang">Português<em>pt</em></span>
         <span class="lang" dir="rtl">اردو<em>ur</em></span>
-        <!-- duplicado para loop contínuo -->
         <span class="lang">English<em>en</em></span>
         <span class="lang">中文<em>zh</em></span>
         <span class="lang">हिन्दी<em>hi</em></span>
@@ -355,14 +380,14 @@
   <section class="cta">
     <div class="wrap">
       <div class="cta-box reveal">
-        <h2>Pronto para assistir?</h2>
-        <p class="sub">Baixe a última versão e conecte sua conta Xtream Codes em segundos. Sem cadastro, sem mensalidade no app, sem enrolação.</p>
+        <h2 data-i18n="cta_h2">Pronto para assistir?</h2>
+        <p class="sub" data-i18n="cta_sub">Baixe a última versão e conecte sua conta Xtream Codes em segundos. Sem cadastro, sem mensalidade no app, sem enrolação.</p>
         <div class="hero-cta">
           <a class="btn btn-primary btn-lg" href="https://github.com/paulomanrique/iptv-freedom/releases/latest" target="_blank" rel="noopener">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
-            Baixar última versão
+            <span data-i18n="cta_btn1">Baixar última versão</span>
           </a>
-          <a class="btn btn-ghost btn-lg" href="https://github.com/paulomanrique/iptv-freedom/releases" target="_blank" rel="noopener">Todas as versões</a>
+          <a class="btn btn-ghost btn-lg" href="https://github.com/paulomanrique/iptv-freedom/releases" target="_blank" rel="noopener" data-i18n="cta_btn2">Todas as versões</a>
         </div>
       </div>
     </div>
@@ -377,19 +402,20 @@
           IPTV Freedom
         </a>
         <div class="foot-links">
-          <a href="#recursos">Recursos</a>
-          <a href="#idiomas">Idiomas</a>
+          <a href="#recursos" data-i18n="nav_features">Recursos</a>
+          <a href="#idiomas" data-i18n="nav_languages">Idiomas</a>
           <a href="https://github.com/paulomanrique/iptv-freedom" target="_blank" rel="noopener">GitHub</a>
           <a href="https://github.com/paulomanrique/iptv-freedom/releases" target="_blank" rel="noopener">Releases</a>
-          <a href="https://github.com/paulomanrique/iptv-freedom/blob/master/LICENSE" target="_blank" rel="noopener">Licença MIT</a>
+          <a href="https://github.com/paulomanrique/iptv-freedom/blob/master/LICENSE" target="_blank" rel="noopener" data-i18n="foot_license">Licença MIT</a>
         </div>
       </div>
-      <p class="disclaimer">Construído com Electron, React e Tailwind CSS. IPTV Freedom é apenas um reprodutor: não fornece, hospeda nem inclui qualquer conteúdo, lista ou assinatura — você usa o app com a sua própria conta de um provedor no padrão Xtream Codes.</p>
+      <p class="disclaimer" data-i18n="foot_disclaimer">Construído com Electron, React e Tailwind CSS. IPTV Freedom é apenas um reprodutor: não fornece, hospeda nem inclui qualquer conteúdo, lista ou assinatura — você usa o app com a sua própria conta de um provedor no padrão Xtream Codes.</p>
     </div>
   </footer>
 
 </main>
 
+<script src="i18n.js"></script>
 <script>
   // Revelação ao rolar (respeita prefers-reduced-motion via CSS)
   const els = document.querySelectorAll('.reveal');
