@@ -1,13 +1,9 @@
-const SECTIONS = [
-  { key: 'favorites', label: 'Favoritos' },
-  { key: 'live', label: 'Ao vivo' },
-  { key: 'movies', label: 'Filmes' },
-  { key: 'series', label: 'Séries' },
-  { key: 'downloads', label: 'Downloads' },
-  { key: 'accounts', label: 'Contas' }
-]
+import { useTranslation } from 'react-i18next'
+
+const SECTION_KEYS = ['favorites', 'live', 'movies', 'series', 'downloads', 'accounts']
 
 export default function Sidebar({ view, onNavigate, account }) {
+  const { t } = useTranslation()
   const initials = account ? (account.name || account.host).slice(0, 2).toUpperCase() : '—'
 
   return (
@@ -18,28 +14,28 @@ export default function Sidebar({ view, onNavigate, account }) {
           {account ? (
             <>
               <div className="text-2xs font-semibold truncate">{account.name || account.host}</div>
-              <div className="text-[10px] text-emerald-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />Conta ativa</div>
+              <div className="text-[10px] text-emerald-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />{t('sidebar.activeAccount')}</div>
             </>
           ) : (
             <>
-              <div className="text-2xs font-semibold truncate text-white/60">Sem conta</div>
-              <div className="text-[10px] text-white/40">Clique para adicionar</div>
+              <div className="text-2xs font-semibold truncate text-white/60">{t('sidebar.noAccount')}</div>
+              <div className="text-[10px] text-white/40">{t('sidebar.clickToAdd')}</div>
             </>
           )}
         </div>
       </button>
 
-      <div className="px-3 pt-3 pb-1 text-[10px] uppercase tracking-wider text-white/35">Biblioteca</div>
+      <div className="px-3 pt-3 pb-1 text-[10px] uppercase tracking-wider text-white/35">{t('sidebar.library')}</div>
       <div className="px-2 space-y-0.5">
-        {SECTIONS.map((s) => (
+        {SECTION_KEYS.map((key) => (
           <div
-            key={s.key}
-            onClick={() => onNavigate(s.key)}
+            key={key}
+            onClick={() => onNavigate(key)}
             className={`px-3 py-1.5 rounded-md cursor-pointer flex items-center justify-between transition ${
-              view === s.key ? 'bg-white/10 text-white' : 'text-white/65 hover:bg-white/5'
+              view === key ? 'bg-white/10 text-white' : 'text-white/65 hover:bg-white/5'
             }`}
           >
-            <span>{s.label}</span>
+            <span>{t(`nav.${key}`)}</span>
           </div>
         ))}
       </div>

@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "ఇష్టమైనవి",
+    "live": "ప్రత్యక్ష",
+    "movies": "సినిమాలు",
+    "series": "సిరీస్",
+    "downloads": "డౌన్‌లోడ్‌లు",
+    "accounts": "ఖాతాలు",
+    "search": "శోధన"
+  },
+  "sidebar": {
+    "activeAccount": "క్రియాశీల ఖాతా",
+    "noAccount": "ఖాతా లేదు",
+    "clickToAdd": "జోడించడానికి క్లిక్ చేయండి",
+    "library": "లైబ్రరీ"
+  },
+  "toolbar": {
+    "searchPlaceholder": "అన్నింటిలో శోధించండి… (Enter)",
+    "search": "శోధించు",
+    "clear": "తుడిచివేయి"
+  },
+  "app": {
+    "addActivateAccount": "<a>ఖాతాలు</a>లో ఒక ఖాతాను జోడించి క్రియాశీలం చేయండి."
+  },
+  "addAccount": {
+    "title": "ఖాతా జోడించు",
+    "subtitle": "Xtream Codes ప్రమాణం గల ప్రొవైడర్. ఆధారాలు స్థానికంగా సేవ్ అవుతాయి.",
+    "nickname": "మారుపేరు (ఐచ్ఛికం)",
+    "nicknamePlaceholder": "నా ఖాతా",
+    "host": "హోస్ట్ / URL",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "వినియోగదారు పేరు",
+    "userPlaceholder": "వినియోగదారు పేరు",
+    "password": "పాస్‌వర్డ్",
+    "passwordPlaceholder": "పాస్‌వర్డ్",
+    "fillFields": "హోస్ట్, వినియోగదారు పేరు మరియు పాస్‌వర్డ్ నింపండి.",
+    "validating": "ధ్రువీకరిస్తోంది…",
+    "add": "జోడించు",
+    "cancel": "రద్దు చేయి"
+  },
+  "accounts": {
+    "empty": "ఇంకా ఏ ఖాతా జోడించబడలేదు.",
+    "active": "క్రియాశీలం",
+    "add": "ఖాతా జోడించు",
+    "validating": "ఖాతా ధ్రువీకరిస్తోంది…",
+    "validateFail": "ధ్రువీకరించలేకపోయాం: {{error}}",
+    "user": "వినియోగదారు పేరు",
+    "status": "స్థితి",
+    "validity": "చెల్లుబాటు",
+    "connections": "కనెక్షన్‌లు",
+    "format": "ఫార్మాట్",
+    "trial": "ట్రయల్",
+    "yes": "అవును",
+    "no": "కాదు",
+    "daysLeft": "మిగిలిన రోజులు",
+    "makeActive": "క్రియాశీలం చేయి",
+    "isActive": "✓ క్రియాశీల ఖాతా",
+    "remove": "ఖాతా తొలగించు",
+    "selectPrompt": "ప్రారంభించడానికి ఒక ఖాతాను జోడించండి."
+  },
+  "library": {
+    "categories": "వర్గాలు",
+    "loading": "లోడ్ అవుతోంది…",
+    "empty": "ఇక్కడ ఏమీ లేదు.",
+    "error": "లోపం: {{error}}",
+    "showingFirst": "మొదటి {{max}} అంశాలను చూపుతోంది."
+  },
+  "favorites": {
+    "empty": "ఇంకా ఇష్టమైనవి లేవు.",
+    "hint": "జోడించడానికి సినిమా, ఛానెల్ లేదా సిరీస్ ప్రివ్యూలో ⭐ నక్షత్రాన్ని ఉపయోగించండి."
+  },
+  "search": {
+    "searching": "“{{query}}” శోధిస్తోంది…",
+    "noResults": "<b>“{{query}}”</b> కోసం ఫలితాలు లేవు.",
+    "results": "ఫలితాలు ·“{{query}}”",
+    "total": "మొత్తం {{count}}"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} అంశం",
+    "itemCount_other": "{{count}} అంశాలు",
+    "clearCompleted": "పూర్తయినవి తుడిచివేయి",
+    "empty": "ఇంకా డౌన్‌లోడ్‌లు లేవు. ఒక సినిమా లేదా ఎపిసోడ్‌పై “ఫైల్ డౌన్‌లోడ్” బటన్‌ను ఉపయోగించండి.",
+    "openFolder": "ఫోల్డర్ తెరువు",
+    "pause": "విరామం",
+    "resume": "కొనసాగించు",
+    "cancel": "రద్దు చేయి"
+  },
+  "downloadBar": {
+    "none": "క్రియాశీల డౌన్‌లోడ్‌లు లేవు",
+    "queued": "+{{count}} వరుసలో",
+    "connectionLimit": "1 కనెక్షన్ (ప్రొవైడర్ పరిమితి)"
+  },
+  "status": {
+    "account": {
+      "unknown": "తెలియదు",
+      "active": "క్రియాశీలం",
+      "inactive": "నిష్క్రియం"
+    },
+    "download": {
+      "queued": "వరుసలో",
+      "downloading": "డౌన్‌లోడ్ అవుతోంది",
+      "paused": "విరామం",
+      "done": "పూర్తయింది",
+      "error": "లోపం",
+      "canceled": "రద్దు చేయబడింది"
+    }
+  },
+  "player": {
+    "onAir": "ప్రత్యక్ష ప్రసారం",
+    "auto": "ఆటో",
+    "close": "మూసివేయి (Esc)",
+    "cantPlay": "ప్లే చేయలేకపోయాం",
+    "oneConnHint": "1 కనెక్షన్ పరిమితితో, ఇతర క్రియాశీల స్ట్రీమ్‌లు/డౌన్‌లోడ్‌లను మూసివేయండి.",
+    "autoBuffering": "చాలా ఆగిపోతోంది — బఫర్ పెంచుతోంది: {{label}}",
+    "speedTip": "స్ట్రీమ్ డౌన్‌లోడ్ వేగం",
+    "bufferTip": "ముందుగా బఫర్ చేసిన వీడియో సెకన్లు",
+    "dropsTip": "వదిలేసిన ఫ్రేమ్‌లు",
+    "cacheTip": "ప్రీ-క్యాష్ / బఫర్ (ఆగితే ఆటో బఫర్ పెంచుతుంది)",
+    "drops": "{{count}} డ్రాప్‌లు",
+    "bufferLabel": "బఫర్ {{seconds}}సె",
+    "buffer": {
+      "low": "తక్కువ ఆలస్యం",
+      "balanced": "సమతుల్యం",
+      "high": "ఎక్కువ బఫర్"
+    }
+  },
+  "previews": {
+    "watch": "చూడు",
+    "downloadFile": "ఫైల్ డౌన్‌లోడ్",
+    "download": "డౌన్‌లోడ్",
+    "addFav": "ఇష్టమైనవాటిలో చేర్చు",
+    "removeFav": "ఇష్టమైనవాటి నుండి తీసివేయి",
+    "liveNoDownload": "ప్రత్యక్ష కంటెంట్‌ను డౌన్‌లోడ్ చేయలేరు.",
+    "loadingEpisodes": "ఎపిసోడ్‌లు లోడ్ అవుతున్నాయి…",
+    "downloadSeason": "సీజన్ డౌన్‌లోడ్ ({{count}})",
+    "downloadAll": "అన్నీ డౌన్‌లోడ్ ({{count}})",
+    "episode": "ఎపిసోడ్ {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "ఒక అంశాన్ని ఎంచుకోండి."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} వరుసకు చేర్చబడింది",
+    "activeUpdated": "క్రియాశీల ఖాతా నవీకరించబడింది"
+  },
+  "errors": {
+    "authFailed": "చెల్లని ఆధారాలు (ప్రామాణీకరణ విఫలమైంది)."
+  },
+  "language": {
+    "label": "భాష"
+  }
+}

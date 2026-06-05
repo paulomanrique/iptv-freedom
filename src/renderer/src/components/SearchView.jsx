@@ -1,16 +1,16 @@
 import { useEffect, useState, useMemo } from 'react'
+import { useTranslation, Trans } from 'react-i18next'
 import { getStreams, normalize } from '../catalog'
 import { normalizeSearch } from '../format'
 import { Poster, MoviePreview, LivePreview, SeriesPreview } from './Previews'
 
-const KINDS = [
-  { kind: 'vod', label: 'Filmes' },
-  { kind: 'series', label: 'Séries' },
-  { kind: 'live', label: 'Ao vivo' }
-]
+const KINDS = ['vod', 'series', 'live']
+const KIND_NAV = { vod: 'movies', series: 'series', live: 'live' }
 const MAX_PER_GROUP = 300
 
 export default function SearchView({ account, query, onPlay, onDownload, fav }) {
+  const { t } = useTranslation()
+  const labelFor = (kind) => t(`nav.${KIND_NAV[kind] || kind}`)
   const [groups, setGroups] = useState([])
   const [loading, setLoading] = useState(true)
   const [groupKind, setGroupKind] = useState(null)
@@ -24,7 +24,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
     const q = normalizeSearch(query)
 
     Promise.all(
-      KINDS.map(({ kind, label }) =>
+      KINDS.map((kind) =>
         getStreams(account, kind, null)
           .then((list) =>
             (list || [])
@@ -33,9 +33,9 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
           )
           .then((items) => {
             items.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'pt-BR', { sensitivity: 'base', numeric: true }))
-            return { kind, label, items: items.slice(0, MAX_PER_GROUP), total: items.length }
+            return { kind, items: items.slice(0, MAX_PER_GROUP), total: items.length }
           })
-          .catch(() => ({ kind, label, items: [], total: 0 }))
+          .catch(() => ({ kind, items: [], total: 0 }))
       )
     ).then((res) => {
       if (!alive) return
@@ -61,7 +61,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
   if (loading) {
     return (
       <section className="flex-1 grid place-items-center text-2xs text-white/45">
-        <div className="flex items-center gap-2"><span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />Buscando “{query}”…</div>
+        <div className="flex items-center gap-2"><span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />{t('search.searching', { query })}</div>
       </section>
     )
   }
@@ -69,7 +69,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
   if (groups.length === 0) {
     return (
       <section className="flex-1 grid place-items-center text-2xs text-white/45 text-center px-8">
-        Nenhum resultado para <b className="text-white/70 mx-1">“{query}”</b>.
+        <Trans i18nKey="search.noResults" values={{ query }} components={{ b: <b className="text-white/70 mx-1" /> }} />
       </section>
     )
   }
@@ -79,7 +79,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
       {/* Coluna 1: tipos de resultado */}
       <div className="w-56 shrink-0 bar border-r border-white/10 flex flex-col">
         <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/35 border-b border-white/10 truncate">
-          Resultados · “{query}”
+          {t('search.results', { query })}
         </div>
         <div className="flex-1 scroll overflow-y-auto py-1">
           {groups.map((g) => {
@@ -90,19 +90,19 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
                 onClick={() => { setGroupKind(g.kind); setSelectedId(null) }}
                 className={`w-full text-left px-3 py-1.5 text-2xs flex items-center justify-between gap-2 transition ${active ? 'bg-accent/25 text-white' : 'text-white/70 hover:bg-white/5'}`}
               >
-                <span className="truncate">{g.label}</span>
+                <span className="truncate">{labelFor(g.kind)}</span>
                 <span className="text-[10px] text-white/35">{g.total > g.items.length ? `${g.items.length}+` : g.items.length}</span>
               </button>
             )
           })}
-          <div className="px-3 pt-2 text-[10px] text-white/30">{totalResults} no total</div>
+          <div className="px-3 pt-2 text-[10px] text-white/30">{t('search.total', { count: totalResults })}</div>
         </div>
       </div>
 
       {/* Coluna 2: itens do tipo selecionado */}
       <section className="flex-1 min-w-0 flex flex-col">
         <div className="px-4 py-2 text-2xs text-white/50 border-b border-white/10 truncate shrink-0">
-          {activeGroup?.label}<span className="text-white/30"> · {items.length}</span>
+          {activeGroup ? labelFor(activeGroup.kind) : ''}<span className="text-white/30"> · {items.length}</span>
         </div>
         <div className="flex-1 scroll overflow-y-auto">
           {useGrid ? (
@@ -120,7 +120,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
                 <div key={`${m.kind}:${m.id}`} className={`flex items-center gap-3 px-4 py-2 cursor-pointer ${String(m.id) === String(selected?.id) ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
                   <Poster icon={m.icon} seed={seedOf(m)} className="h-8 w-8" />
                   <div className="flex-1 min-w-0"><div className="font-medium truncate">{m.name}</div></div>
-                  <span className="text-[10px] text-red-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />LIVE</span>
+                  <span className="text-[10px] text-red-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />{t('common.liveBadge')}</span>
                 </div>
               ))}
             </div>
@@ -139,7 +139,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
             <MoviePreview item={selected} seed={seedOf(selected)} onPlay={onPlay} onDownload={onDownload} fav={fav} />
           )
         ) : (
-          <div className="p-5 text-2xs text-white/45">Selecione um item.</div>
+          <div className="p-5 text-2xs text-white/45">{t('common.selectItem')}</div>
         )}
       </aside>
     </>

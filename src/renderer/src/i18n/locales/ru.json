@@ -1,0 +1,155 @@
+{
+  "nav": {
+    "favorites": "Избранное",
+    "live": "Эфир",
+    "movies": "Фильмы",
+    "series": "Сериалы",
+    "downloads": "Загрузки",
+    "accounts": "Аккаунты",
+    "search": "Поиск"
+  },
+  "sidebar": {
+    "activeAccount": "Активный аккаунт",
+    "noAccount": "Нет аккаунта",
+    "clickToAdd": "Нажмите, чтобы добавить",
+    "library": "Библиотека"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Искать везде… (Enter)",
+    "search": "Искать",
+    "clear": "Очистить"
+  },
+  "app": {
+    "addActivateAccount": "Добавьте и активируйте аккаунт в разделе <a>Аккаунты</a>."
+  },
+  "addAccount": {
+    "title": "Добавить аккаунт",
+    "subtitle": "Провайдер стандарта Xtream Codes. Учётные данные хранятся локально.",
+    "nickname": "Псевдоним (необязательно)",
+    "nicknamePlaceholder": "Мой аккаунт",
+    "host": "Хост / URL",
+    "hostPlaceholder": "http://сервер.com:порт",
+    "user": "Пользователь",
+    "userPlaceholder": "пользователь",
+    "password": "Пароль",
+    "passwordPlaceholder": "пароль",
+    "fillFields": "Заполните хост, пользователя и пароль.",
+    "validating": "Проверка…",
+    "add": "Добавить",
+    "cancel": "Отмена"
+  },
+  "accounts": {
+    "empty": "Аккаунты ещё не добавлены.",
+    "active": "АКТИВНЫЙ",
+    "add": "Добавить аккаунт",
+    "validating": "Проверка аккаунта…",
+    "validateFail": "Не удалось проверить: {{error}}",
+    "user": "Пользователь",
+    "status": "Статус",
+    "validity": "Действует до",
+    "connections": "Подключения",
+    "format": "Формат",
+    "trial": "Пробный",
+    "yes": "Да",
+    "no": "Нет",
+    "daysLeft": "Осталось дней",
+    "makeActive": "Сделать активным",
+    "isActive": "✓ Активный аккаунт",
+    "remove": "Удалить аккаунт",
+    "selectPrompt": "Добавьте аккаунт, чтобы начать."
+  },
+  "library": {
+    "categories": "Категории",
+    "loading": "Загрузка…",
+    "empty": "Здесь пусто.",
+    "error": "Ошибка: {{error}}",
+    "showingFirst": "Показаны первые {{max}} элементов."
+  },
+  "favorites": {
+    "empty": "Пока нет избранного.",
+    "hint": "Нажмите звёздочку ⭐ в превью фильма, канала или сериала, чтобы добавить."
+  },
+  "search": {
+    "searching": "Поиск «{{query}}»…",
+    "noResults": "Нет результатов по запросу <b>«{{query}}»</b>.",
+    "results": "Результаты · «{{query}}»",
+    "total": "всего {{count}}"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} элемент",
+    "itemCount_few": "{{count}} элемента",
+    "itemCount_many": "{{count}} элементов",
+    "itemCount_other": "{{count}} элемента",
+    "clearCompleted": "Очистить завершённые",
+    "empty": "Загрузок пока нет. Нажмите «Скачать файл» у фильма или эпизода.",
+    "openFolder": "Открыть папку",
+    "pause": "Пауза",
+    "resume": "Возобновить",
+    "cancel": "Отмена"
+  },
+  "downloadBar": {
+    "none": "Нет активных загрузок",
+    "queued": "+{{count}} в очереди",
+    "connectionLimit": "1 подключение (лимит провайдера)"
+  },
+  "status": {
+    "account": {
+      "unknown": "Неизвестно",
+      "active": "Активен",
+      "inactive": "Неактивен"
+    },
+    "download": {
+      "queued": "В очереди",
+      "downloading": "Загрузка",
+      "paused": "Пауза",
+      "done": "Завершено",
+      "error": "Ошибка",
+      "canceled": "Отменено"
+    }
+  },
+  "player": {
+    "onAir": "В ЭФИРЕ",
+    "auto": "Авто",
+    "close": "Закрыть (Esc)",
+    "cantPlay": "Не удалось воспроизвести",
+    "oneConnHint": "При лимите в 1 подключение закройте другие активные потоки/загрузки.",
+    "autoBuffering": "Часто подвисает — увеличиваем буфер: {{label}}",
+    "speedTip": "Скорость загрузки потока",
+    "bufferTip": "Секунд видео в буфере вперёд",
+    "dropsTip": "Пропущенные кадры",
+    "cacheTip": "Предзагрузка / буфер (Авто увеличивает буфер при подвисаниях)",
+    "drops": "{{count}} пропусков",
+    "bufferLabel": "буфер {{seconds}}с",
+    "buffer": {
+      "low": "Низкая задержка",
+      "balanced": "Сбалансированно",
+      "high": "Больше буфера"
+    }
+  },
+  "previews": {
+    "watch": "Смотреть",
+    "downloadFile": "Скачать файл",
+    "download": "Скачать",
+    "addFav": "Добавить в избранное",
+    "removeFav": "Убрать из избранного",
+    "liveNoDownload": "Прямой эфир нельзя скачать.",
+    "loadingEpisodes": "Загрузка эпизодов…",
+    "downloadSeason": "Скачать сезон ({{count}})",
+    "downloadAll": "Скачать всё ({{count}})",
+    "episode": "Эпизод {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "Выберите элемент."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} добавлен в очередь",
+    "activeUpdated": "Активный аккаунт обновлён"
+  },
+  "errors": {
+    "authFailed": "Неверные учётные данные (ошибка авторизации)."
+  },
+  "language": {
+    "label": "Язык"
+  }
+}

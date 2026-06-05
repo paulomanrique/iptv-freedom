@@ -1,0 +1,157 @@
+{
+  "nav": {
+    "favorites": "المفضلة",
+    "live": "مباشر",
+    "movies": "أفلام",
+    "series": "مسلسلات",
+    "downloads": "التنزيلات",
+    "accounts": "الحسابات",
+    "search": "بحث"
+  },
+  "sidebar": {
+    "activeAccount": "الحساب النشط",
+    "noAccount": "لا يوجد حساب",
+    "clickToAdd": "انقر للإضافة",
+    "library": "المكتبة"
+  },
+  "toolbar": {
+    "searchPlaceholder": "ابحث في كل شيء… (Enter)",
+    "search": "بحث",
+    "clear": "مسح"
+  },
+  "app": {
+    "addActivateAccount": "أضِف حسابًا وفعّله في <a>الحسابات</a>."
+  },
+  "addAccount": {
+    "title": "إضافة حساب",
+    "subtitle": "مزوّد بمعيار Xtream Codes. تُحفظ بيانات الاعتماد محليًا.",
+    "nickname": "الاسم المستعار (اختياري)",
+    "nicknamePlaceholder": "حسابي",
+    "host": "المضيف / الرابط",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "اسم المستخدم",
+    "userPlaceholder": "المستخدم",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "كلمة المرور",
+    "fillFields": "املأ المضيف واسم المستخدم وكلمة المرور.",
+    "validating": "جارٍ التحقق…",
+    "add": "إضافة",
+    "cancel": "إلغاء"
+  },
+  "accounts": {
+    "empty": "لم تتم إضافة أي حساب بعد.",
+    "active": "نشط",
+    "add": "إضافة حساب",
+    "validating": "جارٍ التحقق من الحساب…",
+    "validateFail": "تعذّر التحقق: {{error}}",
+    "user": "اسم المستخدم",
+    "status": "الحالة",
+    "validity": "صالح حتى",
+    "connections": "الاتصالات",
+    "format": "الصيغة",
+    "trial": "تجريبي",
+    "yes": "نعم",
+    "no": "لا",
+    "daysLeft": "الأيام المتبقية",
+    "makeActive": "تعيين كنشط",
+    "isActive": "✓ الحساب النشط",
+    "remove": "إزالة الحساب",
+    "selectPrompt": "أضِف حسابًا للبدء."
+  },
+  "library": {
+    "categories": "الفئات",
+    "loading": "جارٍ التحميل…",
+    "empty": "لا شيء هنا.",
+    "error": "خطأ: {{error}}",
+    "showingFirst": "عرض أول {{max}} عنصر."
+  },
+  "favorites": {
+    "empty": "لا توجد مفضلة بعد.",
+    "hint": "استخدم النجمة ⭐ في معاينة فيلم أو قناة أو مسلسل لإضافته."
+  },
+  "search": {
+    "searching": "جارٍ البحث عن «{{query}}»…",
+    "noResults": "لا نتائج لـ <b>«{{query}}»</b>.",
+    "results": "النتائج · «{{query}}»",
+    "total": "{{count}} إجمالًا"
+  },
+  "downloads": {
+    "itemCount_zero": "لا عناصر",
+    "itemCount_one": "عنصر واحد",
+    "itemCount_two": "عنصران",
+    "itemCount_few": "{{count}} عناصر",
+    "itemCount_many": "{{count}} عنصرًا",
+    "itemCount_other": "{{count}} عنصر",
+    "clearCompleted": "مسح المكتملة",
+    "empty": "لا توجد تنزيلات بعد. استخدم زر «تنزيل الملف» في فيلم أو حلقة.",
+    "openFolder": "فتح المجلد",
+    "pause": "إيقاف مؤقت",
+    "resume": "استئناف",
+    "cancel": "إلغاء"
+  },
+  "downloadBar": {
+    "none": "لا توجد تنزيلات نشطة",
+    "queued": "+{{count}} في الانتظار",
+    "connectionLimit": "اتصال واحد (حد المزوّد)"
+  },
+  "status": {
+    "account": {
+      "unknown": "غير معروف",
+      "active": "نشط",
+      "inactive": "غير نشط"
+    },
+    "download": {
+      "queued": "في الانتظار",
+      "downloading": "جارٍ التنزيل",
+      "paused": "متوقف مؤقتًا",
+      "done": "اكتمل",
+      "error": "خطأ",
+      "canceled": "أُلغي"
+    }
+  },
+  "player": {
+    "onAir": "مباشر",
+    "auto": "تلقائي",
+    "close": "إغلاق (Esc)",
+    "cantPlay": "تعذّر التشغيل",
+    "oneConnHint": "مع حد اتصال واحد، أغلِق البثوث/التنزيلات النشطة الأخرى.",
+    "autoBuffering": "تقطّع كثير — زيادة المخزن المؤقت: {{label}}",
+    "speedTip": "سرعة تنزيل البث",
+    "bufferTip": "ثوانٍ من الفيديو مخزّنة مسبقًا",
+    "dropsTip": "الإطارات المفقودة",
+    "cacheTip": "التخزين المسبق / المخزن المؤقت (يزيد التلقائي المخزن عند التقطّع)",
+    "drops": "{{count}} مفقودة",
+    "bufferLabel": "مخزن {{seconds}} ث",
+    "buffer": {
+      "low": "زمن وصول منخفض",
+      "balanced": "متوازن",
+      "high": "مخزن أكبر"
+    }
+  },
+  "previews": {
+    "watch": "مشاهدة",
+    "downloadFile": "تنزيل الملف",
+    "download": "تنزيل",
+    "addFav": "إضافة إلى المفضلة",
+    "removeFav": "إزالة من المفضلة",
+    "liveNoDownload": "لا يمكن تنزيل المحتوى المباشر.",
+    "loadingEpisodes": "جارٍ تحميل الحلقات…",
+    "downloadSeason": "تنزيل الموسم ({{count}})",
+    "downloadAll": "تنزيل الكل ({{count}})",
+    "episode": "الحلقة {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "اختر عنصرًا."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ تمت إضافة {{name}} إلى الانتظار",
+    "activeUpdated": "تم تحديث الحساب النشط"
+  },
+  "errors": {
+    "authFailed": "بيانات اعتماد غير صالحة (فشل المصادقة)."
+  },
+  "language": {
+    "label": "اللغة"
+  }
+}

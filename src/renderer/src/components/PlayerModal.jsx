@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import mpegts from 'mpegts.js'
 
 // Presets de pré-cache (buffer) para o ao vivo via mpegts.js.
 // stashInitialSize = buffer inicial; latencyChasing corta buffer p/ baixar a latência.
+// O rótulo de cada preset vem do i18n (player.buffer.<key>).
 const BUFFER_PRESETS = {
   low: {
-    label: 'Baixa latência',
     enableStashBuffer: true,
     stashInitialSize: 384 * 1024,
     liveBufferLatencyChasing: true,
@@ -13,13 +14,11 @@ const BUFFER_PRESETS = {
     liveBufferLatencyMinRemain: 1.0
   },
   balanced: {
-    label: 'Equilibrado',
     enableStashBuffer: true,
     stashInitialSize: 1024 * 1024,
     liveBufferLatencyChasing: false
   },
   high: {
-    label: 'Mais buffer',
     enableStashBuffer: true,
     stashInitialSize: 4 * 1024 * 1024,
     liveBufferLatencyChasing: false
@@ -33,6 +32,8 @@ const AUTO_MAX_STALLS = 2 // travadas dentro da janela para subir de nível
 
 // Reproduz VOD (.mp4) com <video> nativo e ao vivo (.ts) via mpegts.js (MSE).
 export default function PlayerModal({ item, onClose }) {
+  const { t } = useTranslation()
+  const bufferLabel = (key) => t(`player.buffer.${key}`)
   const videoRef = useRef(null)
   const hideTimer = useRef(null)
   const statsRef = useRef({}) // última info do STATISTICS_INFO (speed em KB/s, etc.)
@@ -85,7 +86,7 @@ export default function PlayerModal({ item, onClose }) {
         if (!video) return
 
         if (isLive && mpegts.isSupported()) {
-          const { label, ...cfg } = BUFFER_PRESETS[buffer] || BUFFER_PRESETS.balanced
+          const cfg = BUFFER_PRESETS[buffer] || BUFFER_PRESETS.balanced
           mpegtsPlayer = mpegts.createPlayer(
             { type: 'mpegts', isLive: true, url },
             { lazyLoad: false, ...cfg }
@@ -167,13 +168,13 @@ export default function PlayerModal({ item, onClose }) {
           const next = BUFFER_ORDER[i + 1]
           rebufferTimes.current = []
           setBuffer(next) // reinicia o stream com mais buffer
-          setNotice(`Travando muito — aumentando buffer: ${BUFFER_PRESETS[next].label}`)
+          setNotice(t('player.autoBuffering', { label: bufferLabel(next) }))
         }
       }
     }
     v.addEventListener('waiting', onWaiting)
     return () => v.removeEventListener('waiting', onWaiting)
-  }, [item, isLive, auto, buffer])
+  }, [item, isLive, auto, buffer, t])
 
   // Esconde o aviso automaticamente
   useEffect(() => {
@@ -220,9 +221,9 @@ export default function PlayerModal({ item, onClose }) {
                 <div className="h-12 w-12 mx-auto mb-3 rounded-full bg-red-500/15 grid place-items-center">
                   <svg className="h-6 w-6 text-red-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" /></svg>
                 </div>
-                <div className="text-sm font-semibold text-white">Não foi possível reproduzir</div>
+                <div className="text-sm font-semibold text-white">{t('player.cantPlay')}</div>
                 <div className="text-2xs text-white/50 mt-2 max-w-md mx-auto">{error}</div>
-                <div className="text-[10px] text-white/35 mt-3">Com limite de 1 conexão, feche outros streams/downloads ativos.</div>
+                <div className="text-[10px] text-white/35 mt-3">{t('player.oneConnHint')}</div>
               </div>
             </div>
           )}
@@ -238,29 +239,29 @@ export default function PlayerModal({ item, onClose }) {
           <div className={`absolute top-0 inset-x-0 px-4 py-3 flex items-center gap-3 bg-gradient-to-b from-black/75 via-black/30 to-transparent transition-opacity duration-300 ${chrome ? 'opacity-100' : 'opacity-0'}`}>
             {isLive && (
               <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-white bg-red-600/90 rounded-full px-2.5 py-1 shadow shrink-0">
-                <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />AO VIVO
+                <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />{t('player.onAir')}
               </span>
             )}
             {isLive && stats && (
               <span className="flex items-center gap-2 text-[11px] tabular-nums text-white/90 bg-black/40 backdrop-blur rounded-full px-2.5 py-1 shrink-0">
-                <span title="Velocidade de download do stream">↓ {stats.mbps.toFixed(1)} Mbps</span>
+                <span title={t('player.speedTip')}>↓ {stats.mbps.toFixed(1)} Mbps</span>
                 <span className="text-white/30">·</span>
-                <span title="Segundos de vídeo em buffer à frente" className={stats.buffer < 1 ? 'text-red-300' : stats.buffer < 2.5 ? 'text-amber-300' : 'text-emerald-300'}>
-                  buffer {stats.buffer.toFixed(1)}s
+                <span title={t('player.bufferTip')} className={stats.buffer < 1 ? 'text-red-300' : stats.buffer < 2.5 ? 'text-amber-300' : 'text-emerald-300'}>
+                  {t('player.bufferLabel', { seconds: stats.buffer.toFixed(1) })}
                 </span>
-                {stats.dropped > 0 && <><span className="text-white/30">·</span><span className="text-white/60" title="Quadros descartados">{stats.dropped} drops</span></>}
+                {stats.dropped > 0 && <><span className="text-white/30">·</span><span className="text-white/60" title={t('player.dropsTip')}>{t('player.drops', { count: stats.dropped })}</span></>}
               </span>
             )}
             <div className="flex-1 min-w-0">
               <div className="text-[15px] font-semibold text-white truncate drop-shadow">{item.name}</div>
             </div>
             {isLive && (
-              <div className="flex items-center gap-0.5 bg-black/40 backdrop-blur rounded-full p-0.5 shrink-0" title="Pré-cache / buffer (Auto sobe o buffer se travar)">
+              <div className="flex items-center gap-0.5 bg-black/40 backdrop-blur rounded-full p-0.5 shrink-0" title={t('player.cacheTip')}>
                 <button
                   onClick={toggleAuto}
                   className={`text-[11px] px-2.5 py-1 rounded-full transition ${auto ? 'bg-accent text-white font-semibold' : 'text-white/70 hover:text-white'}`}
                 >
-                  Auto
+                  {t('player.auto')}
                 </button>
                 {BUFFER_ORDER.map((key) => {
                   const manualActive = !auto && buffer === key
@@ -271,7 +272,7 @@ export default function PlayerModal({ item, onClose }) {
                       onClick={() => pickBuffer(key)}
                       className={`text-[11px] px-2.5 py-1 rounded-full transition ${manualActive ? 'bg-white text-black font-semibold' : 'text-white/70 hover:text-white'} ${autoAt ? 'ring-1 ring-accent/70 text-white' : ''}`}
                     >
-                      {BUFFER_PRESETS[key].label}
+                      {bufferLabel(key)}
                     </button>
                   )
                 })}
@@ -279,7 +280,7 @@ export default function PlayerModal({ item, onClose }) {
             )}
             <button
               onClick={onClose}
-              title="Fechar (Esc)"
+              title={t('player.close')}
               className="h-9 w-9 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur grid place-items-center text-white/90 shrink-0 transition"
             >
               <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M18 6 6 18" /></svg>

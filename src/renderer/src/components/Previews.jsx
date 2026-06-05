@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getSeriesInfo } from '../catalog'
 import { gradient } from '../data'
 import { smartTitleCase } from '../format'
@@ -16,10 +17,11 @@ export function Poster({ icon, seed, className }) {
 }
 
 function FavButton({ active, onClick }) {
+  const { t } = useTranslation()
   return (
     <button
       onClick={onClick}
-      title={active ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+      title={active ? t('previews.removeFav') : t('previews.addFav')}
       className={`h-9 w-9 grid place-items-center rounded-lg shrink-0 transition ${active ? 'bg-amber-400/20 text-amber-300' : 'bg-white/10 hover:bg-white/20 text-white/70'}`}
     >
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
@@ -31,6 +33,7 @@ function FavButton({ active, onClick }) {
 
 // ---------- Filme ----------
 export function MoviePreview({ item, seed, onPlay, onDownload, fav }) {
+  const { t } = useTranslation()
   const snapshot = { kind: 'vod', type: 'movie', id: item.id, name: item.name, icon: item.icon, ext: item.ext }
   return (
     <div className="p-4">
@@ -46,10 +49,10 @@ export function MoviePreview({ item, seed, onPlay, onDownload, fav }) {
       {item.plot && <p className="text-2xs text-white/60 mt-3 leading-relaxed line-clamp-6">{item.plot}</p>}
       <div className="flex flex-col gap-2 mt-4">
         <button onClick={() => onPlay({ type: 'movie', id: item.id, ext: item.ext, name: item.name })} className="bg-white text-black font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2 hover:bg-white/90">
-          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>Assistir
+          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>{t('previews.watch')}
         </button>
         <button onClick={() => onDownload({ type: 'movie', id: item.id, ext: item.ext, name: item.name, icon: item.icon })} className="bg-white/12 hover:bg-white/20 font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2">
-          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>Baixar arquivo
+          <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>{t('previews.downloadFile')}
         </button>
       </div>
     </div>
@@ -58,6 +61,7 @@ export function MoviePreview({ item, seed, onPlay, onDownload, fav }) {
 
 // ---------- Canal ao vivo ----------
 export function LivePreview({ item, seed, onPlay, fav }) {
+  const { t } = useTranslation()
   const snapshot = { kind: 'live', type: 'live', id: item.id, name: item.name, icon: item.icon }
   return (
     <div className="p-4">
@@ -66,17 +70,18 @@ export function LivePreview({ item, seed, onPlay, fav }) {
         <h2 className="text-base font-bold leading-tight flex-1">{item.name}</h2>
         {fav && <FavButton active={fav.isFav('live', item.id)} onClick={() => fav.toggle(snapshot)} />}
       </div>
-      <div className="text-[10px] text-red-400 flex items-center gap-1 mt-1.5"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />AO VIVO</div>
+      <div className="text-[10px] text-red-400 flex items-center gap-1 mt-1.5"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />{t('player.onAir')}</div>
       <button onClick={() => onPlay({ type: 'live', id: item.id, name: item.name, live: true })} className="w-full mt-4 bg-white text-black font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2 hover:bg-white/90">
-        <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>Assistir
+        <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>{t('previews.watch')}
       </button>
-      <div className="mt-4 p-3 rounded-lg bg-amber-400/10 text-amber-300/80 text-[10px]">Conteúdo ao vivo não pode ser baixado.</div>
+      <div className="mt-4 p-3 rounded-lg bg-amber-400/10 text-amber-300/80 text-[10px]">{t('previews.liveNoDownload')}</div>
     </div>
   )
 }
 
 // ---------- Série (temporadas + episódios) ----------
 export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) {
+  const { t } = useTranslation()
   const [info, setInfo] = useState(null)
   const [season, setSeason] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -124,7 +129,7 @@ export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) 
       </div>
       {item.plot && <p className="text-2xs text-white/60 mt-2 leading-relaxed line-clamp-4">{item.plot}</p>}
 
-      {loading && <div className="flex items-center gap-2 text-2xs text-white/45 py-4"><span className="h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />Carregando episódios…</div>}
+      {loading && <div className="flex items-center gap-2 text-2xs text-white/45 py-4"><span className="h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />{t('previews.loadingEpisodes')}</div>}
 
       {seasons.length > 0 && (
         <div className="flex flex-wrap gap-1.5 my-3">
@@ -142,7 +147,7 @@ export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) 
               className="flex-1 bg-white/12 hover:bg-white/20 font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2"
             >
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
-              Baixar temporada ({eps.length})
+              {t('previews.downloadSeason', { count: eps.length })}
             </button>
           )}
           <button
@@ -150,7 +155,7 @@ export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) 
             className="flex-1 bg-white/12 hover:bg-white/20 font-semibold rounded-lg py-2 text-2xs flex items-center justify-center gap-2"
           >
             <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
-            Baixar tudo ({allEpisodes.length})
+            {t('previews.downloadAll', { count: allEpisodes.length })}
           </button>
         </div>
       )}
@@ -158,11 +163,11 @@ export function SeriesPreview({ account, item, seed, onPlay, onDownload, fav }) 
       <div className="space-y-1.5">
         {eps.map((ep) => (
           <div key={ep.id} className="flex items-center gap-2 rounded-md hover:bg-white/5 px-2 py-1.5">
-            <div className="flex-1 min-w-0"><div className="text-2xs font-medium truncate">{ep.episode_num}. {ep.title ? smartTitleCase(ep.title) : `Episódio ${ep.episode_num}`}</div></div>
-            <button title="Assistir" onClick={() => onPlay({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} · T${season}E${ep.episode_num}` })} className="h-7 w-7 grid place-items-center rounded-md bg-white/10 hover:bg-white/20">
+            <div className="flex-1 min-w-0"><div className="text-2xs font-medium truncate">{ep.episode_num}. {ep.title ? smartTitleCase(ep.title) : t('previews.episode', { number: ep.episode_num })}</div></div>
+            <button title={t('previews.watch')} onClick={() => onPlay({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} · T${season}E${ep.episode_num}` })} className="h-7 w-7 grid place-items-center rounded-md bg-white/10 hover:bg-white/20">
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
             </button>
-            <button title="Baixar" onClick={() => onDownload({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} T${season}E${ep.episode_num}`, icon: item.icon })} className="h-7 w-7 grid place-items-center rounded-md bg-white/10 hover:bg-white/20">
+            <button title={t('previews.download')} onClick={() => onDownload({ type: 'series', id: ep.id, ext: ep.container_extension, name: `${item.name} T${season}E${ep.episode_num}`, icon: item.icon })} className="h-7 w-7 grid place-items-center rounded-md bg-white/10 hover:bg-white/20">
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" /></svg>
             </button>
           </div>

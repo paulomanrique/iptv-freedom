@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { formatDate, daysLeft, statusLabel } from '../format'
 
 function Detail({ account, onRemove, onSetActive, isActive }) {
+  const { t } = useTranslation()
   const [info, setInfo] = useState(null)
   const [state, setState] = useState('loading') // loading | ok | error
   const [err, setErr] = useState(null)
@@ -34,12 +36,12 @@ function Detail({ account, onRemove, onSetActive, isActive }) {
 
   const rows = ui
     ? [
-        ['Usuário', account.username],
-        ['Status', st.label],
-        ['Validade', formatDate(ui.exp_date)],
-        ['Conexões', `${ui.active_cons ?? '?'} / ${ui.max_connections ?? '?'}`],
-        ['Formato', (ui.allowed_output_formats || []).join(', ').toUpperCase() || '—'],
-        ['Teste', String(ui.is_trial) === '1' ? 'Sim' : 'Não']
+        [t('accounts.user'), account.username],
+        [t('accounts.status'), st.label],
+        [t('accounts.validity'), formatDate(ui.exp_date)],
+        [t('accounts.connections'), `${ui.active_cons ?? '?'} / ${ui.max_connections ?? '?'}`],
+        [t('accounts.format'), (ui.allowed_output_formats || []).join(', ').toUpperCase() || '—'],
+        [t('accounts.trial'), String(ui.is_trial) === '1' ? t('accounts.yes') : t('accounts.no')]
       ]
     : []
 
@@ -58,13 +60,13 @@ function Detail({ account, onRemove, onSetActive, isActive }) {
       {state === 'loading' && (
         <div className="flex items-center gap-2 text-2xs text-white/45 py-4">
           <span className="h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-          Validando conta…
+          {t('accounts.validating')}
         </div>
       )}
 
       {state === 'error' && (
         <div className="text-2xs text-red-300 bg-red-500/10 rounded-lg px-3 py-2 my-2">
-          Não foi possível validar: {err}
+          {t('accounts.validateFail', { error: err })}
         </div>
       )}
 
@@ -86,7 +88,7 @@ function Detail({ account, onRemove, onSetActive, isActive }) {
 
           {days != null && (
             <div className="mt-4">
-              <div className="flex justify-between text-[10px] text-white/45 mb-1"><span>Dias restantes</span><span>{days}</span></div>
+              <div className="flex justify-between text-[10px] text-white/45 mb-1"><span>{t('accounts.daysLeft')}</span><span>{days}</span></div>
               <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
                 <div className={`h-full ${days < 7 ? 'bg-amber-400' : 'bg-emerald-400'}`} style={{ width: `${Math.min(100, (days / 30) * 100)}%` }} />
               </div>
@@ -101,10 +103,10 @@ function Detail({ account, onRemove, onSetActive, isActive }) {
           disabled={isActive}
           className="py-2 rounded-lg bg-white text-black text-2xs font-semibold disabled:opacity-50 disabled:cursor-default"
         >
-          {isActive ? '✓ Conta ativa' : 'Tornar ativa'}
+          {isActive ? t('accounts.isActive') : t('accounts.makeActive')}
         </button>
         <button onClick={() => onRemove(account.id)} className="py-2 rounded-lg bg-white/10 hover:bg-red-500/30 text-2xs font-medium text-white/80">
-          Remover conta
+          {t('accounts.remove')}
         </button>
       </div>
     </div>
@@ -112,6 +114,7 @@ function Detail({ account, onRemove, onSetActive, isActive }) {
 }
 
 export default function AccountsView({ accounts, activeId, selectedId, onSelect, onAdd, onRemove, onSetActive }) {
+  const { t } = useTranslation()
   const selected = accounts.find((a) => a.id === selectedId) || accounts[0]
 
   return (
@@ -119,7 +122,7 @@ export default function AccountsView({ accounts, activeId, selectedId, onSelect,
       <section className="flex-1 min-w-0 scroll overflow-y-auto">
         <div className="p-4 space-y-2">
           {accounts.length === 0 && (
-            <div className="text-2xs text-white/45 text-center py-10">Nenhuma conta cadastrada ainda.</div>
+            <div className="text-2xs text-white/45 text-center py-10">{t('accounts.empty')}</div>
           )}
           {accounts.map((a) => (
             <div
@@ -135,7 +138,7 @@ export default function AccountsView({ accounts, activeId, selectedId, onSelect,
               <div className="flex-1 min-w-0">
                 <div className="font-semibold truncate flex items-center gap-2">
                   {a.name || a.host}
-                  {a.id === activeId && <span className="text-[9px] bg-emerald-500/20 text-emerald-300 rounded px-1.5 py-0.5">ATIVA</span>}
+                  {a.id === activeId && <span className="text-[9px] bg-emerald-500/20 text-emerald-300 rounded px-1.5 py-0.5">{t('accounts.active')}</span>}
                 </div>
                 <div className="text-[10px] text-white/45 truncate">{a.username}</div>
               </div>
@@ -146,7 +149,7 @@ export default function AccountsView({ accounts, activeId, selectedId, onSelect,
             className="w-full border border-dashed border-white/20 rounded-lg p-3 text-white/55 hover:bg-white/5 hover:text-white transition flex items-center justify-center gap-2 text-2xs"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12h14" /></svg>
-            Adicionar conta
+            {t('accounts.add')}
           </button>
         </div>
       </section>
@@ -155,7 +158,7 @@ export default function AccountsView({ accounts, activeId, selectedId, onSelect,
         {selected ? (
           <Detail account={selected} onRemove={onRemove} onSetActive={onSetActive} isActive={selected.id === activeId} />
         ) : (
-          <div className="p-5 text-2xs text-white/45">Adicione uma conta para começar.</div>
+          <div className="p-5 text-2xs text-white/45">{t('accounts.selectPrompt')}</div>
         )}
       </aside>
     </>

@@ -1,10 +1,15 @@
 // Helpers para formatar dados vindos do Xtream (player_api.php).
+import i18n from './i18n'
 
 export function formatDate(unix) {
   if (!unix) return '—'
   const d = new Date(Number(unix) * 1000)
   if (isNaN(d.getTime())) return '—'
-  return d.toLocaleDateString('pt-BR')
+  try {
+    return d.toLocaleDateString(i18n.language || 'en')
+  } catch {
+    return d.toLocaleDateString('en')
+  }
 }
 
 export function daysLeft(unix, now) {
@@ -14,9 +19,9 @@ export function daysLeft(unix, now) {
 }
 
 export function statusLabel(userInfo) {
-  if (!userInfo) return { label: 'Desconhecido', ok: false }
+  if (!userInfo) return { label: i18n.t('status.account.unknown'), ok: false }
   const active = String(userInfo.status).toLowerCase() === 'active'
-  return { label: userInfo.status || (active ? 'Ativa' : 'Inativa'), ok: active }
+  return { label: userInfo.status || i18n.t(active ? 'status.account.active' : 'status.account.inactive'), ok: active }
 }
 
 export function formatBytes(n) {
@@ -77,8 +82,5 @@ export function smartTitleCase(str) {
     .join(' ')
 }
 
-const DL_LABELS = {
-  queued: 'Na fila', downloading: 'Baixando', paused: 'Pausado',
-  done: 'Concluído', error: 'Erro', canceled: 'Cancelado'
-}
-export const downloadLabel = (s) => DL_LABELS[s] || s
+const DL_STATUSES = new Set(['queued', 'downloading', 'paused', 'done', 'error', 'canceled'])
+export const downloadLabel = (s) => (DL_STATUSES.has(s) ? i18n.t(`status.download.${s}`) : s)

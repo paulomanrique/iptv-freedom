@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "पसंदीदा",
+    "live": "लाइव",
+    "movies": "फ़िल्में",
+    "series": "सीरीज़",
+    "downloads": "डाउनलोड",
+    "accounts": "खाते",
+    "search": "खोज"
+  },
+  "sidebar": {
+    "activeAccount": "सक्रिय खाता",
+    "noAccount": "कोई खाता नहीं",
+    "clickToAdd": "जोड़ने के लिए क्लिक करें",
+    "library": "लाइब्रेरी"
+  },
+  "toolbar": {
+    "searchPlaceholder": "सब कुछ खोजें… (Enter)",
+    "search": "खोजें",
+    "clear": "साफ़ करें"
+  },
+  "app": {
+    "addActivateAccount": "<a>खाते</a> में एक खाता जोड़ें और सक्रिय करें।"
+  },
+  "addAccount": {
+    "title": "खाता जोड़ें",
+    "subtitle": "Xtream Codes मानक का प्रदाता। क्रेडेंशियल स्थानीय रूप से सहेजे जाते हैं।",
+    "nickname": "उपनाम (वैकल्पिक)",
+    "nicknamePlaceholder": "मेरा खाता",
+    "host": "होस्ट / URL",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "उपयोगकर्ता नाम",
+    "userPlaceholder": "उपयोगकर्ता नाम",
+    "password": "पासवर्ड",
+    "passwordPlaceholder": "पासवर्ड",
+    "fillFields": "होस्ट, उपयोगकर्ता नाम और पासवर्ड भरें।",
+    "validating": "सत्यापित किया जा रहा है…",
+    "add": "जोड़ें",
+    "cancel": "रद्द करें"
+  },
+  "accounts": {
+    "empty": "अभी तक कोई खाता नहीं जोड़ा गया।",
+    "active": "सक्रिय",
+    "add": "खाता जोड़ें",
+    "validating": "खाता सत्यापित किया जा रहा है…",
+    "validateFail": "सत्यापित नहीं किया जा सका: {{error}}",
+    "user": "उपयोगकर्ता नाम",
+    "status": "स्थिति",
+    "validity": "वैधता",
+    "connections": "कनेक्शन",
+    "format": "प्रारूप",
+    "trial": "ट्रायल",
+    "yes": "हाँ",
+    "no": "नहीं",
+    "daysLeft": "शेष दिन",
+    "makeActive": "सक्रिय करें",
+    "isActive": "✓ सक्रिय खाता",
+    "remove": "खाता हटाएँ",
+    "selectPrompt": "शुरू करने के लिए एक खाता जोड़ें।"
+  },
+  "library": {
+    "categories": "श्रेणियाँ",
+    "loading": "लोड हो रहा है…",
+    "empty": "यहाँ कुछ नहीं है।",
+    "error": "त्रुटि: {{error}}",
+    "showingFirst": "पहले {{max}} आइटम दिखाए जा रहे हैं।"
+  },
+  "favorites": {
+    "empty": "अभी तक कोई पसंदीदा नहीं।",
+    "hint": "किसी फ़िल्म, चैनल या सीरीज़ के पूर्वावलोकन में ⭐ तारे का उपयोग करके जोड़ें।"
+  },
+  "search": {
+    "searching": "“{{query}}” खोजा जा रहा है…",
+    "noResults": "<b>“{{query}}”</b> के लिए कोई परिणाम नहीं।",
+    "results": "परिणाम ·“{{query}}”",
+    "total": "कुल {{count}}"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} आइटम",
+    "itemCount_other": "{{count}} आइटम",
+    "clearCompleted": "पूर्ण हुए साफ़ करें",
+    "empty": "अभी तक कोई डाउनलोड नहीं। किसी फ़िल्म या एपिसोड पर “फ़ाइल डाउनलोड करें” बटन का उपयोग करें।",
+    "openFolder": "फ़ोल्डर खोलें",
+    "pause": "रोकें",
+    "resume": "फिर से शुरू करें",
+    "cancel": "रद्द करें"
+  },
+  "downloadBar": {
+    "none": "कोई सक्रिय डाउनलोड नहीं",
+    "queued": "+{{count}} कतार में",
+    "connectionLimit": "1 कनेक्शन (प्रदाता की सीमा)"
+  },
+  "status": {
+    "account": {
+      "unknown": "अज्ञात",
+      "active": "सक्रिय",
+      "inactive": "निष्क्रिय"
+    },
+    "download": {
+      "queued": "कतार में",
+      "downloading": "डाउनलोड हो रहा है",
+      "paused": "रोका गया",
+      "done": "पूर्ण",
+      "error": "त्रुटि",
+      "canceled": "रद्द किया गया"
+    }
+  },
+  "player": {
+    "onAir": "लाइव",
+    "auto": "ऑटो",
+    "close": "बंद करें (Esc)",
+    "cantPlay": "चलाया नहीं जा सका",
+    "oneConnHint": "1 कनेक्शन की सीमा के साथ, अन्य सक्रिय स्ट्रीम/डाउनलोड बंद करें।",
+    "autoBuffering": "बहुत रुक रहा है — बफ़र बढ़ाया जा रहा है: {{label}}",
+    "speedTip": "स्ट्रीम की डाउनलोड गति",
+    "bufferTip": "आगे बफ़र किए गए वीडियो के सेकंड",
+    "dropsTip": "छूटे हुए फ़्रेम",
+    "cacheTip": "प्री-कैश / बफ़र (रुकने पर ऑटो बफ़र बढ़ाता है)",
+    "drops": "{{count}} ड्रॉप",
+    "bufferLabel": "बफ़र {{seconds}}से",
+    "buffer": {
+      "low": "कम विलंब",
+      "balanced": "संतुलित",
+      "high": "अधिक बफ़र"
+    }
+  },
+  "previews": {
+    "watch": "देखें",
+    "downloadFile": "फ़ाइल डाउनलोड करें",
+    "download": "डाउनलोड",
+    "addFav": "पसंदीदा में जोड़ें",
+    "removeFav": "पसंदीदा से हटाएँ",
+    "liveNoDownload": "लाइव सामग्री डाउनलोड नहीं की जा सकती।",
+    "loadingEpisodes": "एपिसोड लोड हो रहे हैं…",
+    "downloadSeason": "सीज़न डाउनलोड करें ({{count}})",
+    "downloadAll": "सभी डाउनलोड करें ({{count}})",
+    "episode": "एपिसोड {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "कोई आइटम चुनें।"
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} कतार में जोड़ा गया",
+    "activeUpdated": "सक्रिय खाता अपडेट किया गया"
+  },
+  "errors": {
+    "authFailed": "अमान्य क्रेडेंशियल (प्रमाणीकरण विफल)।"
+  },
+  "language": {
+    "label": "भाषा"
+  }
+}

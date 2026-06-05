@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next'
 import { formatBytes, formatSpeed, downloadLabel } from '../format'
 
 // Barra fixa inferior: mostra o download ativo (ou fila) e o aviso de limite.
 export default function DownloadBar({ downloads, onOpen }) {
+  const { t } = useTranslation()
   const active = downloads.find((d) => d.status === 'downloading')
   const queued = downloads.filter((d) => d.status === 'queued').length
   const current = active || downloads.find((d) => d.status === 'queued')
@@ -17,13 +19,13 @@ export default function DownloadBar({ downloads, onOpen }) {
             {active && current.speed ? ` · ${formatSpeed(current.speed)}` : ''}
           </button>
           <div className="w-40 h-1 rounded-full bg-white/10 overflow-hidden"><div className="h-full bg-accent" style={{ width: `${pct}%` }} /></div>
-          {queued > 0 && <span className="text-white/35">+{active ? queued : queued - 1} na fila</span>}
+          {queued > 0 && <span className="text-white/35">{t('downloadBar.queued', { count: active ? queued : queued - 1 })}</span>}
         </>
       ) : (
-        <button className="no-drag hover:text-white" onClick={onOpen}>Nenhum download ativo</button>
+        <button className="no-drag hover:text-white" onClick={onOpen}>{t('downloadBar.none')}</button>
       )}
       <div className="flex-1" />
-      <span className="text-amber-300/70 shrink-0">1 conexão (limite do provedor)</span>
+      <span className="text-amber-300/70 shrink-0">{t('downloadBar.connectionLimit')}</span>
     </div>
   )
 }

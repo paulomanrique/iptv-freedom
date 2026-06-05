@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "Favoriler",
+    "live": "Canlı",
+    "movies": "Filmler",
+    "series": "Diziler",
+    "downloads": "İndirilenler",
+    "accounts": "Hesaplar",
+    "search": "Arama"
+  },
+  "sidebar": {
+    "activeAccount": "Etkin hesap",
+    "noAccount": "Hesap yok",
+    "clickToAdd": "Eklemek için tıklayın",
+    "library": "Kitaplık"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Her şeyde ara… (Enter)",
+    "search": "Ara",
+    "clear": "Temizle"
+  },
+  "app": {
+    "addActivateAccount": "<a>Hesaplar</a> bölümünden bir hesap ekleyip etkinleştirin."
+  },
+  "addAccount": {
+    "title": "Hesap ekle",
+    "subtitle": "Xtream Codes standardında sağlayıcı. Kimlik bilgileri yerel olarak saklanır.",
+    "nickname": "Takma ad (isteğe bağlı)",
+    "nicknamePlaceholder": "Hesabım",
+    "host": "Sunucu / URL",
+    "hostPlaceholder": "http://sunucu.com:port",
+    "user": "Kullanıcı adı",
+    "userPlaceholder": "kullanıcı adı",
+    "password": "Parola",
+    "passwordPlaceholder": "parola",
+    "fillFields": "Sunucu, kullanıcı adı ve parolayı doldurun.",
+    "validating": "Doğrulanıyor…",
+    "add": "Ekle",
+    "cancel": "İptal"
+  },
+  "accounts": {
+    "empty": "Henüz hesap eklenmedi.",
+    "active": "ETKİN",
+    "add": "Hesap ekle",
+    "validating": "Hesap doğrulanıyor…",
+    "validateFail": "Doğrulanamadı: {{error}}",
+    "user": "Kullanıcı adı",
+    "status": "Durum",
+    "validity": "Geçerlilik",
+    "connections": "Bağlantılar",
+    "format": "Biçim",
+    "trial": "Deneme",
+    "yes": "Evet",
+    "no": "Hayır",
+    "daysLeft": "Kalan gün",
+    "makeActive": "Etkinleştir",
+    "isActive": "✓ Etkin hesap",
+    "remove": "Hesabı kaldır",
+    "selectPrompt": "Başlamak için bir hesap ekleyin."
+  },
+  "library": {
+    "categories": "Kategoriler",
+    "loading": "Yükleniyor…",
+    "empty": "Burada bir şey yok.",
+    "error": "Hata: {{error}}",
+    "showingFirst": "İlk {{max}} öğe gösteriliyor."
+  },
+  "favorites": {
+    "empty": "Henüz favori yok.",
+    "hint": "Eklemek için bir film, kanal veya dizinin önizlemesinde ⭐ yıldızını kullanın."
+  },
+  "search": {
+    "searching": "“{{query}}” aranıyor…",
+    "noResults": "<b>“{{query}}”</b> için sonuç yok.",
+    "results": "Sonuçlar ·“{{query}}”",
+    "total": "toplam {{count}}"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} öğe",
+    "itemCount_other": "{{count}} öğe",
+    "clearCompleted": "Tamamlananları temizle",
+    "empty": "Henüz indirme yok. Bir film veya bölümde “Dosyayı indir” düğmesini kullanın.",
+    "openFolder": "Klasörü aç",
+    "pause": "Duraklat",
+    "resume": "Sürdür",
+    "cancel": "İptal"
+  },
+  "downloadBar": {
+    "none": "Etkin indirme yok",
+    "queued": "+{{count}} sırada",
+    "connectionLimit": "1 bağlantı (sağlayıcı sınırı)"
+  },
+  "status": {
+    "account": {
+      "unknown": "Bilinmiyor",
+      "active": "Etkin",
+      "inactive": "Etkin değil"
+    },
+    "download": {
+      "queued": "Sırada",
+      "downloading": "İndiriliyor",
+      "paused": "Duraklatıldı",
+      "done": "Tamamlandı",
+      "error": "Hata",
+      "canceled": "İptal edildi"
+    }
+  },
+  "player": {
+    "onAir": "CANLI",
+    "auto": "Oto",
+    "close": "Kapat (Esc)",
+    "cantPlay": "Oynatılamadı",
+    "oneConnHint": "1 bağlantı sınırıyla diğer etkin yayınları/indirmeleri kapatın.",
+    "autoBuffering": "Çok takılıyor — arabellek artırılıyor: {{label}}",
+    "speedTip": "Yayın indirme hızı",
+    "bufferTip": "Önden arabelleğe alınan video saniyesi",
+    "dropsTip": "Atlanan kareler",
+    "cacheTip": "Ön bellek / arabellek (Oto, takılınca arabelleği artırır)",
+    "drops": "{{count}} atlama",
+    "bufferLabel": "arabellek {{seconds}}sn",
+    "buffer": {
+      "low": "Düşük gecikme",
+      "balanced": "Dengeli",
+      "high": "Daha çok arabellek"
+    }
+  },
+  "previews": {
+    "watch": "İzle",
+    "downloadFile": "Dosyayı indir",
+    "download": "İndir",
+    "addFav": "Favorilere ekle",
+    "removeFav": "Favorilerden çıkar",
+    "liveNoDownload": "Canlı içerik indirilemez.",
+    "loadingEpisodes": "Bölümler yükleniyor…",
+    "downloadSeason": "Sezonu indir ({{count}})",
+    "downloadAll": "Tümünü indir ({{count}})",
+    "episode": "Bölüm {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "Bir öğe seçin."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} sıraya eklendi",
+    "activeUpdated": "Etkin hesap güncellendi"
+  },
+  "errors": {
+    "authFailed": "Geçersiz kimlik bilgileri (kimlik doğrulama başarısız)."
+  },
+  "language": {
+    "label": "Dil"
+  }
+}

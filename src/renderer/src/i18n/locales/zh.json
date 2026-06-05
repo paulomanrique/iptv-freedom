@@ -1,0 +1,152 @@
+{
+  "nav": {
+    "favorites": "收藏",
+    "live": "直播",
+    "movies": "电影",
+    "series": "剧集",
+    "downloads": "下载",
+    "accounts": "账户",
+    "search": "搜索"
+  },
+  "sidebar": {
+    "activeAccount": "当前账户",
+    "noAccount": "无账户",
+    "clickToAdd": "点击添加",
+    "library": "媒体库"
+  },
+  "toolbar": {
+    "searchPlaceholder": "全局搜索…（回车）",
+    "search": "搜索",
+    "clear": "清除"
+  },
+  "app": {
+    "addActivateAccount": "在<a>账户</a>中添加并启用一个账户。"
+  },
+  "addAccount": {
+    "title": "添加账户",
+    "subtitle": "Xtream Codes 标准的服务商。凭据将保存在本地。",
+    "nickname": "昵称（可选）",
+    "nicknamePlaceholder": "我的账户",
+    "host": "主机 / 网址",
+    "hostPlaceholder": "http://服务器.com:端口",
+    "user": "用户名",
+    "userPlaceholder": "用户名",
+    "password": "密码",
+    "passwordPlaceholder": "密码",
+    "fillFields": "请填写主机、用户名和密码。",
+    "validating": "正在验证…",
+    "add": "添加",
+    "cancel": "取消"
+  },
+  "accounts": {
+    "empty": "尚未添加账户。",
+    "active": "当前",
+    "add": "添加账户",
+    "validating": "正在验证账户…",
+    "validateFail": "无法验证：{{error}}",
+    "user": "用户名",
+    "status": "状态",
+    "validity": "有效期至",
+    "connections": "连接数",
+    "format": "格式",
+    "trial": "试用",
+    "yes": "是",
+    "no": "否",
+    "daysLeft": "剩余天数",
+    "makeActive": "设为当前",
+    "isActive": "✓ 当前账户",
+    "remove": "移除账户",
+    "selectPrompt": "添加一个账户即可开始。"
+  },
+  "library": {
+    "categories": "分类",
+    "loading": "正在加载…",
+    "empty": "这里什么都没有。",
+    "error": "错误：{{error}}",
+    "showingFirst": "正在显示前 {{max}} 项。"
+  },
+  "favorites": {
+    "empty": "尚无收藏。",
+    "hint": "在电影、频道或剧集的预览中点击星标 ⭐ 即可收藏。"
+  },
+  "search": {
+    "searching": "正在搜索“{{query}}”…",
+    "noResults": "未找到与 <b>“{{query}}”</b> 相关的结果。",
+    "results": "结果 ·“{{query}}”",
+    "total": "共 {{count}} 项"
+  },
+  "downloads": {
+    "itemCount_other": "{{count}} 项",
+    "clearCompleted": "清除已完成",
+    "empty": "尚无下载。在电影或剧集上点击“下载文件”按钮。",
+    "openFolder": "打开文件夹",
+    "pause": "暂停",
+    "resume": "继续",
+    "cancel": "取消"
+  },
+  "downloadBar": {
+    "none": "无进行中的下载",
+    "queued": "+{{count}} 排队中",
+    "connectionLimit": "1 个连接（服务商限制）"
+  },
+  "status": {
+    "account": {
+      "unknown": "未知",
+      "active": "有效",
+      "inactive": "无效"
+    },
+    "download": {
+      "queued": "排队中",
+      "downloading": "下载中",
+      "paused": "已暂停",
+      "done": "已完成",
+      "error": "错误",
+      "canceled": "已取消"
+    }
+  },
+  "player": {
+    "onAir": "直播中",
+    "auto": "自动",
+    "close": "关闭（Esc）",
+    "cantPlay": "无法播放",
+    "oneConnHint": "在仅 1 个连接的限制下，请关闭其他进行中的流/下载。",
+    "autoBuffering": "卡顿频繁 — 正在增大缓冲：{{label}}",
+    "speedTip": "流的下载速度",
+    "bufferTip": "已预缓冲的视频秒数",
+    "dropsTip": "丢帧数",
+    "cacheTip": "预缓存 / 缓冲（卡顿时自动增大缓冲）",
+    "drops": "{{count}} 丢帧",
+    "bufferLabel": "缓冲 {{seconds}}s",
+    "buffer": {
+      "low": "低延迟",
+      "balanced": "均衡",
+      "high": "更多缓冲"
+    }
+  },
+  "previews": {
+    "watch": "观看",
+    "downloadFile": "下载文件",
+    "download": "下载",
+    "addFav": "加入收藏",
+    "removeFav": "取消收藏",
+    "liveNoDownload": "直播内容无法下载。",
+    "loadingEpisodes": "正在加载剧集…",
+    "downloadSeason": "下载本季（{{count}}）",
+    "downloadAll": "全部下载（{{count}}）",
+    "episode": "第 {{number}} 集"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "请选择一项。"
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ 已将 {{name}} 加入队列",
+    "activeUpdated": "已更新当前账户"
+  },
+  "errors": {
+    "authFailed": "凭据无效（验证失败）。"
+  },
+  "language": {
+    "label": "语言"
+  }
+}

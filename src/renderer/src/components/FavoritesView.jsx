@@ -1,9 +1,11 @@
 import { useState, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { groupFavorites } from '../favorites'
 import { Poster, MoviePreview, LivePreview, SeriesPreview } from './Previews'
 
 export default function FavoritesView({ account, favorites, onPlay, onDownload, fav }) {
-  const groups = useMemo(() => groupFavorites(favorites), [favorites])
+  const { t, i18n } = useTranslation()
+  const groups = useMemo(() => groupFavorites(favorites), [favorites, i18n.language])
   const [groupKind, setGroupKind] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
 
@@ -26,7 +28,7 @@ export default function FavoritesView({ account, favorites, onPlay, onDownload, 
   if (favorites.length === 0) {
     return (
       <section className="flex-1 grid place-items-center text-2xs text-white/45 text-center px-8">
-        Nenhum favorito ainda.<br />Use a estrela ⭐ na prévia de um filme, canal ou série para favoritar.
+        {t('favorites.empty')}<br />{t('favorites.hint')}
       </section>
     )
   }
@@ -35,7 +37,7 @@ export default function FavoritesView({ account, favorites, onPlay, onDownload, 
     <>
       {/* Coluna 1: grupos (Ao vivo / Filmes / Séries) */}
       <div className="w-56 shrink-0 bar border-r border-white/10 flex flex-col">
-        <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/35 border-b border-white/10">Favoritos</div>
+        <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/35 border-b border-white/10">{t('nav.favorites')}</div>
         <div className="flex-1 scroll overflow-y-auto py-1">
           {groups.map((g) => {
             const active = g.kind === activeGroup?.kind
@@ -75,7 +77,7 @@ export default function FavoritesView({ account, favorites, onPlay, onDownload, 
                 <div key={`${m.kind}:${m.id}`} className={`flex items-center gap-3 px-4 py-2 cursor-pointer ${String(m.id) === String(selected?.id) ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
                   <Poster icon={m.icon} seed={seedOf(m)} className={m.kind === 'live' ? 'h-8 w-8' : 'h-9 w-6'} />
                   <div className="flex-1 min-w-0"><div className="font-medium truncate">{m.name}</div></div>
-                  {m.kind === 'live' && <span className="text-[10px] text-red-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />LIVE</span>}
+                  {m.kind === 'live' && <span className="text-[10px] text-red-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />{t('common.liveBadge')}</span>}
                 </div>
               ))}
             </div>
@@ -94,7 +96,7 @@ export default function FavoritesView({ account, favorites, onPlay, onDownload, 
             <MoviePreview item={selected} seed={seedOf(selected)} onPlay={onPlay} onDownload={onDownload} fav={fav} />
           )
         ) : (
-          <div className="p-5 text-2xs text-white/45">Selecione um item.</div>
+          <div className="p-5 text-2xs text-white/45">{t('common.selectItem')}</div>
         )}
       </aside>
     </>

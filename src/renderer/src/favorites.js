@@ -31,13 +31,19 @@ export function toggleFavorite(favs, item) {
 }
 
 // Agrupa favoritos por tipo geral, na ordem Ao vivo > Filmes > Séries.
-export const KIND_LABELS = { live: 'Ao vivo', vod: 'Filmes', series: 'Séries' }
+import i18n from './i18n'
+
+// Mapeia o "kind" do favorito para a chave de navegação correspondente.
+export const KIND_NAV = { live: 'live', vod: 'movies', series: 'series' }
 const KIND_ORDER = ['live', 'vod', 'series']
+
+// Rótulo traduzido para um kind de favorito ('live' | 'vod' | 'series').
+export const kindLabel = (kind) => i18n.t(`nav.${KIND_NAV[kind] || kind}`)
 
 export function groupFavorites(favs) {
   return KIND_ORDER.map((kind) => ({
     kind,
-    label: KIND_LABELS[kind],
+    label: kindLabel(kind),
     items: favs.filter((f) => f.kind === kind)
   })).filter((g) => g.items.length > 0)
 }

@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "Favoriten",
+    "live": "Live",
+    "movies": "Filme",
+    "series": "Serien",
+    "downloads": "Downloads",
+    "accounts": "Konten",
+    "search": "Suche"
+  },
+  "sidebar": {
+    "activeAccount": "Aktives Konto",
+    "noAccount": "Kein Konto",
+    "clickToAdd": "Zum Hinzufügen klicken",
+    "library": "Bibliothek"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Alles durchsuchen… (Enter)",
+    "search": "Suchen",
+    "clear": "Löschen"
+  },
+  "app": {
+    "addActivateAccount": "Füge ein Konto unter <a>Konten</a> hinzu und aktiviere es."
+  },
+  "addAccount": {
+    "title": "Konto hinzufügen",
+    "subtitle": "Anbieter im Xtream-Codes-Standard. Die Zugangsdaten werden lokal gespeichert.",
+    "nickname": "Spitzname (optional)",
+    "nicknamePlaceholder": "Mein Konto",
+    "host": "Host / URL",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "Benutzer",
+    "userPlaceholder": "Benutzer",
+    "password": "Passwort",
+    "passwordPlaceholder": "Passwort",
+    "fillFields": "Host, Benutzer und Passwort ausfüllen.",
+    "validating": "Wird geprüft…",
+    "add": "Hinzufügen",
+    "cancel": "Abbrechen"
+  },
+  "accounts": {
+    "empty": "Noch keine Konten hinzugefügt.",
+    "active": "AKTIV",
+    "add": "Konto hinzufügen",
+    "validating": "Konto wird geprüft…",
+    "validateFail": "Konnte nicht geprüft werden: {{error}}",
+    "user": "Benutzer",
+    "status": "Status",
+    "validity": "Gültig bis",
+    "connections": "Verbindungen",
+    "format": "Format",
+    "trial": "Test",
+    "yes": "Ja",
+    "no": "Nein",
+    "daysLeft": "Verbleibende Tage",
+    "makeActive": "Aktivieren",
+    "isActive": "✓ Aktives Konto",
+    "remove": "Konto entfernen",
+    "selectPrompt": "Füge ein Konto hinzu, um zu beginnen."
+  },
+  "library": {
+    "categories": "Kategorien",
+    "loading": "Wird geladen…",
+    "empty": "Nichts hier.",
+    "error": "Fehler: {{error}}",
+    "showingFirst": "Es werden die ersten {{max}} Elemente angezeigt."
+  },
+  "favorites": {
+    "empty": "Noch keine Favoriten.",
+    "hint": "Nutze den Stern ⭐ in der Vorschau eines Films, Senders oder einer Serie, um ihn hinzuzufügen."
+  },
+  "search": {
+    "searching": "Suche nach „{{query}}“…",
+    "noResults": "Keine Ergebnisse für <b>„{{query}}“</b>.",
+    "results": "Ergebnisse · „{{query}}“",
+    "total": "{{count}} insgesamt"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} Element",
+    "itemCount_other": "{{count}} Elemente",
+    "clearCompleted": "Abgeschlossene löschen",
+    "empty": "Noch keine Downloads. Nutze die Schaltfläche „Datei herunterladen“ bei einem Film oder einer Folge.",
+    "openFolder": "Ordner öffnen",
+    "pause": "Pausieren",
+    "resume": "Fortsetzen",
+    "cancel": "Abbrechen"
+  },
+  "downloadBar": {
+    "none": "Keine aktiven Downloads",
+    "queued": "+{{count}} in Warteschlange",
+    "connectionLimit": "1 Verbindung (Anbieterlimit)"
+  },
+  "status": {
+    "account": {
+      "unknown": "Unbekannt",
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "download": {
+      "queued": "In Warteschlange",
+      "downloading": "Wird heruntergeladen",
+      "paused": "Pausiert",
+      "done": "Abgeschlossen",
+      "error": "Fehler",
+      "canceled": "Abgebrochen"
+    }
+  },
+  "player": {
+    "onAir": "LIVE",
+    "auto": "Auto",
+    "close": "Schließen (Esc)",
+    "cantPlay": "Wiedergabe nicht möglich",
+    "oneConnHint": "Bei einem Limit von 1 Verbindung andere aktive Streams/Downloads schließen.",
+    "autoBuffering": "Häufiges Stocken — Puffer wird erhöht: {{label}}",
+    "speedTip": "Download-Geschwindigkeit des Streams",
+    "bufferTip": "Sekunden Video im Voraus gepuffert",
+    "dropsTip": "Verlorene Bilder",
+    "cacheTip": "Vorab-Cache / Puffer (Auto erhöht den Puffer bei Stocken)",
+    "drops": "{{count}} Verluste",
+    "bufferLabel": "Puffer {{seconds}}s",
+    "buffer": {
+      "low": "Geringe Latenz",
+      "balanced": "Ausgewogen",
+      "high": "Mehr Puffer"
+    }
+  },
+  "previews": {
+    "watch": "Ansehen",
+    "downloadFile": "Datei herunterladen",
+    "download": "Herunterladen",
+    "addFav": "Zu Favoriten hinzufügen",
+    "removeFav": "Aus Favoriten entfernen",
+    "liveNoDownload": "Live-Inhalte können nicht heruntergeladen werden.",
+    "loadingEpisodes": "Folgen werden geladen…",
+    "downloadSeason": "Staffel herunterladen ({{count}})",
+    "downloadAll": "Alle herunterladen ({{count}})",
+    "episode": "Folge {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "Wähle ein Element aus."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} zur Warteschlange hinzugefügt",
+    "activeUpdated": "Aktives Konto aktualisiert"
+  },
+  "errors": {
+    "authFailed": "Ungültige Zugangsdaten (Authentifizierung fehlgeschlagen)."
+  },
+  "language": {
+    "label": "Sprache"
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "Favoritos",
+    "live": "En vivo",
+    "movies": "Películas",
+    "series": "Series",
+    "downloads": "Descargas",
+    "accounts": "Cuentas",
+    "search": "Búsqueda"
+  },
+  "sidebar": {
+    "activeAccount": "Cuenta activa",
+    "noAccount": "Sin cuenta",
+    "clickToAdd": "Haz clic para añadir",
+    "library": "Biblioteca"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Buscar en todo… (Enter)",
+    "search": "Buscar",
+    "clear": "Limpiar"
+  },
+  "app": {
+    "addActivateAccount": "Añade y activa una cuenta en <a>Cuentas</a>."
+  },
+  "addAccount": {
+    "title": "Añadir cuenta",
+    "subtitle": "Proveedor con estándar Xtream Codes. Las credenciales se guardan localmente.",
+    "nickname": "Alias (opcional)",
+    "nicknamePlaceholder": "Mi cuenta",
+    "host": "Host / URL",
+    "hostPlaceholder": "http://servidor.com:puerto",
+    "user": "Usuario",
+    "userPlaceholder": "usuario",
+    "password": "Contraseña",
+    "passwordPlaceholder": "contraseña",
+    "fillFields": "Rellena host, usuario y contraseña.",
+    "validating": "Validando…",
+    "add": "Añadir",
+    "cancel": "Cancelar"
+  },
+  "accounts": {
+    "empty": "Aún no hay cuentas añadidas.",
+    "active": "ACTIVA",
+    "add": "Añadir cuenta",
+    "validating": "Validando cuenta…",
+    "validateFail": "No se pudo validar: {{error}}",
+    "user": "Usuario",
+    "status": "Estado",
+    "validity": "Válida hasta",
+    "connections": "Conexiones",
+    "format": "Formato",
+    "trial": "Prueba",
+    "yes": "Sí",
+    "no": "No",
+    "daysLeft": "Días restantes",
+    "makeActive": "Activar",
+    "isActive": "✓ Cuenta activa",
+    "remove": "Eliminar cuenta",
+    "selectPrompt": "Añade una cuenta para empezar."
+  },
+  "library": {
+    "categories": "Categorías",
+    "loading": "Cargando…",
+    "empty": "Nada por aquí.",
+    "error": "Error: {{error}}",
+    "showingFirst": "Mostrando los primeros {{max}} elementos."
+  },
+  "favorites": {
+    "empty": "Aún no hay favoritos.",
+    "hint": "Usa la estrella ⭐ en la vista previa de una película, canal o serie para añadirlo."
+  },
+  "search": {
+    "searching": "Buscando «{{query}}»…",
+    "noResults": "Sin resultados para <b>«{{query}}»</b>.",
+    "results": "Resultados · «{{query}}»",
+    "total": "{{count}} en total"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} elemento",
+    "itemCount_other": "{{count}} elementos",
+    "clearCompleted": "Limpiar completadas",
+    "empty": "Aún no hay descargas. Usa el botón «Descargar archivo» en una película o episodio.",
+    "openFolder": "Abrir carpeta",
+    "pause": "Pausar",
+    "resume": "Reanudar",
+    "cancel": "Cancelar"
+  },
+  "downloadBar": {
+    "none": "Sin descargas activas",
+    "queued": "+{{count}} en cola",
+    "connectionLimit": "1 conexión (límite del proveedor)"
+  },
+  "status": {
+    "account": {
+      "unknown": "Desconocido",
+      "active": "Activa",
+      "inactive": "Inactiva"
+    },
+    "download": {
+      "queued": "En cola",
+      "downloading": "Descargando",
+      "paused": "Pausada",
+      "done": "Completada",
+      "error": "Error",
+      "canceled": "Cancelada"
+    }
+  },
+  "player": {
+    "onAir": "EN VIVO",
+    "auto": "Auto",
+    "close": "Cerrar (Esc)",
+    "cantPlay": "No se pudo reproducir",
+    "oneConnHint": "Con el límite de 1 conexión, cierra otros streams/descargas activos.",
+    "autoBuffering": "Se traba mucho — aumentando búfer: {{label}}",
+    "speedTip": "Velocidad de descarga del stream",
+    "bufferTip": "Segundos de vídeo en búfer por delante",
+    "dropsTip": "Fotogramas descartados",
+    "cacheTip": "Precaché / búfer (Auto sube el búfer si se traba)",
+    "drops": "{{count}} descartes",
+    "bufferLabel": "búfer {{seconds}}s",
+    "buffer": {
+      "low": "Baja latencia",
+      "balanced": "Equilibrado",
+      "high": "Más búfer"
+    }
+  },
+  "previews": {
+    "watch": "Ver",
+    "downloadFile": "Descargar archivo",
+    "download": "Descargar",
+    "addFav": "Añadir a favoritos",
+    "removeFav": "Quitar de favoritos",
+    "liveNoDownload": "El contenido en vivo no se puede descargar.",
+    "loadingEpisodes": "Cargando episodios…",
+    "downloadSeason": "Descargar temporada ({{count}})",
+    "downloadAll": "Descargar todo ({{count}})",
+    "episode": "Episodio {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "Selecciona un elemento."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} añadido a la cola",
+    "activeUpdated": "Cuenta activa actualizada"
+  },
+  "errors": {
+    "authFailed": "Credenciales no válidas (falló la autenticación)."
+  },
+  "language": {
+    "label": "Idioma"
+  }
+}

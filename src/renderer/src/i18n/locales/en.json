@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "Favorites",
+    "live": "Live",
+    "movies": "Movies",
+    "series": "Series",
+    "downloads": "Downloads",
+    "accounts": "Accounts",
+    "search": "Search"
+  },
+  "sidebar": {
+    "activeAccount": "Active account",
+    "noAccount": "No account",
+    "clickToAdd": "Click to add",
+    "library": "Library"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Search everything… (Enter)",
+    "search": "Search",
+    "clear": "Clear"
+  },
+  "app": {
+    "addActivateAccount": "Add and activate an account in <a>Accounts</a>."
+  },
+  "addAccount": {
+    "title": "Add account",
+    "subtitle": "Xtream Codes provider. Credentials are saved locally.",
+    "nickname": "Nickname (optional)",
+    "nicknamePlaceholder": "My account",
+    "host": "Host / URL",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "Username",
+    "userPlaceholder": "username",
+    "password": "Password",
+    "passwordPlaceholder": "password",
+    "fillFields": "Fill in host, username and password.",
+    "validating": "Validating…",
+    "add": "Add",
+    "cancel": "Cancel"
+  },
+  "accounts": {
+    "empty": "No accounts added yet.",
+    "active": "ACTIVE",
+    "add": "Add account",
+    "validating": "Validating account…",
+    "validateFail": "Could not validate: {{error}}",
+    "user": "Username",
+    "status": "Status",
+    "validity": "Valid until",
+    "connections": "Connections",
+    "format": "Format",
+    "trial": "Trial",
+    "yes": "Yes",
+    "no": "No",
+    "daysLeft": "Days left",
+    "makeActive": "Make active",
+    "isActive": "✓ Active account",
+    "remove": "Remove account",
+    "selectPrompt": "Add an account to get started."
+  },
+  "library": {
+    "categories": "Categories",
+    "loading": "Loading…",
+    "empty": "Nothing here.",
+    "error": "Error: {{error}}",
+    "showingFirst": "Showing the first {{max}} items."
+  },
+  "favorites": {
+    "empty": "No favorites yet.",
+    "hint": "Use the ⭐ star in the preview of a movie, channel or series to add it."
+  },
+  "search": {
+    "searching": "Searching “{{query}}”…",
+    "noResults": "No results for <b>“{{query}}”</b>.",
+    "results": "Results · “{{query}}”",
+    "total": "{{count}} total"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} item",
+    "itemCount_other": "{{count}} items",
+    "clearCompleted": "Clear completed",
+    "empty": "No downloads yet. Use the “Download file” button on a movie or episode.",
+    "openFolder": "Open folder",
+    "pause": "Pause",
+    "resume": "Resume",
+    "cancel": "Cancel"
+  },
+  "downloadBar": {
+    "none": "No active downloads",
+    "queued": "+{{count}} queued",
+    "connectionLimit": "1 connection (provider limit)"
+  },
+  "status": {
+    "account": {
+      "unknown": "Unknown",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "download": {
+      "queued": "Queued",
+      "downloading": "Downloading",
+      "paused": "Paused",
+      "done": "Completed",
+      "error": "Error",
+      "canceled": "Canceled"
+    }
+  },
+  "player": {
+    "onAir": "LIVE",
+    "auto": "Auto",
+    "close": "Close (Esc)",
+    "cantPlay": "Could not play",
+    "oneConnHint": "With a 1-connection limit, close other active streams/downloads.",
+    "autoBuffering": "Buffering a lot — raising buffer: {{label}}",
+    "speedTip": "Stream download speed",
+    "bufferTip": "Seconds of video buffered ahead",
+    "dropsTip": "Dropped frames",
+    "cacheTip": "Pre-cache / buffer (Auto raises the buffer if it stalls)",
+    "drops": "{{count}} drops",
+    "bufferLabel": "buffer {{seconds}}s",
+    "buffer": {
+      "low": "Low latency",
+      "balanced": "Balanced",
+      "high": "More buffer"
+    }
+  },
+  "previews": {
+    "watch": "Watch",
+    "downloadFile": "Download file",
+    "download": "Download",
+    "addFav": "Add to favorites",
+    "removeFav": "Remove from favorites",
+    "liveNoDownload": "Live content cannot be downloaded.",
+    "loadingEpisodes": "Loading episodes…",
+    "downloadSeason": "Download season ({{count}})",
+    "downloadAll": "Download all ({{count}})",
+    "episode": "Episode {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "Select an item."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} added to queue",
+    "activeUpdated": "Active account updated"
+  },
+  "errors": {
+    "authFailed": "Invalid credentials (auth failed)."
+  },
+  "language": {
+    "label": "Language"
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "پسندیدہ",
+    "live": "لائیو",
+    "movies": "فلمیں",
+    "series": "سیریز",
+    "downloads": "ڈاؤن لوڈز",
+    "accounts": "اکاؤنٹس",
+    "search": "تلاش"
+  },
+  "sidebar": {
+    "activeAccount": "فعال اکاؤنٹ",
+    "noAccount": "کوئی اکاؤنٹ نہیں",
+    "clickToAdd": "شامل کرنے کے لیے کلک کریں",
+    "library": "لائبریری"
+  },
+  "toolbar": {
+    "searchPlaceholder": "ہر چیز میں تلاش کریں… (Enter)",
+    "search": "تلاش",
+    "clear": "صاف کریں"
+  },
+  "app": {
+    "addActivateAccount": "<a>اکاؤنٹس</a> میں ایک اکاؤنٹ شامل اور فعال کریں۔"
+  },
+  "addAccount": {
+    "title": "اکاؤنٹ شامل کریں",
+    "subtitle": "Xtream Codes معیار کا فراہم کنندہ۔ اسناد مقامی طور پر محفوظ ہوتی ہیں۔",
+    "nickname": "عرفی نام (اختیاری)",
+    "nicknamePlaceholder": "میرا اکاؤنٹ",
+    "host": "ہوسٹ / URL",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "صارف نام",
+    "userPlaceholder": "صارف نام",
+    "password": "پاس ورڈ",
+    "passwordPlaceholder": "پاس ورڈ",
+    "fillFields": "ہوسٹ، صارف نام اور پاس ورڈ بھریں۔",
+    "validating": "تصدیق ہو رہی ہے…",
+    "add": "شامل کریں",
+    "cancel": "منسوخ کریں"
+  },
+  "accounts": {
+    "empty": "ابھی تک کوئی اکاؤنٹ شامل نہیں کیا گیا۔",
+    "active": "فعال",
+    "add": "اکاؤنٹ شامل کریں",
+    "validating": "اکاؤنٹ کی تصدیق ہو رہی ہے…",
+    "validateFail": "تصدیق نہیں ہو سکی: {{error}}",
+    "user": "صارف نام",
+    "status": "حالت",
+    "validity": "میعاد",
+    "connections": "کنکشنز",
+    "format": "فارمیٹ",
+    "trial": "آزمائشی",
+    "yes": "ہاں",
+    "no": "نہیں",
+    "daysLeft": "باقی دن",
+    "makeActive": "فعال کریں",
+    "isActive": "✓ فعال اکاؤنٹ",
+    "remove": "اکاؤنٹ ہٹائیں",
+    "selectPrompt": "شروع کرنے کے لیے ایک اکاؤنٹ شامل کریں۔"
+  },
+  "library": {
+    "categories": "زمرے",
+    "loading": "لوڈ ہو رہا ہے…",
+    "empty": "یہاں کچھ نہیں ہے۔",
+    "error": "خرابی: {{error}}",
+    "showingFirst": "پہلی {{max}} اشیاء دکھائی جا رہی ہیں۔"
+  },
+  "favorites": {
+    "empty": "ابھی تک کوئی پسندیدہ نہیں۔",
+    "hint": "شامل کرنے کے لیے کسی فلم، چینل یا سیریز کے پیش منظر میں ⭐ ستارہ استعمال کریں۔"
+  },
+  "search": {
+    "searching": "“{{query}}” تلاش ہو رہی ہے…",
+    "noResults": "<b>“{{query}}”</b> کے لیے کوئی نتیجہ نہیں۔",
+    "results": "نتائج ·“{{query}}”",
+    "total": "کل {{count}}"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} آئٹم",
+    "itemCount_other": "{{count}} آئٹمز",
+    "clearCompleted": "مکمل شدہ صاف کریں",
+    "empty": "ابھی تک کوئی ڈاؤن لوڈ نہیں۔ کسی فلم یا قسط پر “فائل ڈاؤن لوڈ کریں” بٹن استعمال کریں۔",
+    "openFolder": "فولڈر کھولیں",
+    "pause": "روکیں",
+    "resume": "جاری رکھیں",
+    "cancel": "منسوخ کریں"
+  },
+  "downloadBar": {
+    "none": "کوئی فعال ڈاؤن لوڈ نہیں",
+    "queued": "+{{count}} قطار میں",
+    "connectionLimit": "1 کنکشن (فراہم کنندہ کی حد)"
+  },
+  "status": {
+    "account": {
+      "unknown": "نامعلوم",
+      "active": "فعال",
+      "inactive": "غیر فعال"
+    },
+    "download": {
+      "queued": "قطار میں",
+      "downloading": "ڈاؤن لوڈ ہو رہا ہے",
+      "paused": "روکا گیا",
+      "done": "مکمل",
+      "error": "خرابی",
+      "canceled": "منسوخ"
+    }
+  },
+  "player": {
+    "onAir": "لائیو",
+    "auto": "آٹو",
+    "close": "بند کریں (Esc)",
+    "cantPlay": "چلایا نہیں جا سکا",
+    "oneConnHint": "1 کنکشن کی حد کے ساتھ، دیگر فعال اسٹریمز/ڈاؤن لوڈز بند کریں۔",
+    "autoBuffering": "بہت رک رہا ہے — بفر بڑھایا جا رہا ہے: {{label}}",
+    "speedTip": "اسٹریم کی ڈاؤن لوڈ رفتار",
+    "bufferTip": "آگے بفر کیے گئے ویڈیو کے سیکنڈ",
+    "dropsTip": "چھوٹے ہوئے فریم",
+    "cacheTip": "پری کیش / بفر (رکنے پر آٹو بفر بڑھاتا ہے)",
+    "drops": "{{count}} ڈراپ",
+    "bufferLabel": "بفر {{seconds}}س",
+    "buffer": {
+      "low": "کم تاخیر",
+      "balanced": "متوازن",
+      "high": "زیادہ بفر"
+    }
+  },
+  "previews": {
+    "watch": "دیکھیں",
+    "downloadFile": "فائل ڈاؤن لوڈ کریں",
+    "download": "ڈاؤن لوڈ",
+    "addFav": "پسندیدہ میں شامل کریں",
+    "removeFav": "پسندیدہ سے ہٹائیں",
+    "liveNoDownload": "لائیو مواد ڈاؤن لوڈ نہیں کیا جا سکتا۔",
+    "loadingEpisodes": "اقساط لوڈ ہو رہی ہیں…",
+    "downloadSeason": "سیزن ڈاؤن لوڈ کریں ({{count}})",
+    "downloadAll": "سب ڈاؤن لوڈ کریں ({{count}})",
+    "episode": "قسط {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "ایک آئٹم منتخب کریں۔"
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} قطار میں شامل کر دیا گیا",
+    "activeUpdated": "فعال اکاؤنٹ اپ ڈیٹ ہو گیا"
+  },
+  "errors": {
+    "authFailed": "غلط اسناد (تصدیق ناکام)۔"
+  },
+  "language": {
+    "label": "زبان"
+  }
+}

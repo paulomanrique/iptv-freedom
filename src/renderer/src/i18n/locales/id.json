@@ -1,0 +1,152 @@
+{
+  "nav": {
+    "favorites": "Favorit",
+    "live": "Langsung",
+    "movies": "Film",
+    "series": "Serial",
+    "downloads": "Unduhan",
+    "accounts": "Akun",
+    "search": "Cari"
+  },
+  "sidebar": {
+    "activeAccount": "Akun aktif",
+    "noAccount": "Tidak ada akun",
+    "clickToAdd": "Klik untuk menambah",
+    "library": "Pustaka"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Cari semuanya… (Enter)",
+    "search": "Cari",
+    "clear": "Hapus"
+  },
+  "app": {
+    "addActivateAccount": "Tambahkan dan aktifkan akun di <a>Akun</a>."
+  },
+  "addAccount": {
+    "title": "Tambah akun",
+    "subtitle": "Penyedia standar Xtream Codes. Kredensial disimpan secara lokal.",
+    "nickname": "Nama panggilan (opsional)",
+    "nicknamePlaceholder": "Akun saya",
+    "host": "Host / URL",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "Nama pengguna",
+    "userPlaceholder": "nama pengguna",
+    "password": "Kata sandi",
+    "passwordPlaceholder": "kata sandi",
+    "fillFields": "Isi host, nama pengguna, dan kata sandi.",
+    "validating": "Memvalidasi…",
+    "add": "Tambah",
+    "cancel": "Batal"
+  },
+  "accounts": {
+    "empty": "Belum ada akun yang ditambahkan.",
+    "active": "AKTIF",
+    "add": "Tambah akun",
+    "validating": "Memvalidasi akun…",
+    "validateFail": "Tidak dapat memvalidasi: {{error}}",
+    "user": "Nama pengguna",
+    "status": "Status",
+    "validity": "Berlaku hingga",
+    "connections": "Koneksi",
+    "format": "Format",
+    "trial": "Uji coba",
+    "yes": "Ya",
+    "no": "Tidak",
+    "daysLeft": "Sisa hari",
+    "makeActive": "Jadikan aktif",
+    "isActive": "✓ Akun aktif",
+    "remove": "Hapus akun",
+    "selectPrompt": "Tambahkan akun untuk memulai."
+  },
+  "library": {
+    "categories": "Kategori",
+    "loading": "Memuat…",
+    "empty": "Tidak ada apa-apa di sini.",
+    "error": "Galat: {{error}}",
+    "showingFirst": "Menampilkan {{max}} item pertama."
+  },
+  "favorites": {
+    "empty": "Belum ada favorit.",
+    "hint": "Gunakan bintang ⭐ pada pratinjau film, saluran, atau serial untuk menambahkannya."
+  },
+  "search": {
+    "searching": "Mencari “{{query}}”…",
+    "noResults": "Tidak ada hasil untuk <b>“{{query}}”</b>.",
+    "results": "Hasil ·“{{query}}”",
+    "total": "{{count}} total"
+  },
+  "downloads": {
+    "itemCount_other": "{{count}} item",
+    "clearCompleted": "Bersihkan yang selesai",
+    "empty": "Belum ada unduhan. Gunakan tombol “Unduh berkas” pada film atau episode.",
+    "openFolder": "Buka folder",
+    "pause": "Jeda",
+    "resume": "Lanjutkan",
+    "cancel": "Batal"
+  },
+  "downloadBar": {
+    "none": "Tidak ada unduhan aktif",
+    "queued": "+{{count}} dalam antrean",
+    "connectionLimit": "1 koneksi (batas penyedia)"
+  },
+  "status": {
+    "account": {
+      "unknown": "Tidak diketahui",
+      "active": "Aktif",
+      "inactive": "Tidak aktif"
+    },
+    "download": {
+      "queued": "Dalam antrean",
+      "downloading": "Mengunduh",
+      "paused": "Dijeda",
+      "done": "Selesai",
+      "error": "Galat",
+      "canceled": "Dibatalkan"
+    }
+  },
+  "player": {
+    "onAir": "LANGSUNG",
+    "auto": "Otomatis",
+    "close": "Tutup (Esc)",
+    "cantPlay": "Tidak dapat memutar",
+    "oneConnHint": "Dengan batas 1 koneksi, tutup streaming/unduhan aktif lainnya.",
+    "autoBuffering": "Sering tersendat — menaikkan buffer: {{label}}",
+    "speedTip": "Kecepatan unduh streaming",
+    "bufferTip": "Detik video yang di-buffer di depan",
+    "dropsTip": "Bingkai yang hilang",
+    "cacheTip": "Pra-cache / buffer (Otomatis menaikkan buffer jika tersendat)",
+    "drops": "{{count}} drop",
+    "bufferLabel": "buffer {{seconds}}d",
+    "buffer": {
+      "low": "Latensi rendah",
+      "balanced": "Seimbang",
+      "high": "Buffer lebih besar"
+    }
+  },
+  "previews": {
+    "watch": "Tonton",
+    "downloadFile": "Unduh berkas",
+    "download": "Unduh",
+    "addFav": "Tambahkan ke favorit",
+    "removeFav": "Hapus dari favorit",
+    "liveNoDownload": "Konten langsung tidak dapat diunduh.",
+    "loadingEpisodes": "Memuat episode…",
+    "downloadSeason": "Unduh musim ({{count}})",
+    "downloadAll": "Unduh semua ({{count}})",
+    "episode": "Episode {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "Pilih sebuah item."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} ditambahkan ke antrean",
+    "activeUpdated": "Akun aktif diperbarui"
+  },
+  "errors": {
+    "authFailed": "Kredensial tidak valid (autentikasi gagal)."
+  },
+  "language": {
+    "label": "Bahasa"
+  }
+}

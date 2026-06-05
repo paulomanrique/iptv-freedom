@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { getCategories, getStreams, normalize } from '../catalog'
 import { smartTitleCase } from '../format'
 import { Poster, MoviePreview, LivePreview, SeriesPreview } from './Previews'
@@ -6,6 +7,7 @@ import { Poster, MoviePreview, LivePreview, SeriesPreview } from './Previews'
 const MAX_RESULTS = 400
 
 export default function LibraryView({ account, kind, viewStyle, onPlay, onDownload, fav }) {
+  const { t } = useTranslation()
   const [categories, setCategories] = useState([])
   const [catLoading, setCatLoading] = useState(true)
   const [catId, setCatId] = useState(null)
@@ -75,9 +77,9 @@ export default function LibraryView({ account, kind, viewStyle, onPlay, onDownlo
     <>
       {/* Coluna 1: categorias (estilo Finder, rolagem vertical) */}
       <div className="w-56 shrink-0 bar border-r border-white/10 flex flex-col">
-        <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/35 border-b border-white/10">Categorias</div>
+        <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/35 border-b border-white/10">{t('library.categories')}</div>
         <div className="flex-1 scroll overflow-y-auto py-1">
-          {catLoading && <div className="flex items-center gap-2 text-2xs text-white/45 px-3 py-2"><span className="h-3 w-3 rounded-full border-2 border-white/30 border-t-white animate-spin" />Carregando…</div>}
+          {catLoading && <div className="flex items-center gap-2 text-2xs text-white/45 px-3 py-2"><span className="h-3 w-3 rounded-full border-2 border-white/30 border-t-white animate-spin" />{t('library.loading')}</div>}
           {categories.map((c) => {
             const active = c.category_id === catId
             return (
@@ -102,9 +104,9 @@ export default function LibraryView({ account, kind, viewStyle, onPlay, onDownlo
         </div>
 
         <div className="flex-1 scroll overflow-y-auto">
-          {error && <div className="m-4 text-2xs text-red-300 bg-red-500/10 rounded-lg px-3 py-2">Erro: {error}</div>}
-          {loading && <div className="flex items-center gap-2 text-2xs text-white/45 p-4"><span className="h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />Carregando…</div>}
-          {!loading && visible.length === 0 && !error && <div className="p-6 text-2xs text-white/45 text-center">Nada aqui.</div>}
+          {error && <div className="m-4 text-2xs text-red-300 bg-red-500/10 rounded-lg px-3 py-2">{t('library.error', { error })}</div>}
+          {loading && <div className="flex items-center gap-2 text-2xs text-white/45 p-4"><span className="h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white animate-spin" />{t('library.loading')}</div>}
+          {!loading && visible.length === 0 && !error && <div className="p-6 text-2xs text-white/45 text-center">{t('library.empty')}</div>}
 
           {!loading && visible.length > 0 && (useGrid ? (
             <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 p-4">
@@ -121,13 +123,13 @@ export default function LibraryView({ account, kind, viewStyle, onPlay, onDownlo
                 <div key={m.id} className={`flex items-center gap-3 px-4 py-2 cursor-pointer ${m.id === selected?.id ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
                   <Poster icon={m.icon} seed={seedOf(m)} className={kind === 'live' ? 'h-8 w-8' : 'h-9 w-6'} />
                   <div className="flex-1 min-w-0"><div className="font-medium truncate">{m.name}</div></div>
-                  {kind === 'live' && <span className="text-[10px] text-red-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />LIVE</span>}
+                  {kind === 'live' && <span className="text-[10px] text-red-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />{t('common.liveBadge')}</span>}
                   {kind === 'vod' && m.ext && <span className="text-[10px] text-white/40 uppercase">{m.ext}</span>}
                 </div>
               ))}
             </div>
           ))}
-          {visible.length === MAX_RESULTS && <div className="px-4 py-2 text-[10px] text-white/35">Mostrando os primeiros {MAX_RESULTS} itens.</div>}
+          {visible.length === MAX_RESULTS && <div className="px-4 py-2 text-[10px] text-white/35">{t('library.showingFirst', { max: MAX_RESULTS })}</div>}
         </div>
       </section>
 
@@ -142,7 +144,7 @@ export default function LibraryView({ account, kind, viewStyle, onPlay, onDownlo
             <MoviePreview item={selected} seed={seedOf(selected)} onPlay={onPlay} onDownload={onDownload} fav={fav} />
           )
         ) : (
-          <div className="p-5 text-2xs text-white/45">Selecione um item.</div>
+          <div className="p-5 text-2xs text-white/45">{t('common.selectItem')}</div>
         )}
       </aside>
     </>

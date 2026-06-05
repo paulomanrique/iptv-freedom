@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "Favoris",
+    "live": "En direct",
+    "movies": "Films",
+    "series": "Séries",
+    "downloads": "Téléchargements",
+    "accounts": "Comptes",
+    "search": "Recherche"
+  },
+  "sidebar": {
+    "activeAccount": "Compte actif",
+    "noAccount": "Aucun compte",
+    "clickToAdd": "Cliquez pour ajouter",
+    "library": "Bibliothèque"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Tout rechercher… (Entrée)",
+    "search": "Rechercher",
+    "clear": "Effacer"
+  },
+  "app": {
+    "addActivateAccount": "Ajoutez et activez un compte dans <a>Comptes</a>."
+  },
+  "addAccount": {
+    "title": "Ajouter un compte",
+    "subtitle": "Fournisseur au standard Xtream Codes. Les identifiants sont enregistrés localement.",
+    "nickname": "Surnom (facultatif)",
+    "nicknamePlaceholder": "Mon compte",
+    "host": "Hôte / URL",
+    "hostPlaceholder": "http://serveur.com:port",
+    "user": "Utilisateur",
+    "userPlaceholder": "utilisateur",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "mot de passe",
+    "fillFields": "Renseignez l’hôte, l’utilisateur et le mot de passe.",
+    "validating": "Validation…",
+    "add": "Ajouter",
+    "cancel": "Annuler"
+  },
+  "accounts": {
+    "empty": "Aucun compte ajouté pour l’instant.",
+    "active": "ACTIF",
+    "add": "Ajouter un compte",
+    "validating": "Validation du compte…",
+    "validateFail": "Validation impossible : {{error}}",
+    "user": "Utilisateur",
+    "status": "Statut",
+    "validity": "Valide jusqu’au",
+    "connections": "Connexions",
+    "format": "Format",
+    "trial": "Essai",
+    "yes": "Oui",
+    "no": "Non",
+    "daysLeft": "Jours restants",
+    "makeActive": "Rendre actif",
+    "isActive": "✓ Compte actif",
+    "remove": "Supprimer le compte",
+    "selectPrompt": "Ajoutez un compte pour commencer."
+  },
+  "library": {
+    "categories": "Catégories",
+    "loading": "Chargement…",
+    "empty": "Rien ici.",
+    "error": "Erreur : {{error}}",
+    "showingFirst": "Affichage des {{max}} premiers éléments."
+  },
+  "favorites": {
+    "empty": "Aucun favori pour l’instant.",
+    "hint": "Utilisez l’étoile ⭐ dans l’aperçu d’un film, d’une chaîne ou d’une série pour l’ajouter."
+  },
+  "search": {
+    "searching": "Recherche de « {{query}} »…",
+    "noResults": "Aucun résultat pour <b>« {{query}} »</b>.",
+    "results": "Résultats · « {{query}} »",
+    "total": "{{count}} au total"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}} élément",
+    "itemCount_other": "{{count}} éléments",
+    "clearCompleted": "Effacer les terminés",
+    "empty": "Aucun téléchargement. Utilisez le bouton « Télécharger le fichier » sur un film ou un épisode.",
+    "openFolder": "Ouvrir le dossier",
+    "pause": "Suspendre",
+    "resume": "Reprendre",
+    "cancel": "Annuler"
+  },
+  "downloadBar": {
+    "none": "Aucun téléchargement actif",
+    "queued": "+{{count}} en file",
+    "connectionLimit": "1 connexion (limite du fournisseur)"
+  },
+  "status": {
+    "account": {
+      "unknown": "Inconnu",
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "download": {
+      "queued": "En file",
+      "downloading": "Téléchargement",
+      "paused": "Suspendu",
+      "done": "Terminé",
+      "error": "Erreur",
+      "canceled": "Annulé"
+    }
+  },
+  "player": {
+    "onAir": "EN DIRECT",
+    "auto": "Auto",
+    "close": "Fermer (Échap)",
+    "cantPlay": "Lecture impossible",
+    "oneConnHint": "Avec une limite d’1 connexion, fermez les autres streams/téléchargements actifs.",
+    "autoBuffering": "Saccades fréquentes — augmentation du tampon : {{label}}",
+    "speedTip": "Vitesse de téléchargement du stream",
+    "bufferTip": "Secondes de vidéo en tampon d’avance",
+    "dropsTip": "Images perdues",
+    "cacheTip": "Pré-cache / tampon (Auto augmente le tampon en cas de saccades)",
+    "drops": "{{count}} pertes",
+    "bufferLabel": "tampon {{seconds}}s",
+    "buffer": {
+      "low": "Faible latence",
+      "balanced": "Équilibré",
+      "high": "Plus de tampon"
+    }
+  },
+  "previews": {
+    "watch": "Regarder",
+    "downloadFile": "Télécharger le fichier",
+    "download": "Télécharger",
+    "addFav": "Ajouter aux favoris",
+    "removeFav": "Retirer des favoris",
+    "liveNoDownload": "Le contenu en direct ne peut pas être téléchargé.",
+    "loadingEpisodes": "Chargement des épisodes…",
+    "downloadSeason": "Télécharger la saison ({{count}})",
+    "downloadAll": "Tout télécharger ({{count}})",
+    "episode": "Épisode {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "Sélectionnez un élément."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} ajouté à la file",
+    "activeUpdated": "Compte actif mis à jour"
+  },
+  "errors": {
+    "authFailed": "Identifiants invalides (échec de l’authentification)."
+  },
+  "language": {
+    "label": "Langue"
+  }
+}

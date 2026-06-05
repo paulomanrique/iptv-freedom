@@ -48,7 +48,8 @@ ipcMain.handle('accounts:add', async (_e, account) => {
   // Valida as credenciais antes de salvar
   const info = await xtream.getAccountInfo(account)
   if (!info?.user_info || Number(info.user_info.auth) !== 1) {
-    throw new Error('Credenciais inválidas (auth falhou).')
+    // Código estável; o renderer (AddAccountModal) traduz para o idioma ativo.
+    throw new Error('auth_failed')
   }
   const entry = await accountsStore.add(account)
   return { account: entry, info }

@@ -1,0 +1,152 @@
+{
+  "nav": {
+    "favorites": "Yêu thích",
+    "live": "Trực tiếp",
+    "movies": "Phim",
+    "series": "Phim bộ",
+    "downloads": "Tải xuống",
+    "accounts": "Tài khoản",
+    "search": "Tìm kiếm"
+  },
+  "sidebar": {
+    "activeAccount": "Tài khoản đang dùng",
+    "noAccount": "Chưa có tài khoản",
+    "clickToAdd": "Nhấn để thêm",
+    "library": "Thư viện"
+  },
+  "toolbar": {
+    "searchPlaceholder": "Tìm mọi thứ… (Enter)",
+    "search": "Tìm",
+    "clear": "Xóa"
+  },
+  "app": {
+    "addActivateAccount": "Thêm và kích hoạt một tài khoản trong <a>Tài khoản</a>."
+  },
+  "addAccount": {
+    "title": "Thêm tài khoản",
+    "subtitle": "Nhà cung cấp theo chuẩn Xtream Codes. Thông tin đăng nhập được lưu cục bộ.",
+    "nickname": "Biệt danh (tùy chọn)",
+    "nicknamePlaceholder": "Tài khoản của tôi",
+    "host": "Máy chủ / URL",
+    "hostPlaceholder": "http://server.com:cổng",
+    "user": "Tên người dùng",
+    "userPlaceholder": "tên người dùng",
+    "password": "Mật khẩu",
+    "passwordPlaceholder": "mật khẩu",
+    "fillFields": "Hãy điền máy chủ, tên người dùng và mật khẩu.",
+    "validating": "Đang xác thực…",
+    "add": "Thêm",
+    "cancel": "Hủy"
+  },
+  "accounts": {
+    "empty": "Chưa thêm tài khoản nào.",
+    "active": "ĐANG DÙNG",
+    "add": "Thêm tài khoản",
+    "validating": "Đang xác thực tài khoản…",
+    "validateFail": "Không thể xác thực: {{error}}",
+    "user": "Tên người dùng",
+    "status": "Trạng thái",
+    "validity": "Hiệu lực đến",
+    "connections": "Kết nối",
+    "format": "Định dạng",
+    "trial": "Dùng thử",
+    "yes": "Có",
+    "no": "Không",
+    "daysLeft": "Số ngày còn lại",
+    "makeActive": "Đặt làm hiện tại",
+    "isActive": "✓ Tài khoản đang dùng",
+    "remove": "Xóa tài khoản",
+    "selectPrompt": "Thêm một tài khoản để bắt đầu."
+  },
+  "library": {
+    "categories": "Danh mục",
+    "loading": "Đang tải…",
+    "empty": "Không có gì ở đây.",
+    "error": "Lỗi: {{error}}",
+    "showingFirst": "Đang hiển thị {{max}} mục đầu tiên."
+  },
+  "favorites": {
+    "empty": "Chưa có mục yêu thích.",
+    "hint": "Dùng ngôi sao ⭐ trong phần xem trước của phim, kênh hoặc phim bộ để thêm."
+  },
+  "search": {
+    "searching": "Đang tìm “{{query}}”…",
+    "noResults": "Không có kết quả cho <b>“{{query}}”</b>.",
+    "results": "Kết quả ·“{{query}}”",
+    "total": "tổng {{count}}"
+  },
+  "downloads": {
+    "itemCount_other": "{{count}} mục",
+    "clearCompleted": "Xóa mục đã hoàn tất",
+    "empty": "Chưa có lượt tải nào. Dùng nút “Tải tệp” ở một phim hoặc tập.",
+    "openFolder": "Mở thư mục",
+    "pause": "Tạm dừng",
+    "resume": "Tiếp tục",
+    "cancel": "Hủy"
+  },
+  "downloadBar": {
+    "none": "Không có lượt tải nào đang chạy",
+    "queued": "+{{count}} trong hàng đợi",
+    "connectionLimit": "1 kết nối (giới hạn của nhà cung cấp)"
+  },
+  "status": {
+    "account": {
+      "unknown": "Không rõ",
+      "active": "Hoạt động",
+      "inactive": "Không hoạt động"
+    },
+    "download": {
+      "queued": "Trong hàng đợi",
+      "downloading": "Đang tải",
+      "paused": "Tạm dừng",
+      "done": "Hoàn tất",
+      "error": "Lỗi",
+      "canceled": "Đã hủy"
+    }
+  },
+  "player": {
+    "onAir": "TRỰC TIẾP",
+    "auto": "Tự động",
+    "close": "Đóng (Esc)",
+    "cantPlay": "Không thể phát",
+    "oneConnHint": "Với giới hạn 1 kết nối, hãy đóng các luồng/lượt tải khác đang chạy.",
+    "autoBuffering": "Giật nhiều — đang tăng bộ đệm: {{label}}",
+    "speedTip": "Tốc độ tải của luồng",
+    "bufferTip": "Số giây video đã đệm trước",
+    "dropsTip": "Khung hình bị mất",
+    "cacheTip": "Đệm trước / bộ đệm (Tự động tăng bộ đệm khi bị giật)",
+    "drops": "{{count}} khung mất",
+    "bufferLabel": "đệm {{seconds}}s",
+    "buffer": {
+      "low": "Độ trễ thấp",
+      "balanced": "Cân bằng",
+      "high": "Đệm nhiều hơn"
+    }
+  },
+  "previews": {
+    "watch": "Xem",
+    "downloadFile": "Tải tệp",
+    "download": "Tải",
+    "addFav": "Thêm vào yêu thích",
+    "removeFav": "Bỏ khỏi yêu thích",
+    "liveNoDownload": "Nội dung trực tiếp không thể tải xuống.",
+    "loadingEpisodes": "Đang tải các tập…",
+    "downloadSeason": "Tải mùa ({{count}})",
+    "downloadAll": "Tải tất cả ({{count}})",
+    "episode": "Tập {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "Hãy chọn một mục."
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ Đã thêm {{name}} vào hàng đợi",
+    "activeUpdated": "Đã cập nhật tài khoản đang dùng"
+  },
+  "errors": {
+    "authFailed": "Thông tin đăng nhập không hợp lệ (xác thực thất bại)."
+  },
+  "language": {
+    "label": "Ngôn ngữ"
+  }
+}

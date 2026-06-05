@@ -1,5 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
+import { useTranslation, Trans } from 'react-i18next'
 import Sidebar from './components/Sidebar'
+import LanguageMenu from './components/LanguageMenu'
 import LibraryView from './components/LibraryView'
 import DownloadBar from './components/DownloadBar'
 import DownloadsView from './components/DownloadsView'
@@ -12,12 +14,12 @@ import { useDownloads } from './useDownloads'
 import { useFavorites } from './useFavorites'
 import { loadFavorites } from './favorites'
 
-const TITLES = { favorites: 'Favoritos', movies: 'Filmes', series: 'Séries', live: 'Ao vivo', downloads: 'Downloads', accounts: 'Contas', search: 'Busca' }
 const KIND = { movies: 'vod', series: 'series', live: 'live' }
 const isLibrary = (m) => m === 'movies' || m === 'series' || m === 'live'
 const ACTIVE_KEY = 'iptvfreedom.activeAccountId'
 
 export default function App() {
+  const { t } = useTranslation()
   const [mode, setMode] = useState('accounts')
   const [viewStyle, setViewStyle] = useState('list')
   const [searchInput, setSearchInput] = useState('')
@@ -84,16 +86,16 @@ export default function App() {
   const handleDownload = useCallback(
     (item) => {
       dl.add({ ...item, account: activeAccount })
-      showToast(`⬇︎ ${item.name} adicionado à fila`)
+      showToast(t('toast.addedToQueue', { name: item.name }))
     },
-    [dl, activeAccount, showToast]
+    [dl, activeAccount, showToast, t]
   )
 
   const setActive = useCallback((id) => {
     setActiveId(id)
     localStorage.setItem(ACTIVE_KEY, id)
-    showToast('Conta ativa atualizada')
-  }, [showToast])
+    showToast(t('toast.activeUpdated'))
+  }, [showToast, t])
 
   const onAccountAdded = useCallback((account) => {
     refreshAccounts().then(() => {
@@ -113,7 +115,7 @@ export default function App() {
 
         {/* Toolbar */}
         <div className="bar h-11 shrink-0 flex items-center px-3 gap-3 border-b border-white/10">
-          <div className="font-semibold text-white/70 text-2xs uppercase tracking-wider">{TITLES[mode]}</div>
+          <div className="font-semibold text-white/70 text-2xs uppercase tracking-wider">{t(`nav.${mode}`)}</div>
           <div className="flex-1" />
 
           {isLibrary(mode) && (
@@ -128,22 +130,24 @@ export default function App() {
           )}
 
           <form onSubmit={submitSearch} className="relative w-64">
-            <button type="submit" disabled={!activeAccount} title="Buscar" className="absolute left-2 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center text-white/40 hover:text-white disabled:hover:text-white/40">
+            <button type="submit" disabled={!activeAccount} title={t('toolbar.search')} className="absolute left-2 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center text-white/40 hover:text-white disabled:hover:text-white/40">
               <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
             </button>
             <input
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               disabled={!activeAccount}
-              placeholder="Buscar em tudo… (Enter)"
+              placeholder={t('toolbar.searchPlaceholder')}
               className="w-full bg-white/10 focus:bg-white/15 rounded-md pl-8 pr-7 py-1.5 text-2xs outline-none focus:ring-2 ring-accent/60 disabled:opacity-40"
             />
             {searchInput && (
-              <button type="button" title="Limpar" onClick={() => setSearchInput('')} className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center text-white/40 hover:text-white">
+              <button type="button" title={t('toolbar.clear')} onClick={() => setSearchInput('')} className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 grid place-items-center text-white/40 hover:text-white">
                 <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 6l12 12M18 6 6 18" /></svg>
               </button>
             )}
           </form>
+
+          <LanguageMenu />
         </div>
 
         {/* Corpo */}
@@ -162,7 +166,7 @@ export default function App() {
               />
             ) : (
               <section className="flex-1 grid place-items-center text-2xs text-white/45">
-                Adicione e ative uma conta em <button className="underline ml-1" onClick={() => navigate('accounts')}>Contas</button>.
+                <Trans i18nKey="app.addActivateAccount" components={{ a: <button className="underline mx-1" onClick={() => navigate('accounts')} /> }} />
               </section>
             )
           )}
@@ -192,7 +196,7 @@ export default function App() {
               />
             ) : (
               <section className="flex-1 grid place-items-center text-2xs text-white/45">
-                Adicione e ative uma conta em <button className="underline ml-1" onClick={() => navigate('accounts')}>Contas</button>.
+                <Trans i18nKey="app.addActivateAccount" components={{ a: <button className="underline mx-1" onClick={() => navigate('accounts')} /> }} />
               </section>
             )
           )}

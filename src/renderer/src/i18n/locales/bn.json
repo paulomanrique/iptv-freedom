@@ -1,0 +1,153 @@
+{
+  "nav": {
+    "favorites": "পছন্দের",
+    "live": "লাইভ",
+    "movies": "চলচ্চিত্র",
+    "series": "সিরিজ",
+    "downloads": "ডাউনলোড",
+    "accounts": "অ্যাকাউন্ট",
+    "search": "অনুসন্ধান"
+  },
+  "sidebar": {
+    "activeAccount": "সক্রিয় অ্যাকাউন্ট",
+    "noAccount": "কোনো অ্যাকাউন্ট নেই",
+    "clickToAdd": "যোগ করতে ক্লিক করুন",
+    "library": "লাইব্রেরি"
+  },
+  "toolbar": {
+    "searchPlaceholder": "সবকিছু অনুসন্ধান করুন… (Enter)",
+    "search": "অনুসন্ধান",
+    "clear": "মুছুন"
+  },
+  "app": {
+    "addActivateAccount": "<a>অ্যাকাউন্ট</a>-এ একটি অ্যাকাউন্ট যোগ করুন এবং সক্রিয় করুন।"
+  },
+  "addAccount": {
+    "title": "অ্যাকাউন্ট যোগ করুন",
+    "subtitle": "Xtream Codes মানের প্রদানকারী। শংসাপত্র স্থানীয়ভাবে সংরক্ষিত হয়।",
+    "nickname": "ডাকনাম (ঐচ্ছিক)",
+    "nicknamePlaceholder": "আমার অ্যাকাউন্ট",
+    "host": "হোস্ট / URL",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "ব্যবহারকারীর নাম",
+    "userPlaceholder": "ব্যবহারকারীর নাম",
+    "password": "পাসওয়ার্ড",
+    "passwordPlaceholder": "পাসওয়ার্ড",
+    "fillFields": "হোস্ট, ব্যবহারকারীর নাম এবং পাসওয়ার্ড পূরণ করুন।",
+    "validating": "যাচাই করা হচ্ছে…",
+    "add": "যোগ করুন",
+    "cancel": "বাতিল"
+  },
+  "accounts": {
+    "empty": "এখনও কোনো অ্যাকাউন্ট যোগ করা হয়নি।",
+    "active": "সক্রিয়",
+    "add": "অ্যাকাউন্ট যোগ করুন",
+    "validating": "অ্যাকাউন্ট যাচাই করা হচ্ছে…",
+    "validateFail": "যাচাই করা যায়নি: {{error}}",
+    "user": "ব্যবহারকারীর নাম",
+    "status": "অবস্থা",
+    "validity": "মেয়াদ",
+    "connections": "সংযোগ",
+    "format": "ফরম্যাট",
+    "trial": "ট্রায়াল",
+    "yes": "হ্যাঁ",
+    "no": "না",
+    "daysLeft": "অবশিষ্ট দিন",
+    "makeActive": "সক্রিয় করুন",
+    "isActive": "✓ সক্রিয় অ্যাকাউন্ট",
+    "remove": "অ্যাকাউন্ট সরান",
+    "selectPrompt": "শুরু করতে একটি অ্যাকাউন্ট যোগ করুন।"
+  },
+  "library": {
+    "categories": "বিভাগ",
+    "loading": "লোড হচ্ছে…",
+    "empty": "এখানে কিছু নেই।",
+    "error": "ত্রুটি: {{error}}",
+    "showingFirst": "প্রথম {{max}}টি আইটেম দেখানো হচ্ছে।"
+  },
+  "favorites": {
+    "empty": "এখনও কোনো পছন্দের নেই।",
+    "hint": "যোগ করতে কোনো চলচ্চিত্র, চ্যানেল বা সিরিজের প্রিভিউতে ⭐ তারকা ব্যবহার করুন।"
+  },
+  "search": {
+    "searching": "“{{query}}” অনুসন্ধান করা হচ্ছে…",
+    "noResults": "<b>“{{query}}”</b>-এর জন্য কোনো ফলাফল নেই।",
+    "results": "ফলাফল ·“{{query}}”",
+    "total": "মোট {{count}}"
+  },
+  "downloads": {
+    "itemCount_one": "{{count}}টি আইটেম",
+    "itemCount_other": "{{count}}টি আইটেম",
+    "clearCompleted": "সম্পন্নগুলো মুছুন",
+    "empty": "এখনও কোনো ডাউনলোড নেই। কোনো চলচ্চিত্র বা পর্বে “ফাইল ডাউনলোড” বোতাম ব্যবহার করুন।",
+    "openFolder": "ফোল্ডার খুলুন",
+    "pause": "বিরতি",
+    "resume": "চালিয়ে যান",
+    "cancel": "বাতিল"
+  },
+  "downloadBar": {
+    "none": "কোনো সক্রিয় ডাউনলোড নেই",
+    "queued": "+{{count}} সারিতে",
+    "connectionLimit": "১টি সংযোগ (প্রদানকারীর সীমা)"
+  },
+  "status": {
+    "account": {
+      "unknown": "অজানা",
+      "active": "সক্রিয়",
+      "inactive": "নিষ্ক্রিয়"
+    },
+    "download": {
+      "queued": "সারিতে",
+      "downloading": "ডাউনলোড হচ্ছে",
+      "paused": "বিরতি",
+      "done": "সম্পন্ন",
+      "error": "ত্রুটি",
+      "canceled": "বাতিল"
+    }
+  },
+  "player": {
+    "onAir": "লাইভ",
+    "auto": "অটো",
+    "close": "বন্ধ করুন (Esc)",
+    "cantPlay": "চালানো যায়নি",
+    "oneConnHint": "১টি সংযোগের সীমায় অন্যান্য সক্রিয় স্ট্রিম/ডাউনলোড বন্ধ করুন।",
+    "autoBuffering": "অনেক আটকাচ্ছে — বাফার বাড়ানো হচ্ছে: {{label}}",
+    "speedTip": "স্ট্রিমের ডাউনলোড গতি",
+    "bufferTip": "আগে বাফার করা ভিডিওর সেকেন্ড",
+    "dropsTip": "বাদ পড়া ফ্রেম",
+    "cacheTip": "প্রি-ক্যাশ / বাফার (আটকালে অটো বাফার বাড়ায়)",
+    "drops": "{{count}} ড্রপ",
+    "bufferLabel": "বাফার {{seconds}}সে",
+    "buffer": {
+      "low": "কম বিলম্ব",
+      "balanced": "ভারসাম্যপূর্ণ",
+      "high": "বেশি বাফার"
+    }
+  },
+  "previews": {
+    "watch": "দেখুন",
+    "downloadFile": "ফাইল ডাউনলোড",
+    "download": "ডাউনলোড",
+    "addFav": "পছন্দে যোগ করুন",
+    "removeFav": "পছন্দ থেকে সরান",
+    "liveNoDownload": "লাইভ কন্টেন্ট ডাউনলোড করা যায় না।",
+    "loadingEpisodes": "পর্ব লোড হচ্ছে…",
+    "downloadSeason": "সিজন ডাউনলোড করুন ({{count}})",
+    "downloadAll": "সব ডাউনলোড করুন ({{count}})",
+    "episode": "পর্ব {{number}}"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "একটি আইটেম নির্বাচন করুন।"
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} সারিতে যোগ করা হয়েছে",
+    "activeUpdated": "সক্রিয় অ্যাকাউন্ট আপডেট হয়েছে"
+  },
+  "errors": {
+    "authFailed": "অবৈধ শংসাপত্র (প্রমাণীকরণ ব্যর্থ)।"
+  },
+  "language": {
+    "label": "ভাষা"
+  }
+}

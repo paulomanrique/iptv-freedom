@@ -1,0 +1,152 @@
+{
+  "nav": {
+    "favorites": "お気に入り",
+    "live": "ライブ",
+    "movies": "映画",
+    "series": "シリーズ",
+    "downloads": "ダウンロード",
+    "accounts": "アカウント",
+    "search": "検索"
+  },
+  "sidebar": {
+    "activeAccount": "アクティブなアカウント",
+    "noAccount": "アカウントなし",
+    "clickToAdd": "クリックして追加",
+    "library": "ライブラリ"
+  },
+  "toolbar": {
+    "searchPlaceholder": "すべてを検索…（Enter）",
+    "search": "検索",
+    "clear": "クリア"
+  },
+  "app": {
+    "addActivateAccount": "<a>アカウント</a>でアカウントを追加して有効にしてください。"
+  },
+  "addAccount": {
+    "title": "アカウントを追加",
+    "subtitle": "Xtream Codes 規格のプロバイダー。認証情報はローカルに保存されます。",
+    "nickname": "ニックネーム（任意）",
+    "nicknamePlaceholder": "マイアカウント",
+    "host": "ホスト / URL",
+    "hostPlaceholder": "http://server.com:port",
+    "user": "ユーザー名",
+    "userPlaceholder": "ユーザー名",
+    "password": "パスワード",
+    "passwordPlaceholder": "パスワード",
+    "fillFields": "ホスト、ユーザー名、パスワードを入力してください。",
+    "validating": "確認中…",
+    "add": "追加",
+    "cancel": "キャンセル"
+  },
+  "accounts": {
+    "empty": "まだアカウントが追加されていません。",
+    "active": "アクティブ",
+    "add": "アカウントを追加",
+    "validating": "アカウントを確認中…",
+    "validateFail": "確認できませんでした: {{error}}",
+    "user": "ユーザー名",
+    "status": "ステータス",
+    "validity": "有効期限",
+    "connections": "接続数",
+    "format": "形式",
+    "trial": "お試し",
+    "yes": "はい",
+    "no": "いいえ",
+    "daysLeft": "残り日数",
+    "makeActive": "アクティブにする",
+    "isActive": "✓ アクティブなアカウント",
+    "remove": "アカウントを削除",
+    "selectPrompt": "アカウントを追加して始めましょう。"
+  },
+  "library": {
+    "categories": "カテゴリ",
+    "loading": "読み込み中…",
+    "empty": "ここには何もありません。",
+    "error": "エラー: {{error}}",
+    "showingFirst": "最初の {{max}} 件を表示しています。"
+  },
+  "favorites": {
+    "empty": "まだお気に入りがありません。",
+    "hint": "映画・チャンネル・シリーズのプレビューで星 ⭐ を押すと追加できます。"
+  },
+  "search": {
+    "searching": "「{{query}}」を検索中…",
+    "noResults": "<b>「{{query}}」</b> の結果はありません。",
+    "results": "結果 ·「{{query}}」",
+    "total": "合計 {{count}} 件"
+  },
+  "downloads": {
+    "itemCount_other": "{{count}} 件",
+    "clearCompleted": "完了済みを消去",
+    "empty": "まだダウンロードがありません。映画やエピソードで「ファイルをダウンロード」ボタンを使ってください。",
+    "openFolder": "フォルダを開く",
+    "pause": "一時停止",
+    "resume": "再開",
+    "cancel": "キャンセル"
+  },
+  "downloadBar": {
+    "none": "アクティブなダウンロードなし",
+    "queued": "+{{count}} 待機中",
+    "connectionLimit": "1 接続（プロバイダーの制限）"
+  },
+  "status": {
+    "account": {
+      "unknown": "不明",
+      "active": "有効",
+      "inactive": "無効"
+    },
+    "download": {
+      "queued": "待機中",
+      "downloading": "ダウンロード中",
+      "paused": "一時停止",
+      "done": "完了",
+      "error": "エラー",
+      "canceled": "キャンセル"
+    }
+  },
+  "player": {
+    "onAir": "ライブ配信中",
+    "auto": "自動",
+    "close": "閉じる（Esc）",
+    "cantPlay": "再生できませんでした",
+    "oneConnHint": "1 接続の制限があるため、他のアクティブなストリーム/ダウンロードを閉じてください。",
+    "autoBuffering": "頻繁に止まっています — バッファを増やしています: {{label}}",
+    "speedTip": "ストリームのダウンロード速度",
+    "bufferTip": "先読みバッファの秒数",
+    "dropsTip": "ドロップしたフレーム",
+    "cacheTip": "プリキャッシュ / バッファ（自動は止まると増やします）",
+    "drops": "{{count}} ドロップ",
+    "bufferLabel": "バッファ {{seconds}}秒",
+    "buffer": {
+      "low": "低遅延",
+      "balanced": "バランス",
+      "high": "バッファ多め"
+    }
+  },
+  "previews": {
+    "watch": "視聴",
+    "downloadFile": "ファイルをダウンロード",
+    "download": "ダウンロード",
+    "addFav": "お気に入りに追加",
+    "removeFav": "お気に入りから削除",
+    "liveNoDownload": "ライブ配信はダウンロードできません。",
+    "loadingEpisodes": "エピソードを読み込み中…",
+    "downloadSeason": "シーズンをダウンロード（{{count}}）",
+    "downloadAll": "すべてダウンロード（{{count}}）",
+    "episode": "第 {{number}} 話"
+  },
+  "common": {
+    "liveBadge": "LIVE",
+    "selectItem": "項目を選択してください。"
+  },
+  "toast": {
+    "addedToQueue": "⬇︎ {{name}} をキューに追加しました",
+    "activeUpdated": "アクティブなアカウントを更新しました"
+  },
+  "errors": {
+    "authFailed": "認証情報が無効です（認証に失敗しました）。"
+  },
+  "language": {
+    "label": "言語"
+  }
+}
