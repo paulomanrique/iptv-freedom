@@ -1,0 +1,44 @@
+appId: dev.paulomanrique.iptvfreedom
+productName: IPTV Freedom
+
+directories:
+  output: dist
+  buildResources: build
+
+# A UI já é empacotada pelo electron-vite em out/. O main usa apenas módulos
+# nativos do Node/Electron, então não é preciso incluir node_modules.
+files:
+  - out/**
+  - package.json
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+        - arm64
+  artifactName: IPTV-Freedom-${version}-windows-${arch}-setup.${ext}
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  category: public.app-category.entertainment
+  artifactName: IPTV-Freedom-${version}-mac-${arch}.${ext}
+
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+        - arm64
+  category: AudioVideo
+  synopsis: Desktop IPTV client for Xtream Codes providers
+  artifactName: IPTV-Freedom-${version}-linux-${arch}.${ext}
