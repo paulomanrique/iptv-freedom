@@ -2,8 +2,6 @@
 
 Desktop IPTV client built with **Electron + React + Tailwind CSS** for providers using the **Xtream Codes** standard.
 
-> A landing page lives in [`docs/`](docs/) and is published via GitHub Pages.
-
 ## Features
 
 - 📺 Multiple IPTV accounts (host · username · password) — add, edit and remove
