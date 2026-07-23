@@ -1,0 +1,15 @@
+packages:
+  - apps/*
+  - packages/*
+
+# mpegts.js pulls webworkify-webpack via a git repository (transitive dep).
+blockExoticSubdeps: false
+
+allowBuilds:
+  esbuild: true
+  electron: true
+
+# Dependencies whose install/build scripts we trust to run.
+onlyBuiltDependencies:
+  - esbuild
+  - electron
