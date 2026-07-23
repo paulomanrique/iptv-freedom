@@ -13,6 +13,9 @@
     "dist": "electron-vite build && electron-builder"
   },
   "dependencies": {
+    "@iptv/contracts": "workspace:*",
+    "@iptv/core": "workspace:*",
+    "@iptv/ui": "workspace:*",
     "i18next": "^23.16.8",
     "mpegts.js": "^1.8.0",
     "react": "^19.2.6",
