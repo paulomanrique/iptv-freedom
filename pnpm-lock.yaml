@@ -78,7 +78,11 @@ importers:
 
   packages/contracts: {}
 
-  packages/core: {}
+  packages/core:
+    dependencies:
+      '@iptv/contracts':
+        specifier: workspace:*
+        version: link:../contracts
 
   packages/ui:
     dependencies:

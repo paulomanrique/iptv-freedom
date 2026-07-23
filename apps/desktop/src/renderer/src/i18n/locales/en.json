@@ -19,6 +19,10 @@
     "search": "Search",
     "clear": "Clear"
   },
+  "theme": {
+    "light": "Light mode",
+    "dark": "Dark mode"
+  },
   "app": {
     "addActivateAccount": "Add and activate an account in <a>Accounts</a>."
   },

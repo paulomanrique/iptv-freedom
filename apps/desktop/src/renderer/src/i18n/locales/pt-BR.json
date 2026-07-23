@@ -19,6 +19,10 @@
     "search": "Buscar",
     "clear": "Limpar"
   },
+  "theme": {
+    "light": "Modo claro",
+    "dark": "Modo escuro"
+  },
   "app": {
     "addActivateAccount": "Adicione e ative uma conta em <a>Contas</a>."
   },

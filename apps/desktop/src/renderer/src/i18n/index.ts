@@ -1,5 +1,5 @@
-// Camada de i18n (react-i18next). Idiomas suportados: os 20 mais falados do mundo.
-// pt-BR é a fonte das chaves; en é o fallback.
+// i18n layer (react-i18next). Supported languages: the 20 most spoken worldwide.
+// pt-BR is the source of the keys; en is the fallback.
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 
@@ -24,8 +24,14 @@ import vi from './locales/vi.json'
 import wuu from './locales/wuu.json'
 import ko from './locales/ko.json'
 
-// Ordem aproximada por número de falantes. `dir` controla RTL.
-export const LANGUAGES = [
+export interface Language {
+  code: string
+  nativeName: string
+  dir: 'ltr' | 'rtl'
+}
+
+// Rough order by number of speakers. `dir` controls RTL.
+export const LANGUAGES: Language[] = [
   { code: 'en', nativeName: 'English', dir: 'ltr' },
   { code: 'zh', nativeName: '中文', dir: 'ltr' },
   { code: 'hi', nativeName: 'हिन्दी', dir: 'ltr' },
@@ -74,13 +80,16 @@ const resources = {
 const LANG_KEY = 'iptvfreedom.lang'
 const SUPPORTED = new Set(LANGUAGES.map((l) => l.code))
 
-// Detecta o idioma inicial: escolha salva → idioma do SO → inglês.
-function detectLanguage() {
+// Detects the initial language: saved choice -> OS language -> English.
+function detectLanguage(): string {
   try {
     const saved = localStorage.getItem(LANG_KEY)
     if (saved && SUPPORTED.has(saved)) return saved
-  } catch { /* localStorage indisponível */ }
-  const navs = (typeof navigator !== 'undefined' && (navigator.languages || [navigator.language])) || []
+  } catch {
+    /* localStorage unavailable */
+  }
+  const navs =
+    (typeof navigator !== 'undefined' && (navigator.languages || [navigator.language])) || []
   for (const l of navs) {
     if (!l) continue
     if (SUPPORTED.has(l)) return l
@@ -91,7 +100,7 @@ function detectLanguage() {
   return 'en'
 }
 
-function applyDir(code) {
+function applyDir(code: string): void {
   const lang = LANGUAGES.find((l) => l.code === code)
   if (typeof document !== 'undefined') {
     document.documentElement.lang = code
@@ -105,17 +114,21 @@ i18n.use(initReactI18next).init({
   resources,
   lng: initial,
   fallbackLng: 'en',
-  interpolation: { escapeValue: false }, // React já faz escaping
+  interpolation: { escapeValue: false }, // React already escapes
   returnNull: false
 })
 
 applyDir(initial)
 
-// Troca o idioma em runtime: muda o i18next, persiste e ajusta a direção (RTL/LTR).
-export function setLanguage(code) {
+// Switches the language at runtime: updates i18next, persists it, and adjusts direction (RTL/LTR).
+export function setLanguage(code: string): void {
   if (!SUPPORTED.has(code)) return
   i18n.changeLanguage(code)
-  try { localStorage.setItem(LANG_KEY, code) } catch { /* noop */ }
+  try {
+    localStorage.setItem(LANG_KEY, code)
+  } catch {
+    /* noop */
+  }
   applyDir(code)
 }
 

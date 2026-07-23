@@ -2,19 +2,21 @@ import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LANGUAGES, setLanguage } from '../i18n'
 
-// Seletor de idioma (globo) na toolbar. Lista os idiomas pelo nome nativo,
-// marca o atual e persiste a escolha via setLanguage (localStorage + dir RTL/LTR).
+// Language selector (globe) in the topbar. Lists languages by native name,
+// marks the current one, and persists the choice via setLanguage (localStorage + RTL/LTR dir).
 export default function LanguageMenu() {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
-  const ref = useRef(null)
+  const ref = useRef<HTMLDivElement>(null)
   const current = i18n.language
 
-  // Fecha ao clicar fora ou ao pressionar Esc
+  // Close on outside click or Escape.
   useEffect(() => {
     if (!open) return
-    const onDown = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false) }
-    const onKey = (e) => e.key === 'Escape' && setOpen(false)
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
     window.addEventListener('mousedown', onDown)
     window.addEventListener('keydown', onKey)
     return () => {
@@ -23,7 +25,7 @@ export default function LanguageMenu() {
     }
   }, [open])
 
-  const choose = (code) => {
+  const choose = (code: string) => {
     setLanguage(code)
     setOpen(false)
   }
@@ -34,7 +36,7 @@ export default function LanguageMenu() {
         type="button"
         title={t('language.label')}
         onClick={() => setOpen((v) => !v)}
-        className="h-7 w-7 grid place-items-center rounded-md text-white/55 hover:text-white hover:bg-white/10 transition"
+        className="grid h-7 w-7 place-items-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
       >
         <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="9" />
@@ -43,19 +45,23 @@ export default function LanguageMenu() {
       </button>
 
       {open && (
-        <div className="absolute end-0 top-full mt-1 z-[70] w-44 max-h-80 overflow-y-auto scroll bg-[#1b1e27] border border-white/10 rounded-lg shadow-2xl p-1 animate-fadein">
+        <div className="scroll absolute end-0 top-full z-[70] mt-1 max-h-80 w-44 overflow-y-auto rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-xl">
           {LANGUAGES.map((l) => (
             <button
               key={l.code}
               onClick={() => choose(l.code)}
               dir={l.dir}
-              className={`w-full text-start px-3 py-1.5 rounded-md text-2xs flex items-center justify-between gap-2 transition ${
-                l.code === current ? 'bg-accent/25 text-white' : 'text-white/70 hover:bg-white/5'
+              className={`flex w-full items-center justify-between gap-2 rounded-md px-3 py-1.5 text-start text-xs transition-colors ${
+                l.code === current
+                  ? 'bg-accent text-accent-foreground'
+                  : 'text-muted-foreground hover:bg-accent hover:text-foreground'
               }`}
             >
               <span className="truncate">{l.nativeName}</span>
               {l.code === current && (
-                <svg className="h-3 w-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M20 6 9 17l-5-5" /></svg>
+                <svg className="h-3 w-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M20 6 9 17l-5-5" />
+                </svg>
               )}
             </button>
           ))}

@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback } from 'react'
+import type { DownloadAddItem, DownloadItem } from '@iptv/contracts'
 
-// Mantém a lista de downloads sincronizada com o processo main (eventos IPC).
+// Keeps the download list in sync with the main process (IPC events).
 export function useDownloads() {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState<DownloadItem[]>([])
 
   useEffect(() => {
     let alive = true
@@ -18,11 +19,11 @@ export function useDownloads() {
     }
   }, [])
 
-  const add = useCallback((item) => window.api.downloads.add(item), [])
-  const pause = useCallback((id) => window.api.downloads.pause(id), [])
-  const resume = useCallback((id) => window.api.downloads.resume(id), [])
-  const cancel = useCallback((id) => window.api.downloads.cancel(id), [])
-  const openFolder = useCallback((id) => window.api.downloads.openFolder(id), [])
+  const add = useCallback((item: DownloadAddItem) => window.api.downloads.add(item), [])
+  const pause = useCallback((id: string) => window.api.downloads.pause(id), [])
+  const resume = useCallback((id: string) => window.api.downloads.resume(id), [])
+  const cancel = useCallback((id: string) => window.api.downloads.cancel(id), [])
+  const openFolder = useCallback((id: string) => window.api.downloads.openFolder(id), [])
   const clearCompleted = useCallback(() => window.api.downloads.clearCompleted(), [])
 
   return { items, add, pause, resume, cancel, openFolder, clearCompleted }
