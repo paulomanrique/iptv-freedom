@@ -37,7 +37,7 @@ export default function LibraryView({ account, kind, viewStyle, onPlay, onDownlo
         // Names arrive with extra spaces and in UPPERCASE — normalize (trim + title case)
         const cleaned = (cats || []).map((c) => ({ ...c, category_name: smartTitleCase(c.category_name) }))
         // Adult categories (starting with "18+") always go to the end of the list
-        const isAdult = (name: string) => /^18\+/.test(name)
+        const isAdult = (name: string) => name.startsWith('18+')
         cleaned.sort((a, b) => {
           const ad = isAdult(a.category_name)
           const bd = isAdult(b.category_name)

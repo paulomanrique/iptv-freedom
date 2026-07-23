@@ -1,6 +1,6 @@
 # IPTV Freedom
 
-Desktop IPTV client built with **Electron + React + Tailwind CSS** for providers using the **Xtream Codes** standard.
+Desktop IPTV client built with **Electron + React + TypeScript + Tailwind CSS** for providers using the **Xtream Codes** standard. The stack and visual language follow [t3code](https://github.com/pingdotgg/t3code).
 
 ## Features
 
@@ -10,6 +10,7 @@ Desktop IPTV client built with **Electron + React + Tailwind CSS** for providers
 - ⬇️ VOD downloads (movies and series) with resume and a queue that respects the provider's connection limit
 - ⭐ Favorites, saved per account
 - 🌍 **20 languages**, with automatic system-language detection and RTL support (Arabic, Urdu)
+- 🎨 **Light and dark themes** (t3code design tokens: zinc + violet, DM Sans)
 - 🔒 Credentials stored locally only — no sign-up, no middle server
 
 ## Translations
@@ -20,35 +21,44 @@ The app and the landing page ship in the 20 most spoken languages in the world.
 
 **Corrections are very welcome.** If you are a native speaker and something reads wrong, please open an issue or a pull request:
 
-- App strings: `src/renderer/src/i18n/locales/<lang>.json`
+- App strings: `apps/desktop/src/renderer/src/i18n/locales/<lang>.json`
 - Landing page: `docs/i18n.js`
 
 ## Stack
 
 - [Electron](https://www.electronjs.org/) + [electron-vite](https://electron-vite.org/)
-- [React](https://react.dev/) 19
-- [Tailwind CSS](https://tailwindcss.com/) v3
+- [React](https://react.dev/) 19 + [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/) v4 (CSS-first tokens) with the [t3code](https://github.com/pingdotgg/t3code) design language
+- [pnpm](https://pnpm.io/) workspaces monorepo
 - [mpegts.js](https://github.com/xqq/mpegts.js) for MPEG-TS streams
 - [i18next](https://www.i18next.com/) + [react-i18next](https://react.i18next.com/) for internationalization
 
 ## Development
 
 ```bash
-npm install
-npm run dev      # start the app with hot reload
-npm run build    # production build
+pnpm install
+pnpm --filter desktop dev    # start the app with hot reload
+pnpm --filter desktop build  # production build
+pnpm typecheck               # type-check the workspace
+pnpm lint                    # oxlint
 ```
 
-> The interface follows a macOS style (emulated vibrancy, rounded corners, a compact 3-pane Finder-like layout).
+> The interface follows the t3code visual language: flat zinc surfaces, a violet
+> primary, DM Sans, and full light/dark theming, in a compact 3-pane layout.
 
 ## Project structure
 
 ```
-src/
-  main/        main process (window, IPC, network, disk)
-  preload/     secure bridge (contextBridge) to the renderer
-  renderer/    React + Tailwind UI
-docs/          landing page (GitHub Pages)
+apps/
+  desktop/           Electron app (main + preload + renderer)
+    src/main/        main process (window, IPC, network, disk)
+    src/preload/     secure bridge (contextBridge) to the renderer
+    src/renderer/    React + Tailwind UI
+packages/
+  contracts/         TypeScript types for the window.api IPC surface
+  core/              shared domain logic (formatters, poster palette, catalog)
+  ui/                design tokens + shadcn-style UI primitives
+docs/                landing page (GitHub Pages)
 ```
 
 ## Disclaimer

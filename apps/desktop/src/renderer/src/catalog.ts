@@ -46,5 +46,5 @@ export function getSeriesInfo(account: Account, seriesId: string | number): Prom
 }
 
 export function clearAccount(accountId: string): void {
-  for (const k of [...cache.keys()]) if (k.startsWith(accountId + '|')) cache.delete(k)
+  for (const k of cache.keys()) if (k.startsWith(accountId + '|')) cache.delete(k)
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import type { Account, Kind } from '@iptv/contracts'
 import { getStreams, normalize, type CatalogItem } from '../catalog'

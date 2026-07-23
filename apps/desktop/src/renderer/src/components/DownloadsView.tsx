@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { DownloadItem } from '@iptv/contracts'
-import { Button, Progress } from '@iptv/ui'
+import { Progress } from '@iptv/ui'
 import { Poster } from './Previews'
 import { formatBytes, formatSpeed, downloadLabel } from '../format'
 
