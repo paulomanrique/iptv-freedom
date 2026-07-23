@@ -1,20 +1,24 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
-import { getStreams, normalize } from '../catalog'
+import type { Account, Kind } from '@iptv/contracts'
+import { getStreams, normalize, type CatalogItem } from '../catalog'
 import { normalizeSearch } from '../format'
 import { Poster, MoviePreview, LivePreview, SeriesPreview } from './Previews'
 
-const KINDS = ['vod', 'series', 'live']
-const KIND_NAV = { vod: 'movies', series: 'series', live: 'live' }
+const KINDS: Kind[] = ['vod', 'series', 'live']
+const KIND_NAV: Record<Kind, string> = { vod: 'movies', series: 'series', live: 'live' }
 const MAX_PER_GROUP = 300
 
-export default function SearchView({ account, query, onPlay, onDownload, fav }) {
+interface SearchGroup { kind: Kind; items: CatalogItem[]; total: number }
+interface SearchViewProps { account: Account; query: string; onPlay: (item: any) => void; onDownload: (item: any) => void; fav: any }
+
+export default function SearchView({ account, query, onPlay, onDownload, fav }: SearchViewProps) {
   const { t } = useTranslation()
-  const labelFor = (kind) => t(`nav.${KIND_NAV[kind] || kind}`)
-  const [groups, setGroups] = useState([])
+  const labelFor = (kind: Kind) => t(`nav.${KIND_NAV[kind] || kind}`)
+  const [groups, setGroups] = useState<SearchGroup[]>([])
   const [loading, setLoading] = useState(true)
-  const [groupKind, setGroupKind] = useState(null)
-  const [selectedId, setSelectedId] = useState(null)
+  const [groupKind, setGroupKind] = useState<Kind | null>(null)
+  const [selectedId, setSelectedId] = useState<string | number | null>(null)
 
   useEffect(() => {
     let alive = true
@@ -25,7 +29,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
 
     Promise.all(
       KINDS.map((kind) =>
-        getStreams(account, kind, null)
+        getStreams(account, kind, undefined)
           .then((list) =>
             (list || [])
               .map((x) => normalize(x, kind))
@@ -49,36 +53,36 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
   const activeGroup = groups.find((g) => g.kind === groupKind) || groups[0]
   const items = activeGroup?.items || []
   const selected = items.find((i) => String(i.id) === String(selectedId)) || items[0]
-  const seedOf = (i) => (items.indexOf(i) + 1) * 3
+  const seedOf = (i: CatalogItem) => (items.indexOf(i) + 1) * 3
   const useGrid = activeGroup ? activeGroup.kind !== 'live' : false
   const totalResults = groups.reduce((n, g) => n + g.total, 0)
 
-  const playItem = (m) => {
+  const playItem = (m: CatalogItem) => {
     if (m.kind === 'live') onPlay({ type: 'live', id: m.id, name: m.name, live: true })
     else if (m.kind === 'vod') onPlay({ type: 'movie', id: m.id, ext: m.ext, name: m.name })
   }
 
   if (loading) {
     return (
-      <section className="flex-1 grid place-items-center text-2xs text-white/45">
-        <div className="flex items-center gap-2"><span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />{t('search.searching', { query })}</div>
+      <section className="flex-1 grid place-items-center text-xs text-muted-foreground">
+        <div className="flex items-center gap-2"><span className="h-4 w-4 rounded-full border-2 border-muted-foreground/30 border-t-foreground animate-spin" />{t('search.searching', { query })}</div>
       </section>
     )
   }
 
   if (groups.length === 0) {
     return (
-      <section className="flex-1 grid place-items-center text-2xs text-white/45 text-center px-8">
-        <Trans i18nKey="search.noResults" values={{ query }} components={{ b: <b className="text-white/70 mx-1" /> }} />
+      <section className="flex-1 grid place-items-center text-xs text-muted-foreground text-center px-8">
+        <Trans i18nKey="search.noResults" values={{ query }} components={{ b: <b className="text-muted-foreground mx-1" /> }} />
       </section>
     )
   }
 
   return (
     <>
-      {/* Coluna 1: tipos de resultado */}
-      <div className="w-56 shrink-0 bar border-e border-white/10 flex flex-col">
-        <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-white/35 border-b border-white/10 truncate">
+      {/* Column 1: result types */}
+      <div className="w-56 shrink-0  border-e border-border flex flex-col">
+        <div className="px-3 py-2 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border truncate">
           {t('search.results', { query })}
         </div>
         <div className="flex-1 scroll overflow-y-auto py-1">
@@ -88,39 +92,39 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
               <button
                 key={g.kind}
                 onClick={() => { setGroupKind(g.kind); setSelectedId(null) }}
-                className={`w-full text-start px-3 py-1.5 text-2xs flex items-center justify-between gap-2 transition ${active ? 'bg-accent/25 text-white' : 'text-white/70 hover:bg-white/5'}`}
+                className={`w-full text-start px-3 py-1.5 text-xs flex items-center justify-between gap-2 transition ${active ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-accent'}`}
               >
                 <span className="truncate">{labelFor(g.kind)}</span>
-                <span className="text-[10px] text-white/35">{g.total > g.items.length ? `${g.items.length}+` : g.items.length}</span>
+                <span className="text-[10px] text-muted-foreground">{g.total > g.items.length ? `${g.items.length}+` : g.items.length}</span>
               </button>
             )
           })}
-          <div className="px-3 pt-2 text-[10px] text-white/30">{t('search.total', { count: totalResults })}</div>
+          <div className="px-3 pt-2 text-[10px] text-muted-foreground">{t('search.total', { count: totalResults })}</div>
         </div>
       </div>
 
-      {/* Coluna 2: itens do tipo selecionado */}
+      {/* Column 2: items of the selected type */}
       <section className="flex-1 min-w-0 flex flex-col">
-        <div className="px-4 py-2 text-2xs text-white/50 border-b border-white/10 truncate shrink-0">
-          {activeGroup ? labelFor(activeGroup.kind) : ''}<span className="text-white/30"> · {items.length}</span>
+        <div className="px-4 py-2 text-xs text-muted-foreground border-b border-border truncate shrink-0">
+          {activeGroup ? labelFor(activeGroup.kind) : ''}<span className="text-muted-foreground"> · {items.length}</span>
         </div>
         <div className="flex-1 scroll overflow-y-auto">
           {useGrid ? (
             <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] gap-3 p-4">
               {items.map((m) => (
-                <div key={`${m.kind}:${m.id}`} className={`cursor-pointer rounded-lg p-1 ${String(m.id) === String(selected?.id) ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
+                <div key={`${m.kind}:${m.id}`} className={`cursor-pointer rounded-lg p-1 ${String(m.id) === String(selected?.id) ? 'bg-accent' : 'hover:bg-accent'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
                   <Poster icon={m.icon} seed={seedOf(m)} className="aspect-[2/3] w-full" />
-                  <div className="text-2xs font-medium truncate mt-1 px-0.5">{m.name}</div>
+                  <div className="text-xs font-medium truncate mt-1 px-0.5">{m.name}</div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="divide-y divide-white/5">
+            <div className="divide-y divide-border">
               {items.map((m) => (
-                <div key={`${m.kind}:${m.id}`} className={`flex items-center gap-3 px-4 py-2 cursor-pointer ${String(m.id) === String(selected?.id) ? 'bg-accent/20' : 'hover:bg-white/5'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
+                <div key={`${m.kind}:${m.id}`} className={`flex items-center gap-3 px-4 py-2 cursor-pointer ${String(m.id) === String(selected?.id) ? 'bg-accent' : 'hover:bg-accent'}`} onClick={() => setSelectedId(m.id)} onDoubleClick={() => playItem(m)}>
                   <Poster icon={m.icon} seed={seedOf(m)} className="h-8 w-8" />
                   <div className="flex-1 min-w-0"><div className="font-medium truncate">{m.name}</div></div>
-                  <span className="text-[10px] text-red-400 flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-red-500" />{t('common.liveBadge')}</span>
+                  <span className="text-[10px] text-destructive flex items-center gap-1"><span className="h-1.5 w-1.5 rounded-full bg-destructive" />{t('common.liveBadge')}</span>
                 </div>
               ))}
             </div>
@@ -128,8 +132,8 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
         </div>
       </section>
 
-      {/* Coluna 3: prévia */}
-      <aside className="w-80 shrink-0 bar border-s border-white/10 scroll overflow-y-auto">
+      {/* Column 3: preview */}
+      <aside className="w-80 shrink-0  border-s border-border scroll overflow-y-auto">
         {selected ? (
           selected.kind === 'live' ? (
             <LivePreview item={selected} seed={seedOf(selected)} onPlay={onPlay} fav={fav} />
@@ -139,7 +143,7 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }) 
             <MoviePreview item={selected} seed={seedOf(selected)} onPlay={onPlay} onDownload={onDownload} fav={fav} />
           )
         ) : (
-          <div className="p-5 text-2xs text-white/45">{t('common.selectItem')}</div>
+          <div className="p-5 text-xs text-muted-foreground">{t('common.selectItem')}</div>
         )}
       </aside>
     </>

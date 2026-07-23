@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import type { Account, StreamType } from '@iptv/contracts'
 import mpegts from 'mpegts.js'
 
-// Presets de pré-cache (buffer) para o ao vivo via mpegts.js.
-// stashInitialSize = buffer inicial; latencyChasing corta buffer p/ baixar a latência.
-// O rótulo de cada preset vem do i18n (player.buffer.<key>).
+// Pre-cache (buffer) presets for live playback via mpegts.js.
+// stashInitialSize = initial buffer; latencyChasing trims the buffer to lower latency.
+// Each preset label comes from i18n (player.buffer.<key>).
 const BUFFER_PRESETS = {
   low: {
     enableStashBuffer: true,
@@ -23,43 +24,56 @@ const BUFFER_PRESETS = {
     stashInitialSize: 4 * 1024 * 1024,
     liveBufferLatencyChasing: false
   }
-}
+} as const
+type BufferPreset = keyof typeof BUFFER_PRESETS
 const BUFFER_KEY = 'iptvfreedom.bufferPreset'
 const AUTO_KEY = 'iptvfreedom.bufferAuto'
-const BUFFER_ORDER = ['low', 'balanced', 'high']
-const AUTO_WINDOW_MS = 20000 // janela de observação de travadas
-const AUTO_MAX_STALLS = 2 // travadas dentro da janela para subir de nível
+const BUFFER_ORDER: BufferPreset[] = ['low', 'balanced', 'high']
+const AUTO_WINDOW_MS = 20000 // stall observation window
+const AUTO_MAX_STALLS = 2 // stalls within the window before moving up a level
 
-// Reproduz VOD (.mp4) com <video> nativo e ao vivo (.ts) via mpegts.js (MSE).
-export default function PlayerModal({ item, onClose }) {
+// Plays VOD (.mp4) with a native <video> and live (.ts) via mpegts.js (MSE).
+interface PlayerItem {
+  account: Account
+  type: StreamType
+  id: string | number
+  ext?: string
+  name?: string
+  live?: boolean
+}
+interface PlayerModalProps { item: PlayerItem | Record<string, any> | null; onClose: () => void }
+interface PlayerStats { mbps: number; buffer: number; dropped: number }
+
+export default function PlayerModal({ item, onClose }: PlayerModalProps) {
   const { t } = useTranslation()
-  const bufferLabel = (key) => t(`player.buffer.${key}`)
-  const videoRef = useRef(null)
-  const hideTimer = useRef(null)
-  const statsRef = useRef({}) // última info do STATISTICS_INFO (speed em KB/s, etc.)
-  const [stats, setStats] = useState(null)
+  const bufferLabel = (key: BufferPreset) => t(`player.buffer.${key}`)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const statsRef = useRef<Record<string, any>>({}) // latest STATISTICS_INFO data (speed in KB/s, etc.)
+  const [stats, setStats] = useState<PlayerStats | null>(null)
   const [status, setStatus] = useState('loading') // loading | playing | error
-  const [error, setError] = useState(null)
-  const [chrome, setChrome] = useState(true) // overlay (topo) visível
-  const rebufferTimes = useRef([])
+  const [error, setError] = useState<string | null>(null)
+  const [chrome, setChrome] = useState(true) // top overlay visible
+  const rebufferTimes = useRef<number[]>([])
   const loadStamp = useRef(0)
   const [auto, setAuto] = useState(() => localStorage.getItem(AUTO_KEY) !== 'false')
-  const [buffer, setBuffer] = useState(() =>
-    localStorage.getItem(AUTO_KEY) !== 'false' ? 'low' : localStorage.getItem(BUFFER_KEY) || 'balanced'
-  )
-  const [notice, setNotice] = useState(null)
+  const [buffer, setBuffer] = useState<BufferPreset>(() => {
+    const saved = localStorage.getItem(BUFFER_KEY)
+    return localStorage.getItem(AUTO_KEY) !== 'false' ? 'low' : saved === 'low' || saved === 'high' ? saved : 'balanced'
+  })
+  const [notice, setNotice] = useState<string | null>(null)
 
   const isLive = item?.live || item?.type === 'live' || item?.ext === 'ts'
 
-  // Seleção manual de buffer (desliga o modo automático)
-  const pickBuffer = (key) => {
+  // Manual buffer selection (turns off automatic mode)
+  const pickBuffer = (key: BufferPreset) => {
     setAuto(false)
     localStorage.setItem(AUTO_KEY, 'false')
     localStorage.setItem(BUFFER_KEY, key)
     setBuffer(key)
   }
 
-  // Liga/desliga o modo automático (começa em baixa latência e sobe se travar)
+  // Toggles automatic mode (starts at low latency and rises if it stalls)
   const toggleAuto = () => {
     const next = !auto
     setAuto(next)
@@ -72,7 +86,7 @@ export default function PlayerModal({ item, onClose }) {
 
   useEffect(() => {
     if (!item) return
-    let mpegtsPlayer = null
+    let mpegtsPlayer: ReturnType<typeof mpegts.createPlayer> | null = null
     let cancelled = false
     setStatus('loading')
     setError(null)
@@ -80,7 +94,7 @@ export default function PlayerModal({ item, onClose }) {
 
     async function start() {
       try {
-        const url = await window.api.xtream.streamUrl(item.account, item.type, item.id, item.ext)
+        const url = await window.api.xtream.streamUrl(item!.account, item!.type, item!.id, item!.ext)
         if (cancelled) return
         const video = videoRef.current
         if (!video) return
@@ -104,8 +118,8 @@ export default function PlayerModal({ item, onClose }) {
         }
         loadStamp.current = Date.now()
         if (!cancelled) setStatus('playing')
-      } catch (e) {
-        if (!cancelled) { setError(String(e?.message || e)); setStatus('error') }
+      } catch (e: unknown) {
+        if (!cancelled) { setError(String(e instanceof Error ? e.message : e)); setStatus('error') }
       }
     }
 
@@ -121,15 +135,15 @@ export default function PlayerModal({ item, onClose }) {
     }
   }, [item, buffer])
 
-  // Fechar com ESC
+  // Close with ESC
   useEffect(() => {
     if (!item) return
-    const onKey = (e) => e.key === 'Escape' && onClose()
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [item, onClose])
 
-  // Estatísticas do ao vivo (velocidade de download + buffer à frente)
+  // Live statistics (download speed + buffer ahead)
   useEffect(() => {
     if (!item || !isLive) { setStats(null); return }
     statsRef.current = {}
@@ -145,20 +159,20 @@ export default function PlayerModal({ item, onClose }) {
         }
       }
       const info = statsRef.current || {}
-      // info.speed vem em KB/s; converte para Mbps
+      // info.speed comes in KB/s; convert to Mbps
       const mbps = info.speed ? (info.speed * 8) / 1000 : 0
       setStats({ mbps, buffer, dropped: info.droppedFrames || 0 })
     }, 1000)
     return () => clearInterval(id)
   }, [item, isLive])
 
-  // Modo automático: sobe de nível de buffer quando trava demais
+  // Automatic mode: raises the buffer level when it stalls too often
   useEffect(() => {
     if (!item || !isLive || !auto) return
     const v = videoRef.current
     if (!v) return
     const onWaiting = () => {
-      if (Date.now() - loadStamp.current < 3000) return // ignora o buffering inicial
+      if (Date.now() - loadStamp.current < 3000) return // ignore the initial buffering
       const now = Date.now()
       rebufferTimes.current = rebufferTimes.current.filter((t) => now - t < AUTO_WINDOW_MS)
       rebufferTimes.current.push(now)
@@ -167,7 +181,7 @@ export default function PlayerModal({ item, onClose }) {
         if (i < BUFFER_ORDER.length - 1) {
           const next = BUFFER_ORDER[i + 1]
           rebufferTimes.current = []
-          setBuffer(next) // reinicia o stream com mais buffer
+          setBuffer(next) // restart the stream with more buffer
           setNotice(t('player.autoBuffering', { label: bufferLabel(next) }))
         }
       }
@@ -176,33 +190,33 @@ export default function PlayerModal({ item, onClose }) {
     return () => v.removeEventListener('waiting', onWaiting)
   }, [item, isLive, auto, buffer, t])
 
-  // Esconde o aviso automaticamente
+  // Hide the notice automatically
   useEffect(() => {
     if (!notice) return
     const t = setTimeout(() => setNotice(null), 3500)
     return () => clearTimeout(t)
   }, [notice])
 
-  // Auto-ocultar o chrome após inatividade do mouse
+  // Auto-hide the chrome after mouse inactivity
   const pokeChrome = () => {
     setChrome(true)
-    clearTimeout(hideTimer.current)
+    if (hideTimer.current) clearTimeout(hideTimer.current)
     hideTimer.current = setTimeout(() => setChrome(false), 2600)
   }
   useEffect(() => {
     if (!item) return
     pokeChrome()
-    return () => clearTimeout(hideTimer.current)
+    return () => { if (hideTimer.current) clearTimeout(hideTimer.current) }
   }, [item])
 
   if (!item) return null
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center p-4 sm:p-8">
-      <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/80" onClick={onClose} />
 
       <div
-        className={`relative w-full max-w-6xl rounded-2xl overflow-hidden shadow-[0_40px_120px_-20px_rgba(0,0,0,.9)] ring-1 ring-white/10 bg-black animate-fadein ${chrome ? '' : 'cursor-none'}`}
+        className={`relative w-full max-w-6xl overflow-hidden rounded-lg bg-black shadow-xl ring-1 ring-white/10 ${chrome ? '' : 'cursor-none'}`}
         onMouseMove={pokeChrome}
         onMouseLeave={() => setChrome(false)}
       >
@@ -235,7 +249,7 @@ export default function PlayerModal({ item, onClose }) {
             </div>
           )}
 
-          {/* Chrome superior (auto-oculta) */}
+          {/* Top chrome (auto-hides) */}
           <div className={`absolute top-0 inset-x-0 px-4 py-3 flex items-center gap-3 bg-gradient-to-b from-black/75 via-black/30 to-transparent transition-opacity duration-300 ${chrome ? 'opacity-100' : 'opacity-0'}`}>
             {isLive && (
               <span className="flex items-center gap-1.5 text-[11px] font-semibold tracking-wide text-white bg-red-600/90 rounded-full px-2.5 py-1 shadow shrink-0">
