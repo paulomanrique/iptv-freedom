@@ -6,8 +6,16 @@ import * as downloads from './downloads'
 
 let mainWindow = null
 
-// Remove o menu nativo do app (não é usado)
-Menu.setApplicationMenu(null)
+// No macOS, os atalhos de edição (Cmd+C/V/X/A/Z) vêm do menu Edit nativo —
+// sem menu, eles param de funcionar nos campos de texto. Então mantemos um menu
+// mínimo (só os roles padrão) no Mac e removemos o menu no Windows/Linux.
+if (process.platform === 'darwin') {
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate([{ role: 'appMenu' }, { role: 'editMenu' }, { role: 'windowMenu' }])
+  )
+} else {
+  Menu.setApplicationMenu(null)
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
