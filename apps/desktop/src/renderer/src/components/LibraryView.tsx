@@ -104,7 +104,8 @@ export default function LibraryView({
 
   // Double-click: play a movie/channel directly (a series needs an episode choice)
   const playItem = (m: CatalogItem) => {
-    if (m.kind === "live") onPlay({ type: "live", id: m.id, name: m.name, live: true });
+    if (m.kind === "live")
+      onPlay({ type: "live", id: m.id, name: m.name, icon: m.icon, live: true });
     else if (m.kind === "vod") onPlay({ type: "movie", id: m.id, ext: m.ext, name: m.name });
   };
   const currentCat = categories.find((c) => c.category_id === catId);

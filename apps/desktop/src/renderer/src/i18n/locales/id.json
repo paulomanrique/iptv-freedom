@@ -97,6 +97,8 @@
     "itemCount_other": "{{count}} rekaman",
     "empty": "Belum ada rekaman. Buka saluran langsung dan tekan REC di pemutar.",
     "stop": "Hentikan rekaman",
+    "play": "Tonton",
+    "playFailed": "Tidak dapat memutar rekaman ini.",
     "openFolder": "Buka folder",
     "remove": "Hapus",
     "clearStopped": "Hapus yang selesai",

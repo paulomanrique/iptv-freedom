@@ -119,6 +119,7 @@ ipcMain.handle("recording:list", () => live.list());
 ipcMain.handle("recording:start", (_e, item) => live.startRecording(item));
 ipcMain.handle("recording:stop", (_e, id: string) => live.stopRecording(id));
 ipcMain.handle("recording:openFolder", (_e, id: string) => live.openFolder(id));
+ipcMain.handle("recording:playUrl", (_e, id: string) => live.playUrl(id));
 ipcMain.handle("recording:remove", (_e, id: string) => live.remove(id));
 ipcMain.handle("recording:clearStopped", () => live.clearStopped());
 

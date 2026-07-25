@@ -75,7 +75,8 @@ export default function SearchView({ account, query, onPlay, onDownload, fav }: 
   const totalResults = groups.reduce((n, g) => n + g.total, 0);
 
   const playItem = (m: CatalogItem) => {
-    if (m.kind === "live") onPlay({ type: "live", id: m.id, name: m.name, live: true });
+    if (m.kind === "live")
+      onPlay({ type: "live", id: m.id, name: m.name, icon: m.icon, live: true });
     else if (m.kind === "vod") onPlay({ type: "movie", id: m.id, ext: m.ext, name: m.name });
   };
 

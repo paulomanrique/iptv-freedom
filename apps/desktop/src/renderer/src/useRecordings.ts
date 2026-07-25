@@ -22,8 +22,9 @@ export function useRecordings() {
   const start = useCallback((item: RecordingStartItem) => window.api.recordings.start(item), []);
   const stop = useCallback((id: string) => window.api.recordings.stop(id), []);
   const openFolder = useCallback((id: string) => window.api.recordings.openFolder(id), []);
+  const playUrl = useCallback((id: string) => window.api.recordings.playUrl(id), []);
   const remove = useCallback((id: string) => window.api.recordings.remove(id), []);
   const clearStopped = useCallback(() => window.api.recordings.clearStopped(), []);
 
-  return { items, start, stop, openFolder, remove, clearStopped };
+  return { items, start, stop, openFolder, playUrl, remove, clearStopped };
 }

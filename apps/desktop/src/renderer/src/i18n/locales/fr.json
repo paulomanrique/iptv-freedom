@@ -98,6 +98,8 @@
     "itemCount_other": "{{count}} enregistrements",
     "empty": "Aucun enregistrement pour le moment. Ouvrez une chaîne en direct et appuyez sur REC dans le lecteur.",
     "stop": "Arrêter l’enregistrement",
+    "play": "Regarder",
+    "playFailed": "Impossible de lire cet enregistrement.",
     "openFolder": "Ouvrir le dossier",
     "remove": "Supprimer",
     "clearStopped": "Effacer les terminés",

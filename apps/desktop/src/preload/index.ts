@@ -65,6 +65,7 @@ const api: WindowApi = {
     start: (item: RecordingStartItem) => ipcRenderer.invoke("recording:start", item),
     stop: (id: string) => ipcRenderer.invoke("recording:stop", id),
     openFolder: (id: string) => ipcRenderer.invoke("recording:openFolder", id),
+    playUrl: (id: string) => ipcRenderer.invoke("recording:playUrl", id),
     remove: (id: string) => ipcRenderer.invoke("recording:remove", id),
     clearStopped: () => ipcRenderer.invoke("recording:clearStopped"),
     onProgress: (cb: (progress: RecordingProgress) => void) => {

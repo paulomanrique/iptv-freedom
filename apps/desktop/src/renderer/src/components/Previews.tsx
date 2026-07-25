@@ -157,7 +157,9 @@ export function LivePreview({ item, seed, onPlay, fav }: PreviewProps) {
         {t("player.onAir")}
       </div>
       <Button
-        onClick={() => onPlay({ type: "live", id: item.id, name: item.name, live: true })}
+        onClick={() =>
+          onPlay({ type: "live", id: item.id, name: item.name, icon: item.icon, live: true })
+        }
         size="sm"
         className="mt-4 w-full"
       >

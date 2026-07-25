@@ -103,6 +103,8 @@
     "itemCount_other": "{{count}} gravações",
     "empty": "Nenhuma gravação ainda. Abra um canal ao vivo e clique em REC no player.",
     "stop": "Parar gravação",
+    "play": "Assistir",
+    "playFailed": "Não foi possível reproduzir esta gravação.",
     "openFolder": "Abrir pasta",
     "remove": "Remover",
     "clearStopped": "Limpar finalizadas",

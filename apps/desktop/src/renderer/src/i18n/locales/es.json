@@ -98,6 +98,8 @@
     "itemCount_other": "{{count}} grabaciones",
     "empty": "Aún no hay grabaciones. Abre un canal en vivo y pulsa REC en el reproductor.",
     "stop": "Detener grabación",
+    "play": "Ver",
+    "playFailed": "No se pudo reproducir esta grabación.",
     "openFolder": "Abrir carpeta",
     "remove": "Eliminar",
     "clearStopped": "Borrar finalizadas",

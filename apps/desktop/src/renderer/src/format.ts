@@ -39,6 +39,21 @@ const REC_STATUSES = new Set(["recording", "stopped", "error"]);
 export const recordingLabel = (s: string): string =>
   REC_STATUSES.has(s) ? i18n.t(`status.recording.${s}`) : s;
 
+// Epoch ms -> localized date + time (e.g. "25/07/2026, 08:24").
+export function formatDateTime(ms: number): string {
+  const d = new Date(ms);
+  if (isNaN(d.getTime())) return "—";
+  const opts: Intl.DateTimeFormatOptions = {
+    dateStyle: "short",
+    timeStyle: "short",
+  };
+  try {
+    return d.toLocaleString(i18n.language || "en", opts);
+  } catch {
+    return d.toLocaleString("en", opts);
+  }
+}
+
 // Elapsed time in ms -> H:MM:SS (or M:SS under an hour).
 export function formatDuration(ms: number): string {
   const total = Math.max(0, Math.floor(ms / 1000));

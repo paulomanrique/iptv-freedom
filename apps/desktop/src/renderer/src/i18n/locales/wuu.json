@@ -97,6 +97,8 @@
     "itemCount_other": "{{count}} 个录像",
     "empty": "还没有录像。打开直播频道，然后在播放器里按 REC。",
     "stop": "停止录像",
+    "play": "看",
+    "playFailed": "无法播放该录制内容。",
     "openFolder": "打开文件夹",
     "remove": "移除",
     "clearStopped": "清除已完成",

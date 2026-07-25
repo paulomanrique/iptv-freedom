@@ -98,6 +98,8 @@
     "itemCount_other": "{{count}} kayıt",
     "empty": "Henüz kayıt yok. Bir canlı kanal açın ve oynatıcıda REC düğmesine basın.",
     "stop": "Kaydı durdur",
+    "play": "İzle",
+    "playFailed": "Bu kayıt oynatılamadı.",
     "openFolder": "Klasörü aç",
     "remove": "Kaldır",
     "clearStopped": "Tamamlananları sil",

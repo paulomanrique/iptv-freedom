@@ -103,6 +103,8 @@
     "itemCount_other": "{{count}} recordings",
     "empty": "No recordings yet. Open a live channel and press REC in the player.",
     "stop": "Stop recording",
+    "play": "Watch",
+    "playFailed": "Could not play this recording.",
     "openFolder": "Open folder",
     "remove": "Remove",
     "clearStopped": "Clear finished",

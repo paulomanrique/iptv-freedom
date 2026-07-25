@@ -41,6 +41,8 @@ interface PlayerItem {
   name?: string;
   icon?: string | null;
   live?: boolean;
+  /** Ready-made URL (local recording playback); skips Xtream URL resolution. */
+  url?: string;
 }
 interface PlayerModalProps {
   item: PlayerItem | Record<string, any> | null;
@@ -139,7 +141,10 @@ export default function PlayerModal({ item, onClose, recordings, notify }: Playe
 
     async function acquire() {
       try {
-        if (isLive) {
+        if (item!.url) {
+          // Already-resolved source (e.g. replaying a local recording).
+          if (!cancelled) setPlayUrl(item!.url);
+        } else if (isLive) {
           const s = await window.api.live.open(item!.account, item!.id);
           if (cancelled) {
             window.api.live.close(s.sessionId);

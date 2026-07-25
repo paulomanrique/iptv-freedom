@@ -98,6 +98,8 @@
     "itemCount_other": "{{count}} Aufnahmen",
     "empty": "Noch keine Aufnahmen. Öffne einen Live-Sender und drücke im Player auf REC.",
     "stop": "Aufnahme stoppen",
+    "play": "Ansehen",
+    "playFailed": "Diese Aufnahme konnte nicht abgespielt werden.",
     "openFolder": "Ordner öffnen",
     "remove": "Entfernen",
     "clearStopped": "Fertige löschen",

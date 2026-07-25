@@ -97,6 +97,8 @@
     "itemCount_other": "녹화 {{count}}개",
     "empty": "아직 녹화가 없습니다. 실시간 채널을 열고 플레이어에서 REC를 누르세요.",
     "stop": "녹화 중지",
+    "play": "재생",
+    "playFailed": "이 녹화를 재생할 수 없습니다.",
     "openFolder": "폴더 열기",
     "remove": "삭제",
     "clearStopped": "완료 항목 지우기",

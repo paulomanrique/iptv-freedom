@@ -11,8 +11,9 @@
 // running after the player modal is closed.
 import { app, shell } from "electron";
 import { join } from "path";
-import { createServer, type Server, type ServerResponse } from "http";
+import { createServer, type IncomingMessage, type Server, type ServerResponse } from "http";
 import { AddressInfo } from "net";
+import { createReadStream, statSync } from "fs";
 import { unlink, mkdir } from "fs/promises";
 import { spawn, type ChildProcessByStdio } from "child_process";
 import { Readable, type Writable } from "stream";
@@ -54,6 +55,12 @@ function ensureServer(): Promise<Server> {
   if (server) return Promise.resolve(server);
   return new Promise((resolve, reject) => {
     const s = createServer((req, res) => {
+      // Route: /rec/<token>.mp4 — plays a finished recording back from disk.
+      const rec = /^\/rec\/([a-f0-9]+)\.mp4$/.exec(req.url || "");
+      if (rec) {
+        serveRecording(rec[1], req, res);
+        return;
+      }
       // Route: /live/<token>.ts
       const m = /^\/live\/([a-f0-9]+)\.ts$/.exec(req.url || "");
       const session = m ? findByToken(m[1]) : undefined;
@@ -89,6 +96,47 @@ function ensureServer(): Promise<Server> {
 function findByToken(token: string): Session | undefined {
   for (const s of sessions.values()) if (s.token === token) return s;
   return undefined;
+}
+
+// Streams a finished recording from disk, honouring Range so the <video>
+// element can seek. Served over the same loopback server as live playback.
+function serveRecording(token: string, req: IncomingMessage, res: ServerResponse): void {
+  const entry = recordings.find((r) => r.playToken === token);
+  if (!entry) {
+    res.writeHead(404).end();
+    return;
+  }
+  let size: number;
+  try {
+    size = statSync(entry.filePath).size;
+  } catch {
+    res.writeHead(404).end();
+    return;
+  }
+  const common = {
+    "Content-Type": "video/mp4",
+    "Access-Control-Allow-Origin": "*",
+    "Cache-Control": "no-store",
+  };
+  const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || "");
+  if (range) {
+    const start = range[1] ? Number(range[1]) : 0;
+    const end = range[2] ? Math.min(Number(range[2]), size - 1) : size - 1;
+    if (Number.isNaN(start) || start >= size || end < start) {
+      res.writeHead(416, { ...common, "Content-Range": `bytes */${size}` }).end();
+      return;
+    }
+    res.writeHead(206, {
+      ...common,
+      "Accept-Ranges": "bytes",
+      "Content-Range": `bytes ${start}-${end}/${size}`,
+      "Content-Length": end - start + 1,
+    });
+    createReadStream(entry.filePath, { start, end }).pipe(res);
+    return;
+  }
+  res.writeHead(200, { ...common, "Accept-Ranges": "bytes", "Content-Length": size });
+  createReadStream(entry.filePath).pipe(res);
 }
 
 function serverPort(): number {
@@ -187,6 +235,7 @@ export function closeSession(sessionId: string): void {
 // ---- Recordings ----
 interface RecordingEntry extends RecordingItem {
   sessionId: string;
+  playToken: string; // path segment guarding the local playback route
   proc: ChildProcessByStdio<Writable, null, Readable> | null;
   stdin: Writable | null;
   stderrTail: string;
@@ -221,9 +270,28 @@ function stamp(): string {
 
 function publicList(): RecordingItem[] {
   return recordings.map(
-    ({ sessionId: _s, proc: _p, stdin: _i, stderrTail: _e, lastT: _lt, lastR: _lr, ...rest }) =>
-      rest,
+    ({
+      sessionId: _s,
+      playToken: _pt,
+      proc: _p,
+      stdin: _i,
+      stderrTail: _e,
+      lastT: _lt,
+      lastR: _lr,
+      preroll: _pr,
+      prerollBytes: _pb,
+      retried: _rt,
+      ...rest
+    }) => rest,
   );
+}
+
+// Loopback URL the renderer can hand to a <video> element to replay a
+// finished recording (Range-capable, so seeking works).
+export function playUrl(id: string): string | null {
+  const e = recordings.find((r) => r.id === id);
+  if (!e || e.status === "recording" || !server) return null;
+  return `http://127.0.0.1:${serverPort()}/rec/${e.playToken}.mp4`;
 }
 function emitChanged(): void {
   send("recording:changed", publicList());
@@ -265,6 +333,7 @@ export async function startRecording(item: {
     status: "recording",
     error: null,
     sessionId: session.id,
+    playToken: randomBytes(8).toString("hex"),
     proc: null,
     stdin: null,
     stderrTail: "",

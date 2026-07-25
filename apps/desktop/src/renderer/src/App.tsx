@@ -119,6 +119,18 @@ export default function App() {
     (item: Record<string, unknown>) => setPlayer({ ...item, account: activeAccount }),
     [activeAccount],
   );
+  // Replays a finished recording from disk (served over the loopback server).
+  const handlePlayRecording = useCallback(
+    async (r: { id: string; name: string; icon: string | null }) => {
+      const url = await window.api.recordings.playUrl(r.id);
+      if (!url) {
+        showToast(t("recordings.playFailed"));
+        return;
+      }
+      setPlayer({ url, name: r.name, icon: r.icon });
+    },
+    [showToast, t],
+  );
   const handleDownload = useCallback(
     (item: Record<string, unknown>) => {
       dl.add({ ...item, account: activeAccount } as never);
@@ -393,6 +405,7 @@ export default function App() {
             onOpen={rec.openFolder}
             onRemove={rec.remove}
             onClearStopped={rec.clearStopped}
+            onPlay={handlePlayRecording}
           />
         )}
       </div>

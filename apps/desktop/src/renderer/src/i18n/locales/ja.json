@@ -97,6 +97,8 @@
     "itemCount_other": "{{count}} 件の録画",
     "empty": "録画はまだありません。ライブチャンネルを開き、プレーヤーで REC を押してください。",
     "stop": "録画を停止",
+    "play": "視聴",
+    "playFailed": "この録画を再生できませんでした。",
     "openFolder": "フォルダーを開く",
     "remove": "削除",
     "clearStopped": "完了分を消去",

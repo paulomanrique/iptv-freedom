@@ -97,6 +97,8 @@
     "itemCount_other": "{{count}} bản ghi",
     "empty": "Chưa có bản ghi. Hãy mở một kênh trực tiếp và nhấn REC trong trình phát.",
     "stop": "Dừng ghi",
+    "play": "Xem",
+    "playFailed": "Không thể phát bản ghi này.",
     "openFolder": "Mở thư mục",
     "remove": "Xóa",
     "clearStopped": "Xóa mục đã xong",

@@ -173,6 +173,8 @@ export interface WindowApi {
     start: (item: RecordingStartItem) => Promise<{ id: string }>;
     stop: (id: string) => Promise<RecordingItem[]>;
     openFolder: (id: string) => Promise<void>;
+    /** Loopback URL to replay a finished recording (null while still recording). */
+    playUrl: (id: string) => Promise<string | null>;
     remove: (id: string) => Promise<RecordingItem[]>;
     clearStopped: () => Promise<RecordingItem[]>;
     onProgress: (cb: (progress: RecordingProgress) => void) => () => void;
