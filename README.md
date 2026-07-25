@@ -29,18 +29,20 @@ The app and the landing page ship in the 20 most spoken languages in the world.
 - [Electron](https://www.electronjs.org/) + [electron-vite](https://electron-vite.org/)
 - [React](https://react.dev/) 19 + [TypeScript](https://www.typescriptlang.org/)
 - [Tailwind CSS](https://tailwindcss.com/) v4 (CSS-first tokens) with the [t3code](https://github.com/pingdotgg/t3code) design language
-- [pnpm](https://pnpm.io/) workspaces monorepo
+- [Vite+](https://vite.plus) (`vp`) unified toolchain — rolldown-vite, oxlint, oxfmt — over [pnpm](https://pnpm.io/) workspaces
 - [mpegts.js](https://github.com/xqq/mpegts.js) for MPEG-TS streams
 - [i18next](https://www.i18next.com/) + [react-i18next](https://react.i18next.com/) for internationalization
 
 ## Development
 
+Install the Vite+ CLI once (`curl -fsSL https://vite.plus | bash`), then:
+
 ```bash
-pnpm install
+vp i                         # install the workspace (pnpm install also works)
 pnpm --filter desktop dev    # start the app with hot reload
 pnpm --filter desktop build  # production build
-pnpm typecheck               # type-check the workspace
-pnpm lint                    # oxlint
+vp check                     # format + lint + type-check
+pnpm typecheck               # tsc only
 ```
 
 > The interface follows the t3code visual language: flat zinc surfaces, a violet

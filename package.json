@@ -3,21 +3,24 @@
   "version": "0.1.0",
   "private": true,
   "description": "IPTV Freedom — Electron IPTV client (pnpm monorepo)",
-  "author": "Paulo Manrique",
   "license": "MIT",
-  "packageManager": "pnpm@11.13.1",
+  "author": "Paulo Manrique",
   "scripts": {
     "dev": "pnpm --filter desktop dev",
     "build": "pnpm --filter desktop build",
     "dist": "pnpm --filter desktop dist",
-    "lint": "oxlint",
+    "lint": "vp lint",
+    "format": "vp fmt",
+    "check": "vp check",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "oxlint": "^0.15.0",
-    "typescript": "^5.7.0"
-  }
+    "typescript": "^5.7.0",
+    "vite": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "packageManager": "pnpm@11.13.1"
 }

@@ -1,131 +1,133 @@
-import { useState, useEffect, useCallback } from 'react'
-import { useTranslation, Trans } from 'react-i18next'
-import { Button, Input, Tooltip, useTheme } from '@iptv/ui'
-import type { Account } from '@iptv/contracts'
-import Sidebar from './components/Sidebar'
-import LanguageMenu from './components/LanguageMenu'
-import LibraryView from './components/LibraryView'
-import DownloadBar from './components/DownloadBar'
-import DownloadsView from './components/DownloadsView'
-import PlayerModal from './components/PlayerModal'
-import AccountsView from './components/AccountsView'
-import AddAccountModal from './components/AddAccountModal'
-import FavoritesView from './components/FavoritesView'
-import SearchView from './components/SearchView'
-import { useDownloads } from './useDownloads'
-import { useFavorites } from './useFavorites'
-import { loadFavorites } from './favorites'
+import { useState, useEffect, useCallback } from "react";
+import { useTranslation, Trans } from "react-i18next";
+import { Button, Input, Tooltip, useTheme } from "@iptv/ui";
+import type { Account } from "@iptv/contracts";
+import Sidebar from "./components/Sidebar";
+import LanguageMenu from "./components/LanguageMenu";
+import LibraryView from "./components/LibraryView";
+import DownloadBar from "./components/DownloadBar";
+import DownloadsView from "./components/DownloadsView";
+import PlayerModal from "./components/PlayerModal";
+import AccountsView from "./components/AccountsView";
+import AddAccountModal from "./components/AddAccountModal";
+import FavoritesView from "./components/FavoritesView";
+import SearchView from "./components/SearchView";
+import { useDownloads } from "./useDownloads";
+import { useFavorites } from "./useFavorites";
+import { loadFavorites } from "./favorites";
 
-const KIND = { movies: 'vod', series: 'series', live: 'live' } as const
-const isLibrary = (m: string): boolean => m === 'movies' || m === 'series' || m === 'live'
-const ACTIVE_KEY = 'iptvfreedom.activeAccountId'
+const KIND = { movies: "vod", series: "series", live: "live" } as const;
+const isLibrary = (m: string): boolean => m === "movies" || m === "series" || m === "live";
+const ACTIVE_KEY = "iptvfreedom.activeAccountId";
 
 export default function App() {
-  const { t } = useTranslation()
-  const { theme, toggle: toggleTheme } = useTheme()
-  const [mode, setMode] = useState('accounts')
-  const [viewStyle, setViewStyle] = useState('list')
-  const [searchInput, setSearchInput] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [player, setPlayer] = useState<Record<string, unknown> | null>(null)
-  const [toast, setToast] = useState<string | null>(null)
+  const { t } = useTranslation();
+  const { theme, toggle: toggleTheme } = useTheme();
+  const [mode, setMode] = useState("accounts");
+  const [viewStyle, setViewStyle] = useState("list");
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [player, setPlayer] = useState<Record<string, unknown> | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
 
-  const [accounts, setAccounts] = useState<Account[]>([])
-  const [activeId, setActiveId] = useState<string | null>(() => localStorage.getItem(ACTIVE_KEY) || null)
-  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null)
+  const [accounts, setAccounts] = useState<Account[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(
+    () => localStorage.getItem(ACTIVE_KEY) || null,
+  );
+  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
   // null = closed; { account: null } = add; { account } = edit
-  const [accountModal, setAccountModal] = useState<{ account: Account | null } | null>(null)
+  const [accountModal, setAccountModal] = useState<{ account: Account | null } | null>(null);
 
-  const dl = useDownloads()
-  const fav = useFavorites(activeId)
+  const dl = useDownloads();
+  const fav = useFavorites(activeId);
 
   const refreshAccounts = useCallback(async () => {
-    const list = await window.api.accounts.list()
-    setAccounts(list)
+    const list = await window.api.accounts.list();
+    setAccounts(list);
     setActiveId((cur) => {
-      if (cur && list.some((a) => a.id === cur)) return cur
-      const next = list[0]?.id || null
-      if (next) localStorage.setItem(ACTIVE_KEY, next)
-      return next
-    })
-    return list
-  }, [])
+      if (cur && list.some((a) => a.id === cur)) return cur;
+      const next = list[0]?.id || null;
+      if (next) localStorage.setItem(ACTIVE_KEY, next);
+      return next;
+    });
+    return list;
+  }, []);
 
   useEffect(() => {
     refreshAccounts().then((list) => {
-      if (list.length === 0) return
+      if (list.length === 0) return;
       // Initial active account (the saved one, if valid; otherwise the first).
-      const stored = localStorage.getItem(ACTIVE_KEY)
-      const initialId = stored && list.some((a) => a.id === stored) ? stored : list[0]?.id
+      const stored = localStorage.getItem(ACTIVE_KEY);
+      const initialId = stored && list.some((a) => a.id === stored) ? stored : list[0]?.id;
       // Open on Favorites if there is at least one; otherwise on Live.
-      setMode(loadFavorites(initialId).length > 0 ? 'favorites' : 'live')
-    })
-  }, [refreshAccounts])
+      setMode(loadFavorites(initialId).length > 0 ? "favorites" : "live");
+    });
+  }, [refreshAccounts]);
 
   const navigate = useCallback((m: string) => {
-    setMode(m)
-  }, [])
+    setMode(m);
+  }, []);
 
   const submitSearch = useCallback(
     (e?: React.FormEvent) => {
-      e?.preventDefault()
-      const q = searchInput.trim()
+      e?.preventDefault();
+      const q = searchInput.trim();
       if (q) {
-        setSearchQuery(q)
-        setMode('search')
+        setSearchQuery(q);
+        setMode("search");
       }
     },
-    [searchInput]
-  )
+    [searchInput],
+  );
 
   const showToast = useCallback((msg: string) => {
-    setToast(msg)
-    clearTimeout((window as unknown as { _tt: number })._tt)
-    ;(window as unknown as { _tt: number })._tt = window.setTimeout(() => setToast(null), 2400)
-  }, [])
+    setToast(msg);
+    clearTimeout((window as unknown as { _tt: number })._tt);
+    (window as unknown as { _tt: number })._tt = window.setTimeout(() => setToast(null), 2400);
+  }, []);
 
-  const activeAccount = accounts.find((a) => a.id === activeId) || null
+  const activeAccount = accounts.find((a) => a.id === activeId) || null;
 
   const handlePlay = useCallback(
     (item: Record<string, unknown>) => setPlayer({ ...item, account: activeAccount }),
-    [activeAccount]
-  )
+    [activeAccount],
+  );
   const handleDownload = useCallback(
     (item: Record<string, unknown>) => {
-      dl.add({ ...item, account: activeAccount } as never)
-      showToast(t('toast.addedToQueue', { name: item.name }))
+      dl.add({ ...item, account: activeAccount } as never);
+      showToast(t("toast.addedToQueue", { name: item.name }));
     },
-    [dl, activeAccount, showToast, t]
-  )
+    [dl, activeAccount, showToast, t],
+  );
 
   const setActive = useCallback(
     (id: string) => {
-      setActiveId(id)
-      localStorage.setItem(ACTIVE_KEY, id)
-      showToast(t('toast.activeUpdated'))
+      setActiveId(id);
+      localStorage.setItem(ACTIVE_KEY, id);
+      showToast(t("toast.activeUpdated"));
     },
-    [showToast, t]
-  )
+    [showToast, t],
+  );
 
   const onAccountSaved = useCallback(
     (account: Account, _info: unknown, isEdit: boolean) => {
       refreshAccounts().then(() => {
-        setSelectedAccountId(account.id)
+        setSelectedAccountId(account.id);
         // A new account becomes active; editing preserves the current active one.
-        if (!isEdit) setActive(account.id)
-      })
+        if (!isEdit) setActive(account.id);
+      });
     },
-    [refreshAccounts, setActive]
-  )
+    [refreshAccounts, setActive],
+  );
 
   const onRemoveAccount = useCallback(
     async (id: string) => {
-      await window.api.accounts.remove(id)
-      await refreshAccounts()
-      setSelectedAccountId(null)
+      await window.api.accounts.remove(id);
+      await refreshAccounts();
+      setSelectedAccountId(null);
     },
-    [refreshAccounts]
-  )
+    [refreshAccounts],
+  );
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-background text-foreground">
@@ -139,22 +141,38 @@ export default function App() {
         {isLibrary(mode) && (
           <div className="flex rounded-md border border-border p-0.5">
             <button
-              onClick={() => setViewStyle('list')}
+              onClick={() => setViewStyle("list")}
               className={`grid h-6 w-7 place-items-center rounded-sm transition-colors ${
-                viewStyle === 'list' ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-foreground'
+                viewStyle === "list"
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />
               </svg>
             </button>
             <button
-              onClick={() => setViewStyle('grid')}
+              onClick={() => setViewStyle("grid")}
               className={`grid h-6 w-7 place-items-center rounded-sm transition-colors ${
-                viewStyle === 'grid' ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-foreground'
+                viewStyle === "grid"
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                className="h-3.5 w-3.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <rect x="3" y="3" width="7" height="7" />
                 <rect x="14" y="3" width="7" height="7" />
                 <rect x="3" y="14" width="7" height="7" />
@@ -168,10 +186,16 @@ export default function App() {
           <button
             type="submit"
             disabled={!activeAccount}
-            title={t('toolbar.search')}
+            title={t("toolbar.search")}
             className="absolute start-2 top-1/2 grid h-5 w-5 -translate-y-1/2 place-items-center text-muted-foreground hover:text-foreground disabled:hover:text-muted-foreground"
           >
-            <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg
+              className="h-3.5 w-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <circle cx="11" cy="11" r="7" />
               <path d="m21 21-4.3-4.3" />
             </svg>
@@ -180,32 +204,55 @@ export default function App() {
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             disabled={!activeAccount}
-            placeholder={t('toolbar.searchPlaceholder')}
+            placeholder={t("toolbar.searchPlaceholder")}
             className="h-8 ps-8 pe-7 text-xs"
           />
           {searchInput && (
             <button
               type="button"
-              title={t('toolbar.clear')}
-              onClick={() => setSearchInput('')}
+              title={t("toolbar.clear")}
+              onClick={() => setSearchInput("")}
               className="absolute end-2 top-1/2 grid h-5 w-5 -translate-y-1/2 place-items-center text-muted-foreground hover:text-foreground"
             >
-              <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                className="h-3 w-3"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M6 6l12 12M18 6 6 18" />
               </svg>
             </button>
           )}
         </form>
 
-        <Tooltip content={t(theme === 'dark' ? 'theme.light' : 'theme.dark')}>
-          <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground" onClick={toggleTheme}>
-            {theme === 'dark' ? (
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <Tooltip content={t(theme === "dark" ? "theme.light" : "theme.dark")}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-7 w-7 text-muted-foreground"
+            onClick={toggleTheme}
+          >
+            {theme === "dark" ? (
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <circle cx="12" cy="12" r="4" />
                 <path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4m11.4-11.4 1.4-1.4" />
               </svg>
             ) : (
-              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
               </svg>
             )}
@@ -219,7 +266,7 @@ export default function App() {
       <div className="flex min-h-0 flex-1">
         <Sidebar view={mode} onNavigate={navigate} account={activeAccount} />
 
-        {mode === 'favorites' &&
+        {mode === "favorites" &&
           (activeAccount ? (
             <FavoritesView
               key={activeAccount.id}
@@ -233,12 +280,19 @@ export default function App() {
             <section className="grid flex-1 place-items-center text-xs text-muted-foreground">
               <Trans
                 i18nKey="app.addActivateAccount"
-                components={{ a: <button className="mx-1 text-primary underline" onClick={() => navigate('accounts')} /> }}
+                components={{
+                  a: (
+                    <button
+                      className="mx-1 text-primary underline"
+                      onClick={() => navigate("accounts")}
+                    />
+                  ),
+                }}
               />
             </section>
           ))}
 
-        {mode === 'accounts' && (
+        {mode === "accounts" && (
           <AccountsView
             accounts={accounts}
             activeId={activeId}
@@ -266,14 +320,21 @@ export default function App() {
             <section className="grid flex-1 place-items-center text-xs text-muted-foreground">
               <Trans
                 i18nKey="app.addActivateAccount"
-                components={{ a: <button className="mx-1 text-primary underline" onClick={() => navigate('accounts')} /> }}
+                components={{
+                  a: (
+                    <button
+                      className="mx-1 text-primary underline"
+                      onClick={() => navigate("accounts")}
+                    />
+                  ),
+                }}
               />
             </section>
           ))}
 
-        {mode === 'search' && activeAccount && (
+        {mode === "search" && activeAccount && (
           <SearchView
-            key={activeAccount.id + ':' + searchQuery}
+            key={activeAccount.id + ":" + searchQuery}
             account={activeAccount}
             query={searchQuery}
             onPlay={handlePlay}
@@ -282,7 +343,7 @@ export default function App() {
           />
         )}
 
-        {mode === 'downloads' && (
+        {mode === "downloads" && (
           <DownloadsView
             downloads={dl.items}
             onPause={dl.pause}
@@ -294,7 +355,7 @@ export default function App() {
         )}
       </div>
 
-      <DownloadBar downloads={dl.items} onOpen={() => navigate('downloads')} />
+      <DownloadBar downloads={dl.items} onOpen={() => navigate("downloads")} />
 
       <PlayerModal item={player} onClose={() => setPlayer(null)} />
       {accountModal && (
@@ -311,5 +372,5 @@ export default function App() {
         </div>
       )}
     </div>
-  )
+  );
 }

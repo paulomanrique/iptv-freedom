@@ -1,8 +1,8 @@
-import { forwardRef } from 'react'
-import type { SelectHTMLAttributes } from 'react'
-import { cn } from '../lib/cn'
+import { forwardRef } from "react";
+import type { SelectHTMLAttributes } from "react";
+import { cn } from "../lib/cn";
 
-export type SelectProps = SelectHTMLAttributes<HTMLSelectElement>
+export type SelectProps = SelectHTMLAttributes<HTMLSelectElement>;
 
 /** Native select styled to match the design system. */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
@@ -11,9 +11,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
       <select
         ref={ref}
         className={cn(
-          'h-9 w-full appearance-none rounded-md border border-input bg-transparent ps-3 pe-8 text-sm text-foreground',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
-          className
+          "h-9 w-full appearance-none rounded-md border border-input bg-transparent ps-3 pe-8 text-sm text-foreground",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+          className,
         )}
         {...props}
       >
@@ -29,6 +29,6 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         <path d="m6 9 6 6 6-6" />
       </svg>
     </div>
-  )
-)
-Select.displayName = 'Select'
+  ),
+);
+Select.displayName = "Select";

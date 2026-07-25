@@ -24,7 +24,7 @@ branch names, and Git workflow are written in **English** — no exceptions.
 
 The only exception is user-facing **i18n locale data** under
 `apps/desktop/src/renderer/src/i18n/locales/*.json`: those are translation
-*content*, not code, and are intentionally multilingual.
+_content_, not code, and are intentionally multilingual.
 
 ### 2. Commit + push after every change
 
@@ -41,8 +41,8 @@ builds and publishes on `v*` tags — Windows (NSIS) / macOS (DMG) / Linux
 
 When touching CI, **preserve this build/release flow** and adapt it only as
 needed (e.g. tooling changes). **Do not add** any other workflow — no lint,
-test, PR-check, or scheduled workflows. Linting and type-checking run locally
-via `pnpm lint` / `pnpm typecheck`, not in CI.
+test, PR-check, or scheduled workflows. Linting, formatting and type-checking
+run locally (`vp check` / `pnpm typecheck`), not in CI.
 
 ## Layout
 
@@ -53,13 +53,22 @@ packages/core/       Shared domain logic (Xtream client, formatters, catalog, fa
 packages/ui/         Tailwind v4 theme tokens + shadcn-style UI primitives
 ```
 
+## Toolchain
+
+The workspace uses [Vite+](https://vite.plus) (`vp`) as the unified toolchain
+(rolldown-vite, oxlint, oxfmt), on top of pnpm workspaces. Install `vp` once:
+`curl -fsSL https://vite.plus | bash`. The Electron app itself is still built by
+`electron-vite` (which resolves Vite to `vite-plus-core` via the pnpm catalog).
+
 ## Commands
 
 ```
-pnpm install                 # install the workspace
+vp i                         # install the workspace (wraps pnpm; pnpm install also works)
 pnpm --filter desktop dev    # run the app (electron-vite dev)
 pnpm --filter desktop build  # build main/preload/renderer
-pnpm lint                    # oxlint
+vp check                     # format + lint + type-check (oxfmt + oxlint)
+vp fmt                       # format only (oxfmt)
+vp lint                      # lint only (oxlint)
 pnpm typecheck               # tsc --noEmit across packages
 pnpm --filter desktop dist   # local installer via electron-builder
 ```
