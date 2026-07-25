@@ -94,7 +94,8 @@
   "downloadBar": {
     "none": "No active downloads",
     "queued": "+{{count}} queued",
-    "connectionLimit": "1 connection (provider limit)"
+    "connectionLimit": "1 download at a time",
+    "connections": "1 download at a time · provider limit {{max}}"
   },
   "status": {
     "account": {

@@ -6,10 +6,12 @@ import { formatSpeed, downloadLabel } from "../format";
 interface DownloadBarProps {
   downloads: DownloadItem[];
   onOpen: () => void;
+  /** Active account's provider connection limit (max_connections), when known. */
+  maxConnections?: number | null;
 }
 
 // Fixed bottom bar: shows the active download (or queue) and the limit notice.
-export default function DownloadBar({ downloads, onOpen }: DownloadBarProps) {
+export default function DownloadBar({ downloads, onOpen, maxConnections }: DownloadBarProps) {
   const { t } = useTranslation();
   const active = downloads.find((d) => d.status === "downloading");
   const queued = downloads.filter((d) => d.status === "queued").length;
@@ -50,7 +52,11 @@ export default function DownloadBar({ downloads, onOpen }: DownloadBarProps) {
         </button>
       )}
       <div className="flex-1" />
-      <span className="shrink-0 text-warning">{t("downloadBar.connectionLimit")}</span>
+      <span className="shrink-0 text-warning">
+        {maxConnections
+          ? t("downloadBar.connections", { max: maxConnections })
+          : t("downloadBar.connectionLimit")}
+      </span>
     </div>
   );
 }

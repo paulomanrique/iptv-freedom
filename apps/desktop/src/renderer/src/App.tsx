@@ -37,6 +37,7 @@ export default function App() {
   const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
   // null = closed; { account: null } = add; { account } = edit
   const [accountModal, setAccountModal] = useState<{ account: Account | null } | null>(null);
+  const [activeMaxConn, setActiveMaxConn] = useState<number | null>(null);
 
   const dl = useDownloads();
   const fav = useFavorites(activeId);
@@ -63,6 +64,29 @@ export default function App() {
       setMode(loadFavorites(initialId).length > 0 ? "favorites" : "live");
     });
   }, [refreshAccounts]);
+
+  // Fetch the active account's provider connection limit for the download bar.
+  useEffect(() => {
+    const acc = accounts.find((a) => a.id === activeId) || null;
+    if (!acc) {
+      setActiveMaxConn(null);
+      return;
+    }
+    let alive = true;
+    window.api.xtream
+      .accountInfo(acc)
+      .then((info) => {
+        if (!alive) return;
+        const max = Number(info?.user_info?.max_connections);
+        setActiveMaxConn(Number.isFinite(max) && max > 0 ? max : null);
+      })
+      .catch(() => {
+        if (alive) setActiveMaxConn(null);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [activeId, accounts]);
 
   const navigate = useCallback((m: string) => {
     setMode(m);
@@ -355,7 +379,11 @@ export default function App() {
         )}
       </div>
 
-      <DownloadBar downloads={dl.items} onOpen={() => navigate("downloads")} />
+      <DownloadBar
+        downloads={dl.items}
+        maxConnections={activeMaxConn}
+        onOpen={() => navigate("downloads")}
+      />
 
       <PlayerModal item={player} onClose={() => setPlayer(null)} />
       {accountModal && (
