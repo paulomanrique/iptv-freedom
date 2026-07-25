@@ -125,7 +125,8 @@ async function pumpUpstream(session: Session, url: string): Promise<void> {
   if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
   const body = Readable.fromWeb(res.body as Parameters<typeof Readable.fromWeb>[0]);
   body.on("data", (chunk: Buffer) => {
-    for (const client of [...session.players]) {
+    // Deleting the current entry while iterating a Set is safe in JS.
+    for (const client of session.players) {
       try {
         client.write(chunk);
       } catch {
@@ -191,7 +192,17 @@ interface RecordingEntry extends RecordingItem {
   stderrTail: string;
   lastT: number;
   lastR: number;
+  // Retry support: providers ship either AAC (needs the adtstoasc bitstream
+  // filter to go into MP4) or AC3/MP2 (which that filter rejects). We start
+  // with the AAC filter and, if ffmpeg bails out immediately, respawn without
+  // it and replay these buffered bytes. Dropped once we are past the window.
+  preroll: Buffer[] | null;
+  prerollBytes: number;
+  retried: boolean;
 }
+
+// Enough to replay after a bitstream-filter mismatch (which fails in ~30ms).
+const PREROLL_CAP = 4 * 1024 * 1024;
 
 const recordings: RecordingEntry[] = [];
 
@@ -260,22 +271,40 @@ export async function startRecording(item: {
     lastT: Date.now(),
     lastR: 0,
     speed: 0,
+    preroll: [],
+    prerollBytes: 0,
+    retried: false,
   };
 
+  const ok = spawnRemuxer(entry, true);
+  recordings.push(entry);
+  if (ok) session.recordingId = entry.id;
+  emitChanged();
+  return { id: entry.id };
+}
+
+// Spawns the ffmpeg remuxer for a recording. `aacBsf` applies the AAC->MP4
+// bitstream filter; it is required for AAC (the common case) and rejected by
+// AC3/MP2, so a mismatch is retried once with it off. Returns false if the
+// process could not be spawned at all.
+function spawnRemuxer(entry: RecordingEntry, aacBsf: boolean): boolean {
   // Remux the incoming TS to a crash-safe fragmented MP4 (no re-encode).
+  // delay_moov lets formats like AC3 write their header once packets arrive.
   const args = [
     "-hide_banner",
     "-loglevel",
     "error",
+    "-y",
     "-i",
     "pipe:0",
     "-c",
     "copy",
+    ...(aacBsf ? ["-bsf:a", "aac_adtstoasc"] : []),
     "-movflags",
-    "frag_keyframe+empty_moov+default_base_moof",
+    "frag_keyframe+empty_moov+default_base_moof+delay_moov",
     "-f",
     "mp4",
-    filePath,
+    entry.filePath,
   ];
   let proc: ChildProcessByStdio<Writable, null, Readable>;
   try {
@@ -283,12 +312,12 @@ export async function startRecording(item: {
   } catch (err) {
     entry.status = "error";
     entry.error = String((err as Error)?.message || err);
-    recordings.push(entry);
-    emitChanged();
-    return { id: entry.id };
+    entry.preroll = null;
+    return false;
   }
   entry.proc = proc;
   entry.stdin = proc.stdin;
+  entry.stderrTail = "";
   proc.stderr.on("data", (d: Buffer) => {
     entry.stderrTail = (entry.stderrTail + d.toString()).slice(-2000);
   });
@@ -304,24 +333,42 @@ export async function startRecording(item: {
     if (entry.status !== "recording") return; // already finalized by stop/upstream
     if (entry.error) {
       finalizeRecording(entry, "error"); // upstream failure recorded before flush
-    } else if (code && code !== 0) {
+      return;
+    }
+    if (code && code !== 0) {
+      // A codec/bitstream mismatch aborts within milliseconds — retry once
+      // without the AAC filter and replay what we buffered so far.
+      if (aacBsf && !entry.retried && entry.preroll) {
+        entry.retried = true;
+        const buffered = entry.preroll;
+        if (spawnRemuxer(entry, false)) {
+          for (const chunk of buffered) entry.stdin?.write(chunk);
+          return;
+        }
+      }
       entry.error = entry.stderrTail.trim() || `ffmpeg exited ${code}`;
       finalizeRecording(entry, "error");
-    } else {
-      finalizeRecording(entry, "stopped");
+      return;
     }
+    finalizeRecording(entry, "stopped");
   });
-
-  recordings.push(entry);
-  session.recordingId = entry.id;
-  emitChanged();
-  return { id: entry.id };
+  return true;
 }
 
 // Writes an upstream chunk into the recording's ffmpeg stdin + tracks speed.
 function feedRecording(entry: RecordingEntry, chunk: Buffer): void {
   if (entry.status !== "recording" || !entry.stdin) return;
   entry.stdin.write(chunk);
+  // Hold the opening bytes until we know ffmpeg accepted the stream, so a
+  // bitstream-filter retry can replay them; then release the memory.
+  if (entry.preroll) {
+    if (entry.prerollBytes < PREROLL_CAP) {
+      entry.preroll.push(chunk);
+      entry.prerollBytes += chunk.length;
+    } else {
+      entry.preroll = null;
+    }
+  }
   entry.received += chunk.length;
   const now = Date.now();
   if (now - entry.lastT >= 500) {
@@ -336,6 +383,7 @@ function finalizeRecording(entry: RecordingEntry, status: "stopped" | "error"): 
   entry.status = status;
   entry.speed = 0;
   entry.stdin = null;
+  entry.preroll = null;
   const session = sessions.get(entry.sessionId);
   if (session && session.recordingId === entry.id) {
     session.recordingId = null;
