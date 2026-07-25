@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "正在播放",
     "favorites": "收藏",
     "live": "直播",
     "movies": "电影",
@@ -133,6 +134,9 @@
     "auto": "自动",
     "record": "REC",
     "stopRecording": "停止",
+    "minimize": "最小化",
+    "expand": "展开",
+    "stop": "停止播放",
     "close": "关闭（Esc）",
     "cantPlay": "无法播放",
     "oneConnHint": "在仅 1 个连接的限制下，请关闭其他进行中的流/下载。",
@@ -175,5 +179,8 @@
   },
   "language": {
     "label": "语言"
+  },
+  "nowPlaying": {
+    "empty": "当前没有播放内容。请选择频道、影片或录制内容。"
   }
 }

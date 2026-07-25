@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { Account } from "@iptv/contracts";
 
 const SECTION_KEYS = [
+  "nowplaying",
   "favorites",
   "live",
   "movies",
@@ -17,9 +18,17 @@ interface SidebarProps {
   account: Account | null;
   /** Whether a live recording is currently in progress (shows a red dot). */
   recordingActive?: boolean;
+  /** Title of whatever is playing, shown under Now Playing. */
+  playingName?: string | null;
 }
 
-export default function Sidebar({ view, onNavigate, account, recordingActive }: SidebarProps) {
+export default function Sidebar({
+  view,
+  onNavigate,
+  account,
+  recordingActive,
+  playingName,
+}: SidebarProps) {
   const { t } = useTranslation();
   const initials = account ? (account.name || account.host).slice(0, 2).toUpperCase() : "—";
 
@@ -66,9 +75,19 @@ export default function Sidebar({ view, onNavigate, account, recordingActive }: 
                 : "text-muted-foreground hover:bg-accent hover:text-foreground"
             }`}
           >
-            <span>{t(`nav.${key}`)}</span>
+            <span className="min-w-0">
+              <span className="block truncate">{t(`nav.${key}`)}</span>
+              {key === "nowplaying" && playingName && (
+                <span className="block truncate text-[10px] font-normal text-muted-foreground">
+                  {playingName}
+                </span>
+              )}
+            </span>
+            {key === "nowplaying" && playingName && (
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+            )}
             {key === "recordings" && recordingActive && (
-              <span className="h-1.5 w-1.5 rounded-full bg-destructive animate-pulse" />
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-destructive animate-pulse" />
             )}
           </div>
         ))}

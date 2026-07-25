@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "Lecture en cours",
     "favorites": "Favoris",
     "live": "En direct",
     "movies": "Films",
@@ -134,6 +135,9 @@
     "auto": "Auto",
     "record": "REC",
     "stopRecording": "Arrêter",
+    "minimize": "Réduire",
+    "expand": "Agrandir",
+    "stop": "Arrêter la lecture",
     "close": "Fermer (Échap)",
     "cantPlay": "Lecture impossible",
     "oneConnHint": "Avec une limite d’1 connexion, fermez les autres streams/téléchargements actifs.",
@@ -176,5 +180,8 @@
   },
   "language": {
     "label": "Langue"
+  },
+  "nowPlaying": {
+    "empty": "Rien en lecture. Choisissez une chaîne, un film ou un enregistrement."
   }
 }

@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "Sedang diputar",
     "favorites": "Favorit",
     "live": "Langsung",
     "movies": "Film",
@@ -133,6 +134,9 @@
     "auto": "Otomatis",
     "record": "REC",
     "stopRecording": "Hentikan",
+    "minimize": "Perkecil",
+    "expand": "Perbesar",
+    "stop": "Hentikan pemutaran",
     "close": "Tutup (Esc)",
     "cantPlay": "Tidak dapat memutar",
     "oneConnHint": "Dengan batas 1 koneksi, tutup streaming/unduhan aktif lainnya.",
@@ -175,5 +179,8 @@
   },
   "language": {
     "label": "Bahasa"
+  },
+  "nowPlaying": {
+    "empty": "Tidak ada yang diputar. Pilih saluran, film, atau rekaman."
   }
 }

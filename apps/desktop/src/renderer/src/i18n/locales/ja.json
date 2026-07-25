@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "再生中",
     "favorites": "お気に入り",
     "live": "ライブ",
     "movies": "映画",
@@ -133,6 +134,9 @@
     "auto": "自動",
     "record": "REC",
     "stopRecording": "停止",
+    "minimize": "最小化",
+    "expand": "拡大",
+    "stop": "再生を停止",
     "close": "閉じる（Esc）",
     "cantPlay": "再生できませんでした",
     "oneConnHint": "1 接続の制限があるため、他のアクティブなストリーム/ダウンロードを閉じてください。",
@@ -175,5 +179,8 @@
   },
   "language": {
     "label": "言語"
+  },
+  "nowPlaying": {
+    "empty": "再生中のものはありません。チャンネル・映画・録画を選んでください。"
   }
 }

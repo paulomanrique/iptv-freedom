@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "Reproduciendo",
     "favorites": "Favoritos",
     "live": "En vivo",
     "movies": "Películas",
@@ -134,6 +135,9 @@
     "auto": "Auto",
     "record": "REC",
     "stopRecording": "Detener",
+    "minimize": "Minimizar",
+    "expand": "Expandir",
+    "stop": "Detener reproducción",
     "close": "Cerrar (Esc)",
     "cantPlay": "No se pudo reproducir",
     "oneConnHint": "Con el límite de 1 conexión, cierra otros streams/descargas activos.",
@@ -176,5 +180,8 @@
   },
   "language": {
     "label": "Idioma"
+  },
+  "nowPlaying": {
+    "empty": "No hay nada en reproducción. Elige un canal, película o grabación."
   }
 }

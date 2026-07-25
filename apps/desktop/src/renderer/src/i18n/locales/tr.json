@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "Şimdi oynatılıyor",
     "favorites": "Favoriler",
     "live": "Canlı",
     "movies": "Filmler",
@@ -134,6 +135,9 @@
     "auto": "Oto",
     "record": "REC",
     "stopRecording": "Durdur",
+    "minimize": "Küçült",
+    "expand": "Büyüt",
+    "stop": "Oynatmayı durdur",
     "close": "Kapat (Esc)",
     "cantPlay": "Oynatılamadı",
     "oneConnHint": "1 bağlantı sınırıyla diğer etkin yayınları/indirmeleri kapatın.",
@@ -176,5 +180,8 @@
   },
   "language": {
     "label": "Dil"
+  },
+  "nowPlaying": {
+    "empty": "Hiçbir şey oynatılmıyor. Bir kanal, film veya kayıt seçin."
   }
 }

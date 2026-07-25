@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "Now Playing",
     "favorites": "Favorites",
     "live": "Live",
     "movies": "Movies",
@@ -139,6 +140,9 @@
     "auto": "Auto",
     "record": "REC",
     "stopRecording": "Stop",
+    "minimize": "Minimize",
+    "expand": "Expand",
+    "stop": "Stop playback",
     "close": "Close (Esc)",
     "cantPlay": "Could not play",
     "oneConnHint": "With a 1-connection limit, close other active streams/downloads.",
@@ -181,5 +185,8 @@
   },
   "language": {
     "label": "Language"
+  },
+  "nowPlaying": {
+    "empty": "Nothing playing. Pick a channel, movie or recording."
   }
 }

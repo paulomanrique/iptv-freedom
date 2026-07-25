@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useTranslation, Trans } from "react-i18next";
 import { Button, Input, Tooltip, useTheme } from "@iptv/ui";
 import type { Account } from "@iptv/contracts";
@@ -8,7 +8,7 @@ import LibraryView from "./components/LibraryView";
 import DownloadBar from "./components/DownloadBar";
 import DownloadsView from "./components/DownloadsView";
 import RecordingsView from "./components/RecordingsView";
-import PlayerModal from "./components/PlayerModal";
+import PlayerHost from "./components/PlayerHost";
 import AccountsView from "./components/AccountsView";
 import AddAccountModal from "./components/AddAccountModal";
 import FavoritesView from "./components/FavoritesView";
@@ -95,6 +95,13 @@ export default function App() {
     setMode(m);
   }, []);
 
+  // Remember the last non-player tab so minimizing returns where you came from.
+  const prevModeRef = useRef("live");
+  useEffect(() => {
+    if (mode !== "nowplaying") prevModeRef.current = mode;
+  }, [mode]);
+  const minimizePlayer = useCallback(() => navigate(prevModeRef.current || "live"), [navigate]);
+
   const submitSearch = useCallback(
     (e?: React.FormEvent) => {
       e?.preventDefault();
@@ -116,7 +123,10 @@ export default function App() {
   const activeAccount = accounts.find((a) => a.id === activeId) || null;
 
   const handlePlay = useCallback(
-    (item: Record<string, unknown>) => setPlayer({ ...item, account: activeAccount }),
+    (item: Record<string, unknown>) => {
+      setPlayer({ ...item, account: activeAccount });
+      setMode("nowplaying");
+    },
     [activeAccount],
   );
   // Replays a finished recording from disk (served over the loopback server).
@@ -128,6 +138,7 @@ export default function App() {
         return;
       }
       setPlayer({ url, name: r.name, icon: r.icon });
+      setMode("nowplaying");
     },
     [showToast, t],
   );
@@ -308,6 +319,7 @@ export default function App() {
           onNavigate={navigate}
           account={activeAccount}
           recordingActive={rec.items.some((r) => r.status === "recording")}
+          playingName={(player?.name as string) || null}
         />
 
         {mode === "favorites" &&
@@ -408,6 +420,24 @@ export default function App() {
             onPlay={handlePlayRecording}
           />
         )}
+
+        {mode === "nowplaying" && !player && (
+          <section className="grid flex-1 place-items-center text-xs text-muted-foreground">
+            {t("nowPlaying.empty")}
+          </section>
+        )}
+
+        {/* Mounted once and never moved: the <video> must survive tab changes,
+            so only its CSS geometry differs between full and mini. */}
+        <PlayerHost
+          item={player}
+          mode={mode === "nowplaying" ? "full" : "mini"}
+          recordings={rec.items}
+          notify={showToast}
+          onClose={() => setPlayer(null)}
+          onExpand={() => navigate("nowplaying")}
+          onMinimize={minimizePlayer}
+        />
       </div>
 
       <DownloadBar
@@ -416,12 +446,6 @@ export default function App() {
         onOpen={() => navigate("downloads")}
       />
 
-      <PlayerModal
-        item={player}
-        onClose={() => setPlayer(null)}
-        recordings={rec.items}
-        notify={showToast}
-      />
       {accountModal && (
         <AddAccountModal
           account={accountModal.account}

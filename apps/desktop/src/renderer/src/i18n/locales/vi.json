@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "Đang phát",
     "favorites": "Yêu thích",
     "live": "Trực tiếp",
     "movies": "Phim",
@@ -133,6 +134,9 @@
     "auto": "Tự động",
     "record": "REC",
     "stopRecording": "Dừng",
+    "minimize": "Thu nhỏ",
+    "expand": "Mở rộng",
+    "stop": "Dừng phát",
     "close": "Đóng (Esc)",
     "cantPlay": "Không thể phát",
     "oneConnHint": "Với giới hạn 1 kết nối, hãy đóng các luồng/lượt tải khác đang chạy.",
@@ -175,5 +179,8 @@
   },
   "language": {
     "label": "Ngôn ngữ"
+  },
+  "nowPlaying": {
+    "empty": "Không có gì đang phát. Chọn một kênh, phim hoặc bản ghi."
   }
 }

@@ -1,5 +1,6 @@
 {
   "nav": {
+    "nowplaying": "Wiedergabe",
     "favorites": "Favoriten",
     "live": "Live",
     "movies": "Filme",
@@ -134,6 +135,9 @@
     "auto": "Auto",
     "record": "REC",
     "stopRecording": "Stopp",
+    "minimize": "Minimieren",
+    "expand": "Vergrößern",
+    "stop": "Wiedergabe beenden",
     "close": "Schließen (Esc)",
     "cantPlay": "Wiedergabe nicht möglich",
     "oneConnHint": "Bei einem Limit von 1 Verbindung andere aktive Streams/Downloads schließen.",
@@ -176,5 +180,8 @@
   },
   "language": {
     "label": "Sprache"
+  },
+  "nowPlaying": {
+    "empty": "Nichts wird abgespielt. Wähle einen Sender, Film oder eine Aufnahme."
   }
 }
