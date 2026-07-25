@@ -63,12 +63,13 @@ The workspace uses [Vite+](https://vite.plus) (`vp`) as the unified toolchain
 ## Commands
 
 ```
-vp i                         # install the workspace (wraps pnpm; pnpm install also works)
-pnpm --filter desktop dev    # run the app (electron-vite dev)
-pnpm --filter desktop build  # build main/preload/renderer
-vp check                     # format + lint + type-check (oxfmt + oxlint)
-vp fmt                       # format only (oxfmt)
-vp lint                      # lint only (oxlint)
-pnpm typecheck               # tsc --noEmit across packages
-pnpm --filter desktop dist   # local installer via electron-builder
+vp i             # install the workspace (pnpm install also works)
+vp run dev       # run the app (electron-vite dev)
+vp run build     # build main/preload/renderer
+vp run dist      # local installer via electron-builder
+vp check         # format + lint + type-check (oxfmt + oxlint + tsc)
+vp fmt           # format only (oxfmt); vp fmt --check to verify
+vp lint          # lint only (oxlint)
+pnpm typecheck   # tsc --noEmit across the workspace
+pnpm clean       # remove node_modules, build output and caches
 ```

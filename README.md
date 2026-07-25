@@ -38,11 +38,11 @@ The app and the landing page ship in the 20 most spoken languages in the world.
 Install the Vite+ CLI once (`curl -fsSL https://vite.plus | bash`), then:
 
 ```bash
-vp i                         # install the workspace (pnpm install also works)
-pnpm --filter desktop dev    # start the app with hot reload
-pnpm --filter desktop build  # production build
-vp check                     # format + lint + type-check
-pnpm typecheck               # tsc only
+vp i             # install the workspace (pnpm install also works)
+vp run dev       # start the app with hot reload
+vp run build     # production build
+vp check         # format + lint + type-check
+pnpm clean       # remove node_modules, build output and caches
 ```
 
 > The interface follows the t3code visual language: flat zinc surfaces, a violet

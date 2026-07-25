@@ -6,20 +6,23 @@
   "license": "MIT",
   "author": "Paulo Manrique",
   "scripts": {
-    "dev": "pnpm --filter desktop dev",
-    "build": "pnpm --filter desktop build",
-    "dist": "pnpm --filter desktop dist",
-    "lint": "vp lint",
-    "format": "vp fmt",
+    "dev": "vp run --filter desktop dev",
+    "build": "vp run --filter desktop build",
+    "start": "vp run --filter desktop start",
+    "dist": "vp run --filter desktop dist",
     "check": "vp check",
-    "typecheck": "tsc --noEmit -p tsconfig.json"
+    "lint": "vp lint --report-unused-disable-directives",
+    "fmt": "vp fmt",
+    "fmt:check": "vp fmt --check",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules apps/*/out apps/*/dist .vite-plus apps/*/.vite-plus packages/*/.vite-plus"
   },
   "devDependencies": {
-    "@types/node": "^22.10.0",
-    "@types/react": "^19.0.0",
-    "@types/react-dom": "^19.0.0",
-    "typescript": "^5.7.0",
-    "vite": "catalog:",
+    "@types/node": "^22.20.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3",
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.2.6",
     "vite-plus": "catalog:"
   },
   "packageManager": "pnpm@11.13.1"
