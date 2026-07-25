@@ -103,7 +103,11 @@
     "openFolder": "Abrir carpeta",
     "remove": "Eliminar",
     "clearStopped": "Borrar finalizadas",
-    "startFailed": "No se pudo iniciar la grabación."
+    "startFailed": "No se pudo iniciar la grabación.",
+    "confirmDeleteTitle": "¿Eliminar grabación?",
+    "confirmDelete": "«{{name}}» se eliminará permanentemente de tu disco.",
+    "confirmDeleteActive": "«{{name}}» aún se está grabando. Se detendrá y se eliminará permanentemente de tu disco.",
+    "cancel": "Cancelar"
   },
   "status": {
     "account": {

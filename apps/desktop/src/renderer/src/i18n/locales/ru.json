@@ -105,7 +105,11 @@
     "openFolder": "Открыть папку",
     "remove": "Удалить",
     "clearStopped": "Удалить завершённые",
-    "startFailed": "Не удалось начать запись."
+    "startFailed": "Не удалось начать запись.",
+    "confirmDeleteTitle": "Удалить запись?",
+    "confirmDelete": "«{{name}}» будет безвозвратно удалена с диска.",
+    "confirmDeleteActive": "«{{name}}» ещё записывается. Запись будет остановлена и безвозвратно удалена с диска.",
+    "cancel": "Отмена"
   },
   "status": {
     "account": {

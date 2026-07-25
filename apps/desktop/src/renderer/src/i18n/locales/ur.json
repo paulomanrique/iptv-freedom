@@ -103,7 +103,11 @@
     "openFolder": "فولڈر کھولیں",
     "remove": "ہٹائیں",
     "clearStopped": "مکمل شدہ صاف کریں",
-    "startFailed": "ریکارڈنگ شروع نہیں ہو سکی۔"
+    "startFailed": "ریکارڈنگ شروع نہیں ہو سکی۔",
+    "confirmDeleteTitle": "ریکارڈنگ حذف کریں؟",
+    "confirmDelete": "”{{name}}“ آپ کی ڈسک سے مستقل طور پر حذف ہو جائے گی۔",
+    "confirmDeleteActive": "”{{name}}“ ابھی ریکارڈ ہو رہی ہے۔ اسے روک کر ڈسک سے مستقل طور پر حذف کر دیا جائے گا۔",
+    "cancel": "منسوخ"
   },
   "status": {
     "account": {

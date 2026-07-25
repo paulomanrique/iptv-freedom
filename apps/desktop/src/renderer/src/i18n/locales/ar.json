@@ -107,7 +107,11 @@
     "openFolder": "فتح المجلد",
     "remove": "إزالة",
     "clearStopped": "مسح المكتملة",
-    "startFailed": "تعذّر بدء التسجيل."
+    "startFailed": "تعذّر بدء التسجيل.",
+    "confirmDeleteTitle": "حذف التسجيل؟",
+    "confirmDelete": "سيتم حذف «{{name}}» نهائيًا من القرص.",
+    "confirmDeleteActive": "«{{name}}» ما زال قيد التسجيل. سيتم إيقافه وحذفه نهائيًا من القرص.",
+    "cancel": "إلغاء"
   },
   "status": {
     "account": {

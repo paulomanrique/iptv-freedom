@@ -103,7 +103,11 @@
     "openFolder": "फोल्डर उघडा",
     "remove": "काढा",
     "clearStopped": "पूर्ण झालेली काढा",
-    "startFailed": "रेकॉर्डिंग सुरू करता आले नाही."
+    "startFailed": "रेकॉर्डिंग सुरू करता आले नाही.",
+    "confirmDeleteTitle": "रेकॉर्डिंग हटवायची?",
+    "confirmDelete": "“{{name}}” तुमच्या डिस्कवरून कायमची हटवली जाईल.",
+    "confirmDeleteActive": "“{{name}}” अजून रेकॉर्ड होत आहे. ती थांबवून डिस्कवरून कायमची हटवली जाईल.",
+    "cancel": "रद्द करा"
   },
   "status": {
     "account": {

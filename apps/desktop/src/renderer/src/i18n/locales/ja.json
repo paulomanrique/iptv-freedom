@@ -102,7 +102,11 @@
     "openFolder": "フォルダーを開く",
     "remove": "削除",
     "clearStopped": "完了分を消去",
-    "startFailed": "録画を開始できませんでした。"
+    "startFailed": "録画を開始できませんでした。",
+    "confirmDeleteTitle": "録画を削除しますか？",
+    "confirmDelete": "「{{name}}」はディスクから完全に削除されます。",
+    "confirmDeleteActive": "「{{name}}」は録画中です。録画を停止し、ディスクから完全に削除します。",
+    "cancel": "キャンセル"
   },
   "status": {
     "account": {

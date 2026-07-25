@@ -108,7 +108,11 @@
     "openFolder": "Open folder",
     "remove": "Remove",
     "clearStopped": "Clear finished",
-    "startFailed": "Could not start recording."
+    "startFailed": "Could not start recording.",
+    "confirmDeleteTitle": "Delete recording?",
+    "confirmDelete": "“{{name}}” will be permanently deleted from your disk.",
+    "confirmDeleteActive": "“{{name}}” is still recording. It will be stopped and permanently deleted from your disk.",
+    "cancel": "Cancel"
   },
   "status": {
     "account": {

@@ -108,7 +108,11 @@
     "openFolder": "Abrir pasta",
     "remove": "Remover",
     "clearStopped": "Limpar finalizadas",
-    "startFailed": "Não foi possível iniciar a gravação."
+    "startFailed": "Não foi possível iniciar a gravação.",
+    "confirmDeleteTitle": "Excluir gravação?",
+    "confirmDelete": "“{{name}}” será excluída permanentemente do seu disco.",
+    "confirmDeleteActive": "“{{name}}” ainda está gravando. Ela será interrompida e excluída permanentemente do seu disco.",
+    "cancel": "Cancelar"
   },
   "status": {
     "account": {

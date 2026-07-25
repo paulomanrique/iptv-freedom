@@ -102,7 +102,11 @@
     "openFolder": "폴더 열기",
     "remove": "삭제",
     "clearStopped": "완료 항목 지우기",
-    "startFailed": "녹화를 시작할 수 없습니다."
+    "startFailed": "녹화를 시작할 수 없습니다.",
+    "confirmDeleteTitle": "녹화를 삭제할까요?",
+    "confirmDelete": "'{{name}}'이(가) 디스크에서 영구적으로 삭제됩니다.",
+    "confirmDeleteActive": "'{{name}}'은(는) 아직 녹화 중입니다. 녹화를 중지하고 디스크에서 영구적으로 삭제합니다.",
+    "cancel": "취소"
   },
   "status": {
     "account": {

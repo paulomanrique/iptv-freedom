@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { RecordingItem } from "@iptv/contracts";
+import { Button, Dialog, DialogBody, DialogFooter, DialogHeader, DialogTitle } from "@iptv/ui";
 import { Poster } from "./Previews";
 import {
   formatBytes,
@@ -16,7 +17,7 @@ interface RowProps {
   now: number;
   onStop: (id: string) => void;
   onOpen: (id: string) => void;
-  onRemove: (id: string) => void;
+  onRemove: (r: RecordingItem) => void;
   onPlay: (r: RecordingItem) => void;
 }
 
@@ -36,7 +37,9 @@ function Row({ r, seed, now, onStop, onOpen, onRemove, onPlay }: RowProps) {
         title={playable ? t("recordings.play") : undefined}
         className="relative group shrink-0 disabled:cursor-default"
       >
-        <Poster icon={r.icon} seed={seed} className="h-12 w-[68px]" />
+        {/* Prefer a frame from the recording; the channel logo is the fallback
+            until the first frame has been grabbed. */}
+        <Poster icon={r.thumb || r.icon} seed={seed} className="h-12 w-[68px]" />
         {playable && (
           <span className="absolute inset-0 grid place-items-center rounded-md bg-black/45 opacity-0 transition-opacity group-hover:opacity-100">
             <svg className="h-5 w-5 text-white drop-shadow" viewBox="0 0 24 24" fill="currentColor">
@@ -111,7 +114,7 @@ function Row({ r, seed, now, onStop, onOpen, onRemove, onPlay }: RowProps) {
         )}
         <button
           title={t("recordings.remove")}
-          onClick={() => onRemove(r.id)}
+          onClick={() => onRemove(r)}
           className="h-7 w-7 grid place-items-center rounded-md hover:bg-destructive/30 text-muted-foreground"
         >
           <svg
@@ -149,6 +152,8 @@ export default function RecordingsView({
   const { t } = useTranslation();
   const stoppedCount = recordings.filter((r) => r.status !== "recording").length;
   const hasActive = recordings.some((r) => r.status === "recording");
+  // Deleting removes the file from disk, so it always goes through a confirm.
+  const [pendingDelete, setPendingDelete] = useState<RecordingItem | null>(null);
 
   // Tick every second so the elapsed time of active recordings advances.
   const [now, setNow] = useState(() => Date.now());
@@ -198,13 +203,44 @@ export default function RecordingsView({
                 now={now}
                 onStop={onStop}
                 onOpen={onOpen}
-                onRemove={onRemove}
+                onRemove={setPendingDelete}
                 onPlay={onPlay}
               />
             ))}
           </div>
         )}
       </div>
+
+      <Dialog open={pendingDelete !== null} onOpenChange={() => setPendingDelete(null)}>
+        <DialogHeader>
+          <DialogTitle>{t("recordings.confirmDeleteTitle")}</DialogTitle>
+        </DialogHeader>
+        <DialogBody>
+          <p className="text-xs text-muted-foreground">
+            {t(
+              pendingDelete?.status === "recording"
+                ? "recordings.confirmDeleteActive"
+                : "recordings.confirmDelete",
+              { name: pendingDelete?.name ?? "" },
+            )}
+          </p>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="ghost" size="sm" onClick={() => setPendingDelete(null)}>
+            {t("recordings.cancel")}
+          </Button>
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => {
+              if (pendingDelete) onRemove(pendingDelete.id);
+              setPendingDelete(null);
+            }}
+          >
+            {t("recordings.remove")}
+          </Button>
+        </DialogFooter>
+      </Dialog>
     </section>
   );
 }

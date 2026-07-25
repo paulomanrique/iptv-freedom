@@ -102,7 +102,11 @@
     "openFolder": "Mở thư mục",
     "remove": "Xóa",
     "clearStopped": "Xóa mục đã xong",
-    "startFailed": "Không thể bắt đầu ghi."
+    "startFailed": "Không thể bắt đầu ghi.",
+    "confirmDeleteTitle": "Xoá bản ghi?",
+    "confirmDelete": "“{{name}}” sẽ bị xoá vĩnh viễn khỏi ổ đĩa của bạn.",
+    "confirmDeleteActive": "“{{name}}” vẫn đang ghi. Bản ghi sẽ bị dừng và xoá vĩnh viễn khỏi ổ đĩa của bạn.",
+    "cancel": "Huỷ"
   },
   "status": {
     "account": {

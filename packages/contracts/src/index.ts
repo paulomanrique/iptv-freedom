@@ -87,6 +87,8 @@ export interface RecordingItem {
   id: string;
   name: string;
   icon: string | null;
+  /** Frame grabbed from the recording itself (loopback URL), once available. */
+  thumb: string | null;
   filePath: string;
   received: number;
   startedAt: number;

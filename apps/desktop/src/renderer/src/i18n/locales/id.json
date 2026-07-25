@@ -102,7 +102,11 @@
     "openFolder": "Buka folder",
     "remove": "Hapus",
     "clearStopped": "Hapus yang selesai",
-    "startFailed": "Tidak dapat memulai rekaman."
+    "startFailed": "Tidak dapat memulai rekaman.",
+    "confirmDeleteTitle": "Hapus rekaman?",
+    "confirmDelete": "“{{name}}” akan dihapus permanen dari disk Anda.",
+    "confirmDeleteActive": "“{{name}}” masih merekam. Rekaman akan dihentikan dan dihapus permanen dari disk Anda.",
+    "cancel": "Batal"
   },
   "status": {
     "account": {

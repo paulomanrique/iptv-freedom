@@ -61,6 +61,12 @@ function ensureServer(): Promise<Server> {
         serveRecording(rec[1], req, res);
         return;
       }
+      // Route: /thumb/<token>.jpg — frame grabbed from the recording.
+      const thumb = /^\/thumb\/([a-f0-9]+)\.jpg/.exec(req.url || "");
+      if (thumb) {
+        serveThumb(thumb[1], res);
+        return;
+      }
       // Route: /live/<token>.ts
       const m = /^\/live\/([a-f0-9]+)\.ts$/.exec(req.url || "");
       const session = m ? findByToken(m[1]) : undefined;
@@ -96,6 +102,29 @@ function ensureServer(): Promise<Server> {
 function findByToken(token: string): Session | undefined {
   for (const s of sessions.values()) if (s.token === token) return s;
   return undefined;
+}
+
+function serveThumb(token: string, res: ServerResponse): void {
+  const entry = recordings.find((r) => r.playToken === token);
+  if (!entry) {
+    res.writeHead(404).end();
+    return;
+  }
+  const file = thumbPath(entry.id);
+  let size: number;
+  try {
+    size = statSync(file).size;
+  } catch {
+    res.writeHead(404).end();
+    return;
+  }
+  res.writeHead(200, {
+    "Content-Type": "image/jpeg",
+    "Content-Length": size,
+    "Access-Control-Allow-Origin": "*",
+    "Cache-Control": "no-store",
+  });
+  createReadStream(file).pipe(res);
 }
 
 // Streams a finished recording from disk, honouring Range so the <video>
@@ -248,7 +277,12 @@ interface RecordingEntry extends RecordingItem {
   preroll: Buffer[] | null;
   prerollBytes: number;
   retried: boolean;
+  thumbBusy: boolean;
+  thumbVersion: number; // cache-buster so the renderer reloads a new frame
 }
+
+// Grab a first preview once this much has been written (a few seconds of video).
+const THUMB_AFTER_BYTES = 3 * 1024 * 1024;
 
 // Enough to replay after a bitstream-filter mismatch (which fails in ~30ms).
 const PREROLL_CAP = 4 * 1024 * 1024;
@@ -281,6 +315,8 @@ function publicList(): RecordingItem[] {
       preroll: _pr,
       prerollBytes: _pb,
       retried: _rt,
+      thumbBusy: _tb,
+      thumbVersion: _tv,
       ...rest
     }) => rest,
   );
@@ -327,6 +363,7 @@ export async function startRecording(item: {
     id: randomUUID(),
     name: item.name,
     icon: item.icon || null,
+    thumb: null,
     filePath,
     received: 0,
     startedAt: Date.now(),
@@ -343,6 +380,8 @@ export async function startRecording(item: {
     preroll: [],
     prerollBytes: 0,
     retried: false,
+    thumbBusy: false,
+    thumbVersion: 0,
   };
 
   const ok = spawnRemuxer(entry, true);
@@ -439,6 +478,8 @@ function feedRecording(entry: RecordingEntry, chunk: Buffer): void {
     }
   }
   entry.received += chunk.length;
+  // First preview once there is enough video to seek into.
+  if (!entry.thumb && entry.received >= THUMB_AFTER_BYTES) void generateThumb(entry);
   const now = Date.now();
   if (now - entry.lastT >= 500) {
     entry.speed = Math.round((entry.received - entry.lastR) / ((now - entry.lastT) / 1000));
@@ -453,6 +494,8 @@ function finalizeRecording(entry: RecordingEntry, status: "stopped" | "error"): 
   entry.speed = 0;
   entry.stdin = null;
   entry.preroll = null;
+  // Refresh the preview from the finished file (or grab a first one).
+  if (status === "stopped") void generateThumb(entry);
   const session = sessions.get(entry.sessionId);
   if (session && session.recordingId === entry.id) {
     session.recordingId = null;
@@ -460,6 +503,71 @@ function finalizeRecording(entry: RecordingEntry, status: "stopped" | "error"): 
   }
   emitProgress(entry);
   emitChanged();
+}
+
+const thumbDir = (): string => join(app.getPath("userData"), "thumbnails");
+const thumbPath = (id: string): string => join(thumbDir(), `${id}.jpg`);
+
+// Grabs a frame from the recording itself so the list shows the actual video
+// rather than the channel logo. Called once the file has some content and
+// again when the recording finishes (the later frame is more representative).
+async function generateThumb(entry: RecordingEntry): Promise<void> {
+  if (entry.thumbBusy) return;
+  entry.thumbBusy = true;
+  try {
+    await mkdir(thumbDir(), { recursive: true });
+    const out = thumbPath(entry.id);
+    // -ss before -i seeks cheaply; fall back to the first frame for short clips.
+    const grab = (seek: string | null): Promise<boolean> =>
+      new Promise((resolve) => {
+        const args = [
+          "-hide_banner",
+          "-loglevel",
+          "error",
+          "-y",
+          ...(seek ? ["-ss", seek] : []),
+          "-i",
+          entry.filePath,
+          "-frames:v",
+          "1",
+          "-vf",
+          "scale=320:-2",
+          "-f",
+          "image2",
+          out,
+        ];
+        let proc: ReturnType<typeof spawn>;
+        try {
+          proc = spawn(ffmpegPath(), args, { stdio: "ignore" });
+        } catch {
+          resolve(false);
+          return;
+        }
+        proc.on("error", () => resolve(false));
+        proc.on("close", (code) => {
+          let ok = code === 0;
+          if (ok) {
+            try {
+              ok = statSync(out).size > 0;
+            } catch {
+              ok = false;
+            }
+          }
+          resolve(ok);
+        });
+      });
+
+    const ok = (await grab("3")) || (await grab(null));
+    if (ok && server) {
+      entry.thumbVersion += 1;
+      entry.thumb = `http://127.0.0.1:${serverPort()}/thumb/${entry.playToken}.jpg?v=${entry.thumbVersion}`;
+      emitChanged();
+    }
+  } catch {
+    /* a missing thumbnail is not worth failing the recording over */
+  } finally {
+    entry.thumbBusy = false;
+  }
 }
 
 function find(id: string): RecordingEntry | undefined {
@@ -506,6 +614,11 @@ export async function remove(id: string): Promise<RecordingItem[]> {
     await unlink(e.filePath);
   } catch {
     /* the file may not exist */
+  }
+  try {
+    await unlink(thumbPath(e.id));
+  } catch {
+    /* no thumbnail was generated */
   }
   emitChanged();
   return publicList();

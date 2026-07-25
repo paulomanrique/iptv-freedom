@@ -103,7 +103,11 @@
     "openFolder": "Ouvrir le dossier",
     "remove": "Supprimer",
     "clearStopped": "Effacer les terminés",
-    "startFailed": "Impossible de démarrer l’enregistrement."
+    "startFailed": "Impossible de démarrer l’enregistrement.",
+    "confirmDeleteTitle": "Supprimer l'enregistrement ?",
+    "confirmDelete": "« {{name}} » sera définitivement supprimé de votre disque.",
+    "confirmDeleteActive": "« {{name}} » est encore en cours d'enregistrement. Il sera arrêté et définitivement supprimé de votre disque.",
+    "cancel": "Annuler"
   },
   "status": {
     "account": {

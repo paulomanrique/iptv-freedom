@@ -102,7 +102,11 @@
     "openFolder": "打开文件夹",
     "remove": "移除",
     "clearStopped": "清除已完成",
-    "startFailed": "无法开始录制。"
+    "startFailed": "无法开始录制。",
+    "confirmDeleteTitle": "删除录制内容？",
+    "confirmDelete": "“{{name}}”将从磁盘中永久删除。",
+    "confirmDeleteActive": "“{{name}}”仍在录制中。录制将停止并从磁盘中永久删除。",
+    "cancel": "取消"
   },
   "status": {
     "account": {

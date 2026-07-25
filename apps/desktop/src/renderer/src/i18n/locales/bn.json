@@ -103,7 +103,11 @@
     "openFolder": "ফোল্ডার খুলুন",
     "remove": "সরান",
     "clearStopped": "শেষ হওয়াগুলো মুছুন",
-    "startFailed": "রেকর্ডিং শুরু করা যায়নি।"
+    "startFailed": "রেকর্ডিং শুরু করা যায়নি।",
+    "confirmDeleteTitle": "রেকর্ডিং মুছবেন?",
+    "confirmDelete": "“{{name}}” আপনার ডিস্ক থেকে স্থায়ীভাবে মুছে যাবে।",
+    "confirmDeleteActive": "“{{name}}” এখনও রেকর্ড হচ্ছে। এটি বন্ধ করে ডিস্ক থেকে স্থায়ীভাবে মুছে ফেলা হবে।",
+    "cancel": "বাতিল"
   },
   "status": {
     "account": {

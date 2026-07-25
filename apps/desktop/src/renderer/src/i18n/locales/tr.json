@@ -103,7 +103,11 @@
     "openFolder": "Klasörü aç",
     "remove": "Kaldır",
     "clearStopped": "Tamamlananları sil",
-    "startFailed": "Kayıt başlatılamadı."
+    "startFailed": "Kayıt başlatılamadı.",
+    "confirmDeleteTitle": "Kayıt silinsin mi?",
+    "confirmDelete": "“{{name}}” diskinizden kalıcı olarak silinecek.",
+    "confirmDeleteActive": "“{{name}}” hâlâ kaydediliyor. Kayıt durdurulacak ve diskinizden kalıcı olarak silinecek.",
+    "cancel": "Vazgeç"
   },
   "status": {
     "account": {

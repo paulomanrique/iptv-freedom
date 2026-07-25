@@ -103,7 +103,11 @@
     "openFolder": "Ordner öffnen",
     "remove": "Entfernen",
     "clearStopped": "Fertige löschen",
-    "startFailed": "Aufnahme konnte nicht gestartet werden."
+    "startFailed": "Aufnahme konnte nicht gestartet werden.",
+    "confirmDeleteTitle": "Aufnahme löschen?",
+    "confirmDelete": "„{{name}}“ wird dauerhaft von deiner Festplatte gelöscht.",
+    "confirmDeleteActive": "„{{name}}“ wird noch aufgenommen. Die Aufnahme wird gestoppt und dauerhaft von deiner Festplatte gelöscht.",
+    "cancel": "Abbrechen"
   },
   "status": {
     "account": {
