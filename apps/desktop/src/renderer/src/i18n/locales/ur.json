@@ -4,6 +4,7 @@
     "live": "لائیو",
     "movies": "فلمیں",
     "series": "سیریز",
+    "recordings": "ریکارڈنگز",
     "downloads": "ڈاؤن لوڈز",
     "accounts": "اکاؤنٹس",
     "search": "تلاش"
@@ -92,6 +93,16 @@
     "queued": "+{{count}} قطار میں",
     "connectionLimit": "1 کنکشن (فراہم کنندہ کی حد)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} ریکارڈنگ",
+    "itemCount_other": "{{count}} ریکارڈنگز",
+    "empty": "ابھی کوئی ریکارڈنگ نہیں ہے۔ لائیو چینل کھولیں اور پلیئر میں REC دبائیں۔",
+    "stop": "ریکارڈنگ روکیں",
+    "openFolder": "فولڈر کھولیں",
+    "remove": "ہٹائیں",
+    "clearStopped": "مکمل شدہ صاف کریں",
+    "startFailed": "ریکارڈنگ شروع نہیں ہو سکی۔"
+  },
   "status": {
     "account": {
       "unknown": "نامعلوم",
@@ -105,11 +116,18 @@
       "done": "مکمل",
       "error": "خرابی",
       "canceled": "منسوخ"
+    },
+    "recording": {
+      "recording": "ریکارڈ ہو رہا ہے",
+      "stopped": "محفوظ ہو گیا",
+      "error": "خرابی"
     }
   },
   "player": {
     "onAir": "لائیو",
     "auto": "آٹو",
+    "record": "REC",
+    "stopRecording": "روکیں",
     "close": "بند کریں (Esc)",
     "cantPlay": "چلایا نہیں جا سکا",
     "oneConnHint": "1 کنکشن کی حد کے ساتھ، دیگر فعال اسٹریمز/ڈاؤن لوڈز بند کریں۔",
@@ -132,7 +150,7 @@
     "download": "ڈاؤن لوڈ",
     "addFav": "پسندیدہ میں شامل کریں",
     "removeFav": "پسندیدہ سے ہٹائیں",
-    "liveNoDownload": "لائیو مواد ڈاؤن لوڈ نہیں کیا جا سکتا۔",
+    "liveNoDownload": "لائیو چینلز ڈاؤن لوڈ نہیں کیے جا سکتے—پلیئر کھولیں اور ریکارڈ کرنے کے لیے REC دبائیں۔",
     "loadingEpisodes": "اقساط لوڈ ہو رہی ہیں…",
     "downloadSeason": "سیزن ڈاؤن لوڈ کریں ({{count}})",
     "downloadAll": "سب ڈاؤن لوڈ کریں ({{count}})",
@@ -144,7 +162,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} قطار میں شامل کر دیا گیا",
-    "activeUpdated": "فعال اکاؤنٹ اپ ڈیٹ ہو گیا"
+    "activeUpdated": "فعال اکاؤنٹ اپ ڈیٹ ہو گیا",
+    "recordingStarted": "● {{name}} ریکارڈ ہو رہا ہے"
   },
   "errors": {
     "authFailed": "غلط اسناد (تصدیق ناکام)۔"

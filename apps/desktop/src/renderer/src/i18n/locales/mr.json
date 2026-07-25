@@ -4,6 +4,7 @@
     "live": "थेट",
     "movies": "चित्रपट",
     "series": "मालिका",
+    "recordings": "रेकॉर्डिंग",
     "downloads": "डाउनलोड",
     "accounts": "खाती",
     "search": "शोध"
@@ -92,6 +93,16 @@
     "queued": "+{{count}} रांगेत",
     "connectionLimit": "1 कनेक्शन (पुरवठादाराची मर्यादा)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} रेकॉर्डिंग",
+    "itemCount_other": "{{count}} रेकॉर्डिंग",
+    "empty": "अद्याप कोणतेही रेकॉर्डिंग नाही. लाइव्ह चॅनेल उघडा आणि प्लेअरमध्ये REC दाबा.",
+    "stop": "रेकॉर्डिंग थांबवा",
+    "openFolder": "फोल्डर उघडा",
+    "remove": "काढा",
+    "clearStopped": "पूर्ण झालेली काढा",
+    "startFailed": "रेकॉर्डिंग सुरू करता आले नाही."
+  },
   "status": {
     "account": {
       "unknown": "अज्ञात",
@@ -105,11 +116,18 @@
       "done": "पूर्ण",
       "error": "त्रुटी",
       "canceled": "रद्द केले"
+    },
+    "recording": {
+      "recording": "रेकॉर्ड होत आहे",
+      "stopped": "जतन केले",
+      "error": "त्रुटी"
     }
   },
   "player": {
     "onAir": "थेट",
     "auto": "ऑटो",
+    "record": "REC",
+    "stopRecording": "थांबवा",
     "close": "बंद करा (Esc)",
     "cantPlay": "प्ले करता आले नाही",
     "oneConnHint": "1 कनेक्शनच्या मर्यादेसह, इतर सक्रिय स्ट्रीम/डाउनलोड बंद करा.",
@@ -132,7 +150,7 @@
     "download": "डाउनलोड",
     "addFav": "आवडत्यांमध्ये जोडा",
     "removeFav": "आवडत्यांमधून काढा",
-    "liveNoDownload": "थेट आशय डाउनलोड करता येत नाही.",
+    "liveNoDownload": "लाइव्ह चॅनेल डाउनलोड करता येत नाहीत—प्लेअर उघडा आणि रेकॉर्ड करण्यासाठी REC दाबा.",
     "loadingEpisodes": "भाग लोड होत आहेत…",
     "downloadSeason": "हंगाम डाउनलोड करा ({{count}})",
     "downloadAll": "सर्व डाउनलोड करा ({{count}})",
@@ -144,7 +162,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} रांगेत जोडले",
-    "activeUpdated": "सक्रिय खाते अद्यतनित केले"
+    "activeUpdated": "सक्रिय खाते अद्यतनित केले",
+    "recordingStarted": "● {{name}} रेकॉर्ड होत आहे"
   },
   "errors": {
     "authFailed": "अवैध क्रेडेन्शियल्स (प्रमाणीकरण अयशस्वी)."

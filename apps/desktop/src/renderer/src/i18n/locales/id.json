@@ -4,6 +4,7 @@
     "live": "Langsung",
     "movies": "Film",
     "series": "Serial",
+    "recordings": "Rekaman",
     "downloads": "Unduhan",
     "accounts": "Akun",
     "search": "Cari"
@@ -91,6 +92,16 @@
     "queued": "+{{count}} dalam antrean",
     "connectionLimit": "1 koneksi (batas penyedia)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} rekaman",
+    "itemCount_other": "{{count}} rekaman",
+    "empty": "Belum ada rekaman. Buka saluran langsung dan tekan REC di pemutar.",
+    "stop": "Hentikan rekaman",
+    "openFolder": "Buka folder",
+    "remove": "Hapus",
+    "clearStopped": "Hapus yang selesai",
+    "startFailed": "Tidak dapat memulai rekaman."
+  },
   "status": {
     "account": {
       "unknown": "Tidak diketahui",
@@ -104,11 +115,18 @@
       "done": "Selesai",
       "error": "Galat",
       "canceled": "Dibatalkan"
+    },
+    "recording": {
+      "recording": "Merekam",
+      "stopped": "Tersimpan",
+      "error": "Kesalahan"
     }
   },
   "player": {
     "onAir": "LANGSUNG",
     "auto": "Otomatis",
+    "record": "REC",
+    "stopRecording": "Hentikan",
     "close": "Tutup (Esc)",
     "cantPlay": "Tidak dapat memutar",
     "oneConnHint": "Dengan batas 1 koneksi, tutup streaming/unduhan aktif lainnya.",
@@ -131,7 +149,7 @@
     "download": "Unduh",
     "addFav": "Tambahkan ke favorit",
     "removeFav": "Hapus dari favorit",
-    "liveNoDownload": "Konten langsung tidak dapat diunduh.",
+    "liveNoDownload": "Saluran langsung tidak dapat diunduh—buka pemutar dan tekan REC untuk merekam.",
     "loadingEpisodes": "Memuat episode…",
     "downloadSeason": "Unduh musim ({{count}})",
     "downloadAll": "Unduh semua ({{count}})",
@@ -143,7 +161,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} ditambahkan ke antrean",
-    "activeUpdated": "Akun aktif diperbarui"
+    "activeUpdated": "Akun aktif diperbarui",
+    "recordingStarted": "● Merekam {{name}}"
   },
   "errors": {
     "authFailed": "Kredensial tidak valid (autentikasi gagal)."

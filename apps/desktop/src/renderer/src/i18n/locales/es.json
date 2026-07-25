@@ -4,6 +4,7 @@
     "live": "En vivo",
     "movies": "Películas",
     "series": "Series",
+    "recordings": "Grabaciones",
     "downloads": "Descargas",
     "accounts": "Cuentas",
     "search": "Búsqueda"
@@ -92,6 +93,16 @@
     "queued": "+{{count}} en cola",
     "connectionLimit": "1 conexión (límite del proveedor)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} grabación",
+    "itemCount_other": "{{count}} grabaciones",
+    "empty": "Aún no hay grabaciones. Abre un canal en vivo y pulsa REC en el reproductor.",
+    "stop": "Detener grabación",
+    "openFolder": "Abrir carpeta",
+    "remove": "Eliminar",
+    "clearStopped": "Borrar finalizadas",
+    "startFailed": "No se pudo iniciar la grabación."
+  },
   "status": {
     "account": {
       "unknown": "Desconocido",
@@ -105,11 +116,18 @@
       "done": "Completada",
       "error": "Error",
       "canceled": "Cancelada"
+    },
+    "recording": {
+      "recording": "Grabando",
+      "stopped": "Guardada",
+      "error": "Error"
     }
   },
   "player": {
     "onAir": "EN VIVO",
     "auto": "Auto",
+    "record": "REC",
+    "stopRecording": "Detener",
     "close": "Cerrar (Esc)",
     "cantPlay": "No se pudo reproducir",
     "oneConnHint": "Con el límite de 1 conexión, cierra otros streams/descargas activos.",
@@ -132,7 +150,7 @@
     "download": "Descargar",
     "addFav": "Añadir a favoritos",
     "removeFav": "Quitar de favoritos",
-    "liveNoDownload": "El contenido en vivo no se puede descargar.",
+    "liveNoDownload": "Los canales en vivo no se pueden descargar: abre el reproductor y pulsa REC para grabar.",
     "loadingEpisodes": "Cargando episodios…",
     "downloadSeason": "Descargar temporada ({{count}})",
     "downloadAll": "Descargar todo ({{count}})",
@@ -144,7 +162,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} añadido a la cola",
-    "activeUpdated": "Cuenta activa actualizada"
+    "activeUpdated": "Cuenta activa actualizada",
+    "recordingStarted": "● Grabando {{name}}"
   },
   "errors": {
     "authFailed": "Credenciales no válidas (falló la autenticación)."

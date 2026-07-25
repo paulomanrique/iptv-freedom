@@ -1,0 +1,403 @@
+// Live-channel session proxy + recorder.
+//
+// The main process owns a single upstream connection per live channel and tees
+// the MPEG-TS bytes to two kinds of sinks:
+//   1. the player, via a loopback HTTP server (mpegts.js plays a normal TS URL);
+//   2. an ffmpeg process that remuxes the stream to MP4 on disk (recording).
+//
+// Because playback and recording share the same upstream fetch, watching a
+// channel and recording it at the same time uses only ONE provider connection.
+// The upstream stays alive while any sink is attached, so a recording keeps
+// running after the player modal is closed.
+import { app, shell } from "electron";
+import { join } from "path";
+import { createServer, type Server, type ServerResponse } from "http";
+import { AddressInfo } from "net";
+import { unlink, mkdir } from "fs/promises";
+import { spawn, type ChildProcessByStdio } from "child_process";
+import { Readable, type Writable } from "stream";
+import { randomUUID, randomBytes } from "crypto";
+import { streamUrl } from "./xtream";
+import type { Account, RecordingItem, RecordingProgress } from "@iptv/contracts";
+
+type Sender = (channel: string, payload: unknown) => void;
+let send: Sender = () => {};
+export function setSender(fn: Sender): void {
+  send = fn;
+}
+
+// ---- ffmpeg binary resolution ----
+// Dev: the host binary from @ffmpeg-installer. Packaged: the arch-specific
+// binary the electron-builder afterPack hook copies into Resources.
+function ffmpegPath(): string {
+  if (app.isPackaged) {
+    return join(process.resourcesPath, process.platform === "win32" ? "ffmpeg.exe" : "ffmpeg");
+  }
+  // Lazy require so packaging without the dev dep never breaks.
+  return require("@ffmpeg-installer/ffmpeg").path as string;
+}
+
+// ---- Sessions ----
+interface Session {
+  id: string;
+  token: string; // path segment guarding the loopback route
+  controller: AbortController;
+  players: Set<ServerResponse>; // attached HTTP player clients
+  recordingId: string | null; // active recording bound to this session, if any
+  closed: boolean;
+}
+
+const sessions = new Map<string, Session>();
+let server: Server | null = null;
+
+function ensureServer(): Promise<Server> {
+  if (server) return Promise.resolve(server);
+  return new Promise((resolve, reject) => {
+    const s = createServer((req, res) => {
+      // Route: /live/<token>.ts
+      const m = /^\/live\/([a-f0-9]+)\.ts$/.exec(req.url || "");
+      const session = m ? findByToken(m[1]) : undefined;
+      if (!session || session.closed) {
+        res.writeHead(404).end();
+        return;
+      }
+      res.writeHead(200, {
+        "Content-Type": "video/mp2t",
+        "Cache-Control": "no-store",
+        Connection: "keep-alive",
+        // The renderer origin (vite dev server or file://) differs from this
+        // loopback origin, so mpegts.js needs CORS to read the stream.
+        "Access-Control-Allow-Origin": "*",
+      });
+      session.players.add(res);
+      const detach = (): void => {
+        session.players.delete(res);
+        maybeCloseSession(session);
+      };
+      res.on("close", detach);
+      res.on("error", detach);
+    });
+    s.on("error", reject);
+    // Bind to loopback only, ephemeral port.
+    s.listen(0, "127.0.0.1", () => {
+      server = s;
+      resolve(s);
+    });
+  });
+}
+
+function findByToken(token: string): Session | undefined {
+  for (const s of sessions.values()) if (s.token === token) return s;
+  return undefined;
+}
+
+function serverPort(): number {
+  return (server?.address() as AddressInfo | null)?.port ?? 0;
+}
+
+export async function openSession(
+  account: Account,
+  channelId: string | number,
+): Promise<{ url: string; sessionId: string }> {
+  await ensureServer();
+  const id = randomUUID();
+  const token = randomBytes(8).toString("hex");
+  const session: Session = {
+    id,
+    token,
+    controller: new AbortController(),
+    players: new Set(),
+    recordingId: null,
+    closed: false,
+  };
+  sessions.set(id, session);
+  // Start pumping upstream bytes into the session's sinks. Runs detached; the
+  // AbortController stops it when the last sink detaches.
+  pumpUpstream(session, streamUrl(account, "live", channelId, "ts")).catch(() => {
+    /* upstream errors are surfaced per-recording below and by the dead player socket */
+  });
+  return { url: `http://127.0.0.1:${serverPort()}/live/${token}.ts`, sessionId: id };
+}
+
+// Reads the upstream .ts once and fans out each chunk to every attached sink.
+async function pumpUpstream(session: Session, url: string): Promise<void> {
+  const res = await fetch(url, { signal: session.controller.signal, redirect: "follow" });
+  if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
+  const body = Readable.fromWeb(res.body as Parameters<typeof Readable.fromWeb>[0]);
+  body.on("data", (chunk: Buffer) => {
+    for (const client of [...session.players]) {
+      try {
+        client.write(chunk);
+      } catch {
+        session.players.delete(client);
+      }
+    }
+    const rec = session.recordingId ? recordings.find((r) => r.id === session.recordingId) : null;
+    if (rec) feedRecording(rec, chunk);
+  });
+  const finish = (err?: Error): void => {
+    for (const client of session.players) client.end();
+    session.players.clear();
+    const rec = session.recordingId ? recordings.find((r) => r.id === session.recordingId) : null;
+    if (rec && rec.status === "recording") {
+      // Flush ffmpeg so it writes the MP4 trailer; the proc 'close' handler
+      // finalizes the entry ("error" if we recorded an upstream failure).
+      if (err) rec.error = String(err.message || err);
+      try {
+        rec.stdin?.end();
+      } catch {
+        /* the proc 'close' handler finalizes */
+      }
+    }
+    maybeCloseSession(session);
+  };
+  body.on("end", () => finish());
+  body.on("error", (err: Error) => {
+    if (session.controller.signal.aborted) return; // intentional close
+    finish(err);
+  });
+}
+
+// Drops the session (and upstream) once nothing is attached to it.
+function maybeCloseSession(session: Session): void {
+  if (session.closed) return;
+  if (session.players.size > 0) return;
+  if (session.recordingId) return; // keep the upstream alive for the recording
+  session.closed = true;
+  session.controller.abort();
+  sessions.delete(session.id);
+}
+
+export function closeSession(sessionId: string): void {
+  const session = sessions.get(sessionId);
+  if (!session) return;
+  // Detach every player socket; a live recording keeps the upstream alive.
+  for (const res of session.players) {
+    try {
+      res.end();
+    } catch {
+      /* noop */
+    }
+  }
+  session.players.clear();
+  maybeCloseSession(session);
+}
+
+// ---- Recordings ----
+interface RecordingEntry extends RecordingItem {
+  sessionId: string;
+  proc: ChildProcessByStdio<Writable, null, Readable> | null;
+  stdin: Writable | null;
+  stderrTail: string;
+  lastT: number;
+  lastR: number;
+}
+
+const recordings: RecordingEntry[] = [];
+
+const destDir = (): string => join(app.getPath("downloads"), "IPTV Freedom", "Recordings");
+const sanitize = (name: string): string =>
+  String(name)
+    .replace(/[<>:"/\\|?* -]/g, "_")
+    .trim()
+    .slice(0, 150) || "recording";
+
+function stamp(): string {
+  const d = new Date();
+  const p = (n: number): string => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}-${p(d.getMinutes())}-${p(d.getSeconds())}`;
+}
+
+function publicList(): RecordingItem[] {
+  return recordings.map(
+    ({ sessionId: _s, proc: _p, stdin: _i, stderrTail: _e, lastT: _lt, lastR: _lr, ...rest }) =>
+      rest,
+  );
+}
+function emitChanged(): void {
+  send("recording:changed", publicList());
+}
+function emitProgress(e: RecordingEntry): void {
+  const progress: RecordingProgress = {
+    id: e.id,
+    received: e.received,
+    speed: e.speed,
+    duration: Date.now() - e.startedAt,
+    status: e.status,
+  };
+  send("recording:progress", progress);
+}
+
+export function list(): RecordingItem[] {
+  return publicList();
+}
+
+export async function startRecording(item: {
+  sessionId: string;
+  name: string;
+  icon?: string | null;
+}): Promise<{ id: string }> {
+  const session = sessions.get(item.sessionId);
+  if (!session || session.closed) throw new Error("session_closed");
+  if (session.recordingId) return { id: session.recordingId }; // already recording
+
+  await mkdir(destDir(), { recursive: true });
+  const filePath = join(destDir(), `${sanitize(item.name)} ${stamp()}.mp4`);
+
+  const entry: RecordingEntry = {
+    id: randomUUID(),
+    name: item.name,
+    icon: item.icon || null,
+    filePath,
+    received: 0,
+    startedAt: Date.now(),
+    status: "recording",
+    error: null,
+    sessionId: session.id,
+    proc: null,
+    stdin: null,
+    stderrTail: "",
+    lastT: Date.now(),
+    lastR: 0,
+    speed: 0,
+  };
+
+  // Remux the incoming TS to a crash-safe fragmented MP4 (no re-encode).
+  const args = [
+    "-hide_banner",
+    "-loglevel",
+    "error",
+    "-i",
+    "pipe:0",
+    "-c",
+    "copy",
+    "-movflags",
+    "frag_keyframe+empty_moov+default_base_moof",
+    "-f",
+    "mp4",
+    filePath,
+  ];
+  let proc: ChildProcessByStdio<Writable, null, Readable>;
+  try {
+    proc = spawn(ffmpegPath(), args, { stdio: ["pipe", "ignore", "pipe"] });
+  } catch (err) {
+    entry.status = "error";
+    entry.error = String((err as Error)?.message || err);
+    recordings.push(entry);
+    emitChanged();
+    return { id: entry.id };
+  }
+  entry.proc = proc;
+  entry.stdin = proc.stdin;
+  proc.stderr.on("data", (d: Buffer) => {
+    entry.stderrTail = (entry.stderrTail + d.toString()).slice(-2000);
+  });
+  proc.stdin.on("error", () => {
+    /* ffmpeg gone; handled by the exit listener */
+  });
+  proc.on("error", (err) => {
+    if (entry.status !== "recording") return;
+    entry.error = String(err.message || err);
+    finalizeRecording(entry, "error");
+  });
+  proc.on("close", (code) => {
+    if (entry.status !== "recording") return; // already finalized by stop/upstream
+    if (entry.error) {
+      finalizeRecording(entry, "error"); // upstream failure recorded before flush
+    } else if (code && code !== 0) {
+      entry.error = entry.stderrTail.trim() || `ffmpeg exited ${code}`;
+      finalizeRecording(entry, "error");
+    } else {
+      finalizeRecording(entry, "stopped");
+    }
+  });
+
+  recordings.push(entry);
+  session.recordingId = entry.id;
+  emitChanged();
+  return { id: entry.id };
+}
+
+// Writes an upstream chunk into the recording's ffmpeg stdin + tracks speed.
+function feedRecording(entry: RecordingEntry, chunk: Buffer): void {
+  if (entry.status !== "recording" || !entry.stdin) return;
+  entry.stdin.write(chunk);
+  entry.received += chunk.length;
+  const now = Date.now();
+  if (now - entry.lastT >= 500) {
+    entry.speed = Math.round((entry.received - entry.lastR) / ((now - entry.lastT) / 1000));
+    entry.lastT = now;
+    entry.lastR = entry.received;
+    emitProgress(entry);
+  }
+}
+
+function finalizeRecording(entry: RecordingEntry, status: "stopped" | "error"): void {
+  entry.status = status;
+  entry.speed = 0;
+  entry.stdin = null;
+  const session = sessions.get(entry.sessionId);
+  if (session && session.recordingId === entry.id) {
+    session.recordingId = null;
+    maybeCloseSession(session); // drop the upstream if the player is gone too
+  }
+  emitProgress(entry);
+  emitChanged();
+}
+
+function find(id: string): RecordingEntry | undefined {
+  return recordings.find((r) => r.id === id);
+}
+
+export function stopRecording(id: string): RecordingItem[] {
+  const e = find(id);
+  if (e && e.status === "recording") {
+    // Flush ffmpeg: ending stdin lets it write the final moof/mfra atoms.
+    try {
+      e.stdin?.end();
+    } catch {
+      /* the 'close' listener finalizes the entry */
+    }
+  }
+  return publicList();
+}
+
+export function openFolder(id: string): void {
+  const e = find(id);
+  if (e) shell.showItemInFolder(e.filePath);
+}
+
+export async function remove(id: string): Promise<RecordingItem[]> {
+  const e = find(id);
+  if (!e) return publicList();
+  if (e.status === "recording") {
+    e.status = "stopped";
+    try {
+      e.proc?.kill("SIGKILL");
+    } catch {
+      /* noop */
+    }
+    const session = sessions.get(e.sessionId);
+    if (session && session.recordingId === e.id) {
+      session.recordingId = null;
+      maybeCloseSession(session);
+    }
+  }
+  const idx = recordings.indexOf(e);
+  if (idx >= 0) recordings.splice(idx, 1);
+  try {
+    await unlink(e.filePath);
+  } catch {
+    /* the file may not exist */
+  }
+  emitChanged();
+  return publicList();
+}
+
+export function clearStopped(): RecordingItem[] {
+  for (let i = recordings.length - 1; i >= 0; i--) {
+    if (recordings[i].status !== "recording") recordings.splice(i, 1);
+  }
+  emitChanged();
+  return publicList();
+}

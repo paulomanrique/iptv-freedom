@@ -4,6 +4,7 @@
     "live": "直播",
     "movies": "电影",
     "series": "剧集",
+    "recordings": "录制内容",
     "downloads": "下载",
     "accounts": "账户",
     "search": "搜索"
@@ -91,6 +92,16 @@
     "queued": "+{{count}} 排队中",
     "connectionLimit": "1 个连接（服务商限制）"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} 个录制",
+    "itemCount_other": "{{count}} 个录制",
+    "empty": "暂无录制。打开直播频道，然后在播放器中按 REC。",
+    "stop": "停止录制",
+    "openFolder": "打开文件夹",
+    "remove": "移除",
+    "clearStopped": "清除已完成",
+    "startFailed": "无法开始录制。"
+  },
   "status": {
     "account": {
       "unknown": "未知",
@@ -104,11 +115,18 @@
       "done": "已完成",
       "error": "错误",
       "canceled": "已取消"
+    },
+    "recording": {
+      "recording": "正在录制",
+      "stopped": "已保存",
+      "error": "错误"
     }
   },
   "player": {
     "onAir": "直播中",
     "auto": "自动",
+    "record": "REC",
+    "stopRecording": "停止",
     "close": "关闭（Esc）",
     "cantPlay": "无法播放",
     "oneConnHint": "在仅 1 个连接的限制下，请关闭其他进行中的流/下载。",
@@ -131,7 +149,7 @@
     "download": "下载",
     "addFav": "加入收藏",
     "removeFav": "取消收藏",
-    "liveNoDownload": "直播内容无法下载。",
+    "liveNoDownload": "直播频道无法下载——请打开播放器并按 REC 进行录制。",
     "loadingEpisodes": "正在加载剧集…",
     "downloadSeason": "下载本季（{{count}}）",
     "downloadAll": "全部下载（{{count}}）",
@@ -143,7 +161,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ 已将 {{name}} 加入队列",
-    "activeUpdated": "已更新当前账户"
+    "activeUpdated": "已更新当前账户",
+    "recordingStarted": "● 正在录制 {{name}}"
   },
   "errors": {
     "authFailed": "凭据无效（验证失败）。"

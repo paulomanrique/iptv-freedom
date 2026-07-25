@@ -4,6 +4,7 @@
     "live": "Эфир",
     "movies": "Фильмы",
     "series": "Сериалы",
+    "recordings": "Записи",
     "downloads": "Загрузки",
     "accounts": "Аккаунты",
     "search": "Поиск"
@@ -94,6 +95,16 @@
     "queued": "+{{count}} в очереди",
     "connectionLimit": "1 подключение (лимит провайдера)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} запись",
+    "itemCount_other": "{{count}} записей",
+    "empty": "Записей пока нет. Откройте телеканал в прямом эфире и нажмите REC в плеере.",
+    "stop": "Остановить запись",
+    "openFolder": "Открыть папку",
+    "remove": "Удалить",
+    "clearStopped": "Удалить завершённые",
+    "startFailed": "Не удалось начать запись."
+  },
   "status": {
     "account": {
       "unknown": "Неизвестно",
@@ -107,11 +118,18 @@
       "done": "Завершено",
       "error": "Ошибка",
       "canceled": "Отменено"
+    },
+    "recording": {
+      "recording": "Идёт запись",
+      "stopped": "Сохранено",
+      "error": "Ошибка"
     }
   },
   "player": {
     "onAir": "В ЭФИРЕ",
     "auto": "Авто",
+    "record": "REC",
+    "stopRecording": "Стоп",
     "close": "Закрыть (Esc)",
     "cantPlay": "Не удалось воспроизвести",
     "oneConnHint": "При лимите в 1 подключение закройте другие активные потоки/загрузки.",
@@ -134,7 +152,7 @@
     "download": "Скачать",
     "addFav": "Добавить в избранное",
     "removeFav": "Убрать из избранного",
-    "liveNoDownload": "Прямой эфир нельзя скачать.",
+    "liveNoDownload": "Телеканалы в прямом эфире нельзя скачать — откройте плеер и нажмите REC для записи.",
     "loadingEpisodes": "Загрузка эпизодов…",
     "downloadSeason": "Скачать сезон ({{count}})",
     "downloadAll": "Скачать всё ({{count}})",
@@ -146,7 +164,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} добавлен в очередь",
-    "activeUpdated": "Активный аккаунт обновлён"
+    "activeUpdated": "Активный аккаунт обновлён",
+    "recordingStarted": "● Запись {{name}}"
   },
   "errors": {
     "authFailed": "Неверные учётные данные (ошибка авторизации)."

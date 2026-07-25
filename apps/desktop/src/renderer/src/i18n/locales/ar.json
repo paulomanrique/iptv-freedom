@@ -4,6 +4,7 @@
     "live": "مباشر",
     "movies": "أفلام",
     "series": "مسلسلات",
+    "recordings": "التسجيلات",
     "downloads": "التنزيلات",
     "accounts": "الحسابات",
     "search": "بحث"
@@ -96,6 +97,16 @@
     "queued": "+{{count}} في الانتظار",
     "connectionLimit": "اتصال واحد (حد المزوّد)"
   },
+  "recordings": {
+    "itemCount_one": "تسجيل واحد",
+    "itemCount_other": "{{count}} تسجيلات",
+    "empty": "لا توجد تسجيلات بعد. افتح قناة مباشرة واضغط REC في المشغّل.",
+    "stop": "إيقاف التسجيل",
+    "openFolder": "فتح المجلد",
+    "remove": "إزالة",
+    "clearStopped": "مسح المكتملة",
+    "startFailed": "تعذّر بدء التسجيل."
+  },
   "status": {
     "account": {
       "unknown": "غير معروف",
@@ -109,11 +120,18 @@
       "done": "اكتمل",
       "error": "خطأ",
       "canceled": "أُلغي"
+    },
+    "recording": {
+      "recording": "جارٍ التسجيل",
+      "stopped": "تم الحفظ",
+      "error": "خطأ"
     }
   },
   "player": {
     "onAir": "مباشر",
     "auto": "تلقائي",
+    "record": "REC",
+    "stopRecording": "إيقاف",
     "close": "إغلاق (Esc)",
     "cantPlay": "تعذّر التشغيل",
     "oneConnHint": "مع حد اتصال واحد، أغلِق البثوث/التنزيلات النشطة الأخرى.",
@@ -136,7 +154,7 @@
     "download": "تنزيل",
     "addFav": "إضافة إلى المفضلة",
     "removeFav": "إزالة من المفضلة",
-    "liveNoDownload": "لا يمكن تنزيل المحتوى المباشر.",
+    "liveNoDownload": "لا يمكن تنزيل القنوات المباشرة — افتح المشغّل واضغط REC للتسجيل.",
     "loadingEpisodes": "جارٍ تحميل الحلقات…",
     "downloadSeason": "تنزيل الموسم ({{count}})",
     "downloadAll": "تنزيل الكل ({{count}})",
@@ -148,7 +166,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ تمت إضافة {{name}} إلى الانتظار",
-    "activeUpdated": "تم تحديث الحساب النشط"
+    "activeUpdated": "تم تحديث الحساب النشط",
+    "recordingStarted": "● جارٍ تسجيل {{name}}"
   },
   "errors": {
     "authFailed": "بيانات اعتماد غير صالحة (فشل المصادقة)."

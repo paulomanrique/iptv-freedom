@@ -4,6 +4,7 @@
     "live": "Live",
     "movies": "Filme",
     "series": "Serien",
+    "recordings": "Aufnahmen",
     "downloads": "Downloads",
     "accounts": "Konten",
     "search": "Suche"
@@ -92,6 +93,16 @@
     "queued": "+{{count}} in Warteschlange",
     "connectionLimit": "1 Verbindung (Anbieterlimit)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} Aufnahme",
+    "itemCount_other": "{{count}} Aufnahmen",
+    "empty": "Noch keine Aufnahmen. Öffne einen Live-Sender und drücke im Player auf REC.",
+    "stop": "Aufnahme stoppen",
+    "openFolder": "Ordner öffnen",
+    "remove": "Entfernen",
+    "clearStopped": "Fertige löschen",
+    "startFailed": "Aufnahme konnte nicht gestartet werden."
+  },
   "status": {
     "account": {
       "unknown": "Unbekannt",
@@ -105,11 +116,18 @@
       "done": "Abgeschlossen",
       "error": "Fehler",
       "canceled": "Abgebrochen"
+    },
+    "recording": {
+      "recording": "Aufnahme läuft",
+      "stopped": "Gespeichert",
+      "error": "Fehler"
     }
   },
   "player": {
     "onAir": "LIVE",
     "auto": "Auto",
+    "record": "REC",
+    "stopRecording": "Stopp",
     "close": "Schließen (Esc)",
     "cantPlay": "Wiedergabe nicht möglich",
     "oneConnHint": "Bei einem Limit von 1 Verbindung andere aktive Streams/Downloads schließen.",
@@ -132,7 +150,7 @@
     "download": "Herunterladen",
     "addFav": "Zu Favoriten hinzufügen",
     "removeFav": "Aus Favoriten entfernen",
-    "liveNoDownload": "Live-Inhalte können nicht heruntergeladen werden.",
+    "liveNoDownload": "Live-Sender können nicht heruntergeladen werden – öffne den Player und drücke zum Aufnehmen auf REC.",
     "loadingEpisodes": "Folgen werden geladen…",
     "downloadSeason": "Staffel herunterladen ({{count}})",
     "downloadAll": "Alle herunterladen ({{count}})",
@@ -144,7 +162,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} zur Warteschlange hinzugefügt",
-    "activeUpdated": "Aktives Konto aktualisiert"
+    "activeUpdated": "Aktives Konto aktualisiert",
+    "recordingStarted": "● Aufnahme von {{name}}"
   },
   "errors": {
     "authFailed": "Ungültige Zugangsdaten (Authentifizierung fehlgeschlagen)."

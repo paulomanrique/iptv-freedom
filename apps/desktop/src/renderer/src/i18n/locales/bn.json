@@ -4,6 +4,7 @@
     "live": "লাইভ",
     "movies": "চলচ্চিত্র",
     "series": "সিরিজ",
+    "recordings": "রেকর্ডিং",
     "downloads": "ডাউনলোড",
     "accounts": "অ্যাকাউন্ট",
     "search": "অনুসন্ধান"
@@ -92,6 +93,16 @@
     "queued": "+{{count}} সারিতে",
     "connectionLimit": "১টি সংযোগ (প্রদানকারীর সীমা)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}}টি রেকর্ডিং",
+    "itemCount_other": "{{count}}টি রেকর্ডিং",
+    "empty": "এখনও কোনো রেকর্ডিং নেই। একটি লাইভ চ্যানেল খুলে প্লেয়ারে REC চাপুন।",
+    "stop": "রেকর্ডিং বন্ধ করুন",
+    "openFolder": "ফোল্ডার খুলুন",
+    "remove": "সরান",
+    "clearStopped": "শেষ হওয়াগুলো মুছুন",
+    "startFailed": "রেকর্ডিং শুরু করা যায়নি।"
+  },
   "status": {
     "account": {
       "unknown": "অজানা",
@@ -105,11 +116,18 @@
       "done": "সম্পন্ন",
       "error": "ত্রুটি",
       "canceled": "বাতিল"
+    },
+    "recording": {
+      "recording": "রেকর্ড হচ্ছে",
+      "stopped": "সংরক্ষিত",
+      "error": "ত্রুটি"
     }
   },
   "player": {
     "onAir": "লাইভ",
     "auto": "অটো",
+    "record": "REC",
+    "stopRecording": "বন্ধ করুন",
     "close": "বন্ধ করুন (Esc)",
     "cantPlay": "চালানো যায়নি",
     "oneConnHint": "১টি সংযোগের সীমায় অন্যান্য সক্রিয় স্ট্রিম/ডাউনলোড বন্ধ করুন।",
@@ -132,7 +150,7 @@
     "download": "ডাউনলোড",
     "addFav": "পছন্দে যোগ করুন",
     "removeFav": "পছন্দ থেকে সরান",
-    "liveNoDownload": "লাইভ কন্টেন্ট ডাউনলোড করা যায় না।",
+    "liveNoDownload": "লাইভ চ্যানেল ডাউনলোড করা যায় না—প্লেয়ার খুলে রেকর্ড করতে REC চাপুন।",
     "loadingEpisodes": "পর্ব লোড হচ্ছে…",
     "downloadSeason": "সিজন ডাউনলোড করুন ({{count}})",
     "downloadAll": "সব ডাউনলোড করুন ({{count}})",
@@ -144,7 +162,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} সারিতে যোগ করা হয়েছে",
-    "activeUpdated": "সক্রিয় অ্যাকাউন্ট আপডেট হয়েছে"
+    "activeUpdated": "সক্রিয় অ্যাকাউন্ট আপডেট হয়েছে",
+    "recordingStarted": "● {{name}} রেকর্ড হচ্ছে"
   },
   "errors": {
     "authFailed": "অবৈধ শংসাপত্র (প্রমাণীকরণ ব্যর্থ)।"

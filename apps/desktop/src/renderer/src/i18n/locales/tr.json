@@ -4,6 +4,7 @@
     "live": "Canlı",
     "movies": "Filmler",
     "series": "Diziler",
+    "recordings": "Kayıtlar",
     "downloads": "İndirilenler",
     "accounts": "Hesaplar",
     "search": "Arama"
@@ -92,6 +93,16 @@
     "queued": "+{{count}} sırada",
     "connectionLimit": "1 bağlantı (sağlayıcı sınırı)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} kayıt",
+    "itemCount_other": "{{count}} kayıt",
+    "empty": "Henüz kayıt yok. Bir canlı kanal açın ve oynatıcıda REC düğmesine basın.",
+    "stop": "Kaydı durdur",
+    "openFolder": "Klasörü aç",
+    "remove": "Kaldır",
+    "clearStopped": "Tamamlananları sil",
+    "startFailed": "Kayıt başlatılamadı."
+  },
   "status": {
     "account": {
       "unknown": "Bilinmiyor",
@@ -105,11 +116,18 @@
       "done": "Tamamlandı",
       "error": "Hata",
       "canceled": "İptal edildi"
+    },
+    "recording": {
+      "recording": "Kaydediliyor",
+      "stopped": "Kaydedildi",
+      "error": "Hata"
     }
   },
   "player": {
     "onAir": "CANLI",
     "auto": "Oto",
+    "record": "REC",
+    "stopRecording": "Durdur",
     "close": "Kapat (Esc)",
     "cantPlay": "Oynatılamadı",
     "oneConnHint": "1 bağlantı sınırıyla diğer etkin yayınları/indirmeleri kapatın.",
@@ -132,7 +150,7 @@
     "download": "İndir",
     "addFav": "Favorilere ekle",
     "removeFav": "Favorilerden çıkar",
-    "liveNoDownload": "Canlı içerik indirilemez.",
+    "liveNoDownload": "Canlı kanallar indirilemez—oynatıcıyı açın ve kaydetmek için REC düğmesine basın.",
     "loadingEpisodes": "Bölümler yükleniyor…",
     "downloadSeason": "Sezonu indir ({{count}})",
     "downloadAll": "Tümünü indir ({{count}})",
@@ -144,7 +162,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} sıraya eklendi",
-    "activeUpdated": "Etkin hesap güncellendi"
+    "activeUpdated": "Etkin hesap güncellendi",
+    "recordingStarted": "● {{name}} kaydediliyor"
   },
   "errors": {
     "authFailed": "Geçersiz kimlik bilgileri (kimlik doğrulama başarısız)."

@@ -4,6 +4,7 @@
     "live": "Live",
     "movies": "Movies",
     "series": "Series",
+    "recordings": "Recordings",
     "downloads": "Downloads",
     "accounts": "Accounts",
     "search": "Search"
@@ -97,6 +98,16 @@
     "connectionLimit": "1 download at a time",
     "connections": "1 download at a time · provider limit {{max}}"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} recording",
+    "itemCount_other": "{{count}} recordings",
+    "empty": "No recordings yet. Open a live channel and press REC in the player.",
+    "stop": "Stop recording",
+    "openFolder": "Open folder",
+    "remove": "Remove",
+    "clearStopped": "Clear finished",
+    "startFailed": "Could not start recording."
+  },
   "status": {
     "account": {
       "unknown": "Unknown",
@@ -110,11 +121,18 @@
       "done": "Completed",
       "error": "Error",
       "canceled": "Canceled"
+    },
+    "recording": {
+      "recording": "Recording",
+      "stopped": "Saved",
+      "error": "Error"
     }
   },
   "player": {
     "onAir": "LIVE",
     "auto": "Auto",
+    "record": "REC",
+    "stopRecording": "Stop",
     "close": "Close (Esc)",
     "cantPlay": "Could not play",
     "oneConnHint": "With a 1-connection limit, close other active streams/downloads.",
@@ -137,7 +155,7 @@
     "download": "Download",
     "addFav": "Add to favorites",
     "removeFav": "Remove from favorites",
-    "liveNoDownload": "Live content cannot be downloaded.",
+    "liveNoDownload": "Live channels can't be downloaded — open the player and press REC to record.",
     "loadingEpisodes": "Loading episodes…",
     "downloadSeason": "Download season ({{count}})",
     "downloadAll": "Download all ({{count}})",
@@ -149,7 +167,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} added to queue",
-    "activeUpdated": "Active account updated"
+    "activeUpdated": "Active account updated",
+    "recordingStarted": "● Recording {{name}}"
   },
   "errors": {
     "authFailed": "Invalid credentials (auth failed)."

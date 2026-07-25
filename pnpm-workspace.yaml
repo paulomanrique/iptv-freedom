@@ -8,11 +8,19 @@ blockExoticSubdeps: false
 allowBuilds:
   esbuild: true
   electron: true
+  "@ffmpeg-installer/darwin-arm64": true
+  "@ffmpeg-installer/darwin-x64": true
+  "@ffmpeg-installer/linux-arm64": true
+  "@ffmpeg-installer/linux-x64": true
 
 # Dependencies whose install/build scripts we trust to run.
 onlyBuiltDependencies:
   - esbuild
   - electron
+  - "@ffmpeg-installer/darwin-arm64"
+  - "@ffmpeg-installer/darwin-x64"
+  - "@ffmpeg-installer/linux-arm64"
+  - "@ffmpeg-installer/linux-x64"
 catalog:
   vite: npm:@voidzero-dev/vite-plus-core@0.2.6
   vite-plus: 0.2.6

@@ -4,6 +4,7 @@
     "live": "直播",
     "movies": "电影",
     "series": "连续剧",
+    "recordings": "录像",
     "downloads": "下载",
     "accounts": "账户",
     "search": "搜寻"
@@ -91,6 +92,16 @@
     "queued": "+{{count}} 排队里",
     "connectionLimit": "1 只连接（服务商限制）"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} 个录像",
+    "itemCount_other": "{{count}} 个录像",
+    "empty": "还没有录像。打开直播频道，然后在播放器里按 REC。",
+    "stop": "停止录像",
+    "openFolder": "打开文件夹",
+    "remove": "移除",
+    "clearStopped": "清除已完成",
+    "startFailed": "无法开始录像。"
+  },
   "status": {
     "account": {
       "unknown": "勿晓得",
@@ -104,11 +115,18 @@
       "done": "已完成",
       "error": "错误",
       "canceled": "已取消"
+    },
+    "recording": {
+      "recording": "正在录像",
+      "stopped": "已保存",
+      "error": "错误"
     }
   },
   "player": {
     "onAir": "直播当中",
     "auto": "自动",
+    "record": "REC",
+    "stopRecording": "停止",
     "close": "关闭（Esc）",
     "cantPlay": "播勿出",
     "oneConnHint": "只有 1 只连接个限制下头，请关脱其他勒辣个流/下载。",
@@ -131,7 +149,7 @@
     "download": "下载",
     "addFav": "加入收藏",
     "removeFav": "取消收藏",
-    "liveNoDownload": "直播内容下载勿了。",
+    "liveNoDownload": "直播频道不能下载——打开播放器并按 REC 录像。",
     "loadingEpisodes": "勒辣加载剧集…",
     "downloadSeason": "下载本季（{{count}}）",
     "downloadAll": "全部下载（{{count}}）",
@@ -143,7 +161,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} 加入队列哉",
-    "activeUpdated": "当前账户更新好哉"
+    "activeUpdated": "当前账户更新好哉",
+    "recordingStarted": "● 正在录像 {{name}}"
   },
   "errors": {
     "authFailed": "凭据勿对（验证失败）。"

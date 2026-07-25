@@ -4,6 +4,7 @@
     "live": "Ao vivo",
     "movies": "Filmes",
     "series": "Séries",
+    "recordings": "Gravações",
     "downloads": "Downloads",
     "accounts": "Contas",
     "search": "Busca"
@@ -97,6 +98,16 @@
     "connectionLimit": "1 download por vez",
     "connections": "1 download por vez · limite do provedor {{max}}"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} gravação",
+    "itemCount_other": "{{count}} gravações",
+    "empty": "Nenhuma gravação ainda. Abra um canal ao vivo e clique em REC no player.",
+    "stop": "Parar gravação",
+    "openFolder": "Abrir pasta",
+    "remove": "Remover",
+    "clearStopped": "Limpar finalizadas",
+    "startFailed": "Não foi possível iniciar a gravação."
+  },
   "status": {
     "account": {
       "unknown": "Desconhecido",
@@ -110,11 +121,18 @@
       "done": "Concluído",
       "error": "Erro",
       "canceled": "Cancelado"
+    },
+    "recording": {
+      "recording": "Gravando",
+      "stopped": "Salva",
+      "error": "Erro"
     }
   },
   "player": {
     "onAir": "AO VIVO",
     "auto": "Auto",
+    "record": "REC",
+    "stopRecording": "Parar",
     "close": "Fechar (Esc)",
     "cantPlay": "Não foi possível reproduzir",
     "oneConnHint": "Com limite de 1 conexão, feche outros streams/downloads ativos.",
@@ -137,7 +155,7 @@
     "download": "Baixar",
     "addFav": "Adicionar aos favoritos",
     "removeFav": "Remover dos favoritos",
-    "liveNoDownload": "Conteúdo ao vivo não pode ser baixado.",
+    "liveNoDownload": "Canais ao vivo não podem ser baixados — abra o player e clique em REC para gravar.",
     "loadingEpisodes": "Carregando episódios…",
     "downloadSeason": "Baixar temporada ({{count}})",
     "downloadAll": "Baixar tudo ({{count}})",
@@ -149,7 +167,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} adicionado à fila",
-    "activeUpdated": "Conta ativa atualizada"
+    "activeUpdated": "Conta ativa atualizada",
+    "recordingStarted": "● Gravando {{name}}"
   },
   "errors": {
     "authFailed": "Credenciais inválidas (auth falhou)."

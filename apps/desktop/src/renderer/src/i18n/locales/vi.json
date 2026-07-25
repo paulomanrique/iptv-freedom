@@ -4,6 +4,7 @@
     "live": "Trực tiếp",
     "movies": "Phim",
     "series": "Phim bộ",
+    "recordings": "Bản ghi",
     "downloads": "Tải xuống",
     "accounts": "Tài khoản",
     "search": "Tìm kiếm"
@@ -91,6 +92,16 @@
     "queued": "+{{count}} trong hàng đợi",
     "connectionLimit": "1 kết nối (giới hạn của nhà cung cấp)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} bản ghi",
+    "itemCount_other": "{{count}} bản ghi",
+    "empty": "Chưa có bản ghi. Hãy mở một kênh trực tiếp và nhấn REC trong trình phát.",
+    "stop": "Dừng ghi",
+    "openFolder": "Mở thư mục",
+    "remove": "Xóa",
+    "clearStopped": "Xóa mục đã xong",
+    "startFailed": "Không thể bắt đầu ghi."
+  },
   "status": {
     "account": {
       "unknown": "Không rõ",
@@ -104,11 +115,18 @@
       "done": "Hoàn tất",
       "error": "Lỗi",
       "canceled": "Đã hủy"
+    },
+    "recording": {
+      "recording": "Đang ghi",
+      "stopped": "Đã lưu",
+      "error": "Lỗi"
     }
   },
   "player": {
     "onAir": "TRỰC TIẾP",
     "auto": "Tự động",
+    "record": "REC",
+    "stopRecording": "Dừng",
     "close": "Đóng (Esc)",
     "cantPlay": "Không thể phát",
     "oneConnHint": "Với giới hạn 1 kết nối, hãy đóng các luồng/lượt tải khác đang chạy.",
@@ -131,7 +149,7 @@
     "download": "Tải",
     "addFav": "Thêm vào yêu thích",
     "removeFav": "Bỏ khỏi yêu thích",
-    "liveNoDownload": "Nội dung trực tiếp không thể tải xuống.",
+    "liveNoDownload": "Không thể tải kênh trực tiếp xuống—hãy mở trình phát và nhấn REC để ghi.",
     "loadingEpisodes": "Đang tải các tập…",
     "downloadSeason": "Tải mùa ({{count}})",
     "downloadAll": "Tải tất cả ({{count}})",
@@ -143,7 +161,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ Đã thêm {{name}} vào hàng đợi",
-    "activeUpdated": "Đã cập nhật tài khoản đang dùng"
+    "activeUpdated": "Đã cập nhật tài khoản đang dùng",
+    "recordingStarted": "● Đang ghi {{name}}"
   },
   "errors": {
     "authFailed": "Thông tin đăng nhập không hợp lệ (xác thực thất bại)."

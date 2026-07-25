@@ -6,6 +6,9 @@ import type {
   DownloadItem,
   DownloadProgress,
   Kind,
+  RecordingItem,
+  RecordingProgress,
+  RecordingStartItem,
   StreamType,
   WindowApi,
 } from "@iptv/contracts";
@@ -50,6 +53,29 @@ const api: WindowApi = {
       const fn = (_e: unknown, list: DownloadItem[]) => cb(list);
       ipcRenderer.on("download:changed", fn);
       return () => ipcRenderer.removeListener("download:changed", fn);
+    },
+  },
+  live: {
+    open: (account: Account, channelId: string | number) =>
+      ipcRenderer.invoke("live:open", account, channelId),
+    close: (sessionId: string) => ipcRenderer.invoke("live:close", sessionId),
+  },
+  recordings: {
+    list: () => ipcRenderer.invoke("recording:list"),
+    start: (item: RecordingStartItem) => ipcRenderer.invoke("recording:start", item),
+    stop: (id: string) => ipcRenderer.invoke("recording:stop", id),
+    openFolder: (id: string) => ipcRenderer.invoke("recording:openFolder", id),
+    remove: (id: string) => ipcRenderer.invoke("recording:remove", id),
+    clearStopped: () => ipcRenderer.invoke("recording:clearStopped"),
+    onProgress: (cb: (progress: RecordingProgress) => void) => {
+      const fn = (_e: unknown, p: RecordingProgress) => cb(p);
+      ipcRenderer.on("recording:progress", fn);
+      return () => ipcRenderer.removeListener("recording:progress", fn);
+    },
+    onChanged: (cb: (list: RecordingItem[]) => void) => {
+      const fn = (_e: unknown, list: RecordingItem[]) => cb(list);
+      ipcRenderer.on("recording:changed", fn);
+      return () => ipcRenderer.removeListener("recording:changed", fn);
     },
   },
 };

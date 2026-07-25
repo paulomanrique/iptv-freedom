@@ -4,6 +4,7 @@
     "live": "लाइव",
     "movies": "फ़िल्में",
     "series": "सीरीज़",
+    "recordings": "रिकॉर्डिंग",
     "downloads": "डाउनलोड",
     "accounts": "खाते",
     "search": "खोज"
@@ -92,6 +93,16 @@
     "queued": "+{{count}} कतार में",
     "connectionLimit": "1 कनेक्शन (प्रदाता की सीमा)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} रिकॉर्डिंग",
+    "itemCount_other": "{{count}} रिकॉर्डिंग",
+    "empty": "अभी कोई रिकॉर्डिंग नहीं है। कोई लाइव चैनल खोलें और प्लेयर में REC दबाएँ।",
+    "stop": "रिकॉर्डिंग रोकें",
+    "openFolder": "फ़ोल्डर खोलें",
+    "remove": "हटाएँ",
+    "clearStopped": "पूरी हुई हटाएँ",
+    "startFailed": "रिकॉर्डिंग शुरू नहीं हो सकी।"
+  },
   "status": {
     "account": {
       "unknown": "अज्ञात",
@@ -105,11 +116,18 @@
       "done": "पूर्ण",
       "error": "त्रुटि",
       "canceled": "रद्द किया गया"
+    },
+    "recording": {
+      "recording": "रिकॉर्ड हो रहा है",
+      "stopped": "सहेजा गया",
+      "error": "त्रुटि"
     }
   },
   "player": {
     "onAir": "लाइव",
     "auto": "ऑटो",
+    "record": "REC",
+    "stopRecording": "रोकें",
     "close": "बंद करें (Esc)",
     "cantPlay": "चलाया नहीं जा सका",
     "oneConnHint": "1 कनेक्शन की सीमा के साथ, अन्य सक्रिय स्ट्रीम/डाउनलोड बंद करें।",
@@ -132,7 +150,7 @@
     "download": "डाउनलोड",
     "addFav": "पसंदीदा में जोड़ें",
     "removeFav": "पसंदीदा से हटाएँ",
-    "liveNoDownload": "लाइव सामग्री डाउनलोड नहीं की जा सकती।",
+    "liveNoDownload": "लाइव चैनल डाउनलोड नहीं किए जा सकते—प्लेयर खोलें और रिकॉर्ड करने के लिए REC दबाएँ।",
     "loadingEpisodes": "एपिसोड लोड हो रहे हैं…",
     "downloadSeason": "सीज़न डाउनलोड करें ({{count}})",
     "downloadAll": "सभी डाउनलोड करें ({{count}})",
@@ -144,7 +162,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} कतार में जोड़ा गया",
-    "activeUpdated": "सक्रिय खाता अपडेट किया गया"
+    "activeUpdated": "सक्रिय खाता अपडेट किया गया",
+    "recordingStarted": "● {{name}} रिकॉर्ड हो रहा है"
   },
   "errors": {
     "authFailed": "अमान्य क्रेडेंशियल (प्रमाणीकरण विफल)।"

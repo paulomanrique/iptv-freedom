@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { Account, StreamType } from "@iptv/contracts";
+import type { Account, RecordingItem, StreamType } from "@iptv/contracts";
 import mpegts from "mpegts.js";
 
 // Pre-cache (buffer) presets for live playback via mpegts.js.
@@ -39,11 +39,16 @@ interface PlayerItem {
   id: string | number;
   ext?: string;
   name?: string;
+  icon?: string | null;
   live?: boolean;
 }
 interface PlayerModalProps {
   item: PlayerItem | Record<string, any> | null;
   onClose: () => void;
+  /** Live recordings list (to reflect the current channel's recording state). */
+  recordings: RecordingItem[];
+  /** Optional toast callback for recording feedback. */
+  notify?: (msg: string) => void;
 }
 interface PlayerStats {
   mbps: number;
@@ -51,7 +56,7 @@ interface PlayerStats {
   dropped: number;
 }
 
-export default function PlayerModal({ item, onClose }: PlayerModalProps) {
+export default function PlayerModal({ item, onClose, recordings, notify }: PlayerModalProps) {
   const { t } = useTranslation();
   const bufferLabel = (key: BufferPreset) => t(`player.buffer.${key}`);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -73,8 +78,34 @@ export default function PlayerModal({ item, onClose }: PlayerModalProps) {
         : "balanced";
   });
   const [notice, setNotice] = useState<string | null>(null);
+  const [playUrl, setPlayUrl] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [recordingId, setRecordingId] = useState<string | null>(null);
+  const sessionIdRef = useRef<string | null>(null);
 
   const isLive = item?.live || item?.type === "live" || item?.ext === "ts";
+
+  const activeRecording = recordingId ? recordings.find((r) => r.id === recordingId) || null : null;
+  const isRecording = activeRecording?.status === "recording";
+
+  const toggleRecording = async () => {
+    if (isRecording && recordingId) {
+      window.api.recordings.stop(recordingId);
+      return;
+    }
+    if (!sessionId) return;
+    try {
+      const { id } = await window.api.recordings.start({
+        sessionId,
+        name: item?.name || t("player.onAir"),
+        icon: item?.icon ?? null,
+      });
+      setRecordingId(id);
+      notify?.(t("toast.recordingStarted", { name: item?.name || "" }));
+    } catch {
+      notify?.(t("recordings.startFailed"));
+    }
+  };
 
   // Manual buffer selection (turns off automatic mode)
   const pickBuffer = (key: BufferPreset) => {
@@ -95,50 +126,37 @@ export default function PlayerModal({ item, onClose }: PlayerModalProps) {
     }
   };
 
+  // Acquire the stream URL. Live goes through the main-process session proxy
+  // (one upstream connection, shared with any recording); VOD uses the direct
+  // URL. Depends on `item` only — buffer changes must NOT reopen the session.
   useEffect(() => {
     if (!item) return;
-    let mpegtsPlayer: ReturnType<typeof mpegts.createPlayer> | null = null;
     let cancelled = false;
+    setPlayUrl(null);
     setStatus("loading");
     setError(null);
-    rebufferTimes.current = [];
+    setRecordingId(null);
 
-    async function start() {
+    async function acquire() {
       try {
-        const url = await window.api.xtream.streamUrl(
-          item!.account,
-          item!.type,
-          item!.id,
-          item!.ext,
-        );
-        if (cancelled) return;
-        const video = videoRef.current;
-        if (!video) return;
-
-        if (isLive && mpegts.isSupported()) {
-          const cfg = BUFFER_PRESETS[buffer] || BUFFER_PRESETS.balanced;
-          mpegtsPlayer = mpegts.createPlayer(
-            { type: "mpegts", isLive: true, url },
-            { lazyLoad: false, ...cfg },
-          );
-          mpegtsPlayer.attachMediaElement(video);
-          mpegtsPlayer.on(mpegts.Events.ERROR, (type, detail) => {
-            if (!cancelled) {
-              setError(`${type}: ${detail}`);
-              setStatus("error");
-            }
-          });
-          mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (info) => {
-            statsRef.current = info;
-          });
-          mpegtsPlayer.load();
-          video.play().catch(() => {});
+        if (isLive) {
+          const s = await window.api.live.open(item!.account, item!.id);
+          if (cancelled) {
+            window.api.live.close(s.sessionId);
+            return;
+          }
+          sessionIdRef.current = s.sessionId;
+          setSessionId(s.sessionId);
+          setPlayUrl(s.url);
         } else {
-          video.src = url;
-          video.play().catch(() => {});
+          const url = await window.api.xtream.streamUrl(
+            item!.account,
+            item!.type,
+            item!.id,
+            item!.ext,
+          );
+          if (!cancelled) setPlayUrl(url);
         }
-        loadStamp.current = Date.now();
-        if (!cancelled) setStatus("playing");
       } catch (e: unknown) {
         if (!cancelled) {
           setError(String(e instanceof Error ? e.message : e));
@@ -146,8 +164,61 @@ export default function PlayerModal({ item, onClose }: PlayerModalProps) {
         }
       }
     }
+    acquire();
 
-    start();
+    return () => {
+      cancelled = true;
+      const sid = sessionIdRef.current;
+      sessionIdRef.current = null;
+      setSessionId(null);
+      // Closing detaches this player; an in-progress recording keeps the
+      // upstream alive in the main process and continues in the background.
+      if (sid) window.api.live.close(sid);
+    };
+  }, [item]);
+
+  // Build the player from the resolved URL. Rebuilds on buffer change WITHOUT
+  // touching the live session, so changing the buffer never opens a 2nd
+  // connection (important while recording).
+  useEffect(() => {
+    if (!item || !playUrl) return;
+    let mpegtsPlayer: ReturnType<typeof mpegts.createPlayer> | null = null;
+    let cancelled = false;
+    rebufferTimes.current = [];
+    const video = videoRef.current;
+    if (!video) return;
+
+    try {
+      if (isLive && mpegts.isSupported()) {
+        const cfg = BUFFER_PRESETS[buffer] || BUFFER_PRESETS.balanced;
+        mpegtsPlayer = mpegts.createPlayer(
+          { type: "mpegts", isLive: true, url: playUrl },
+          { lazyLoad: false, ...cfg },
+        );
+        mpegtsPlayer.attachMediaElement(video);
+        mpegtsPlayer.on(mpegts.Events.ERROR, (type, detail) => {
+          if (!cancelled) {
+            setError(`${type}: ${detail}`);
+            setStatus("error");
+          }
+        });
+        mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (info) => {
+          statsRef.current = info;
+        });
+        mpegtsPlayer.load();
+        video.play().catch(() => {});
+      } else {
+        video.src = playUrl;
+        video.play().catch(() => {});
+      }
+      loadStamp.current = Date.now();
+      if (!cancelled) setStatus("playing");
+    } catch (e: unknown) {
+      if (!cancelled) {
+        setError(String(e instanceof Error ? e.message : e));
+        setStatus("error");
+      }
+    }
 
     return () => {
       cancelled = true;
@@ -169,7 +240,7 @@ export default function PlayerModal({ item, onClose }: PlayerModalProps) {
         }
       }
     };
-  }, [item, buffer]);
+  }, [item, playUrl, buffer]);
 
   // Close with ESC
   useEffect(() => {
@@ -347,6 +418,23 @@ export default function PlayerModal({ item, onClose }: PlayerModalProps) {
                 {item.name}
               </div>
             </div>
+            {isLive && (
+              <button
+                onClick={toggleRecording}
+                disabled={!isRecording && !sessionId}
+                title={isRecording ? t("player.stopRecording") : t("player.record")}
+                className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-semibold shrink-0 transition disabled:opacity-40 ${
+                  isRecording
+                    ? "bg-red-600 text-white"
+                    : "bg-black/40 backdrop-blur text-white/80 hover:text-white"
+                }`}
+              >
+                <span
+                  className={`h-2 w-2 rounded-full ${isRecording ? "bg-white animate-pulse" : "bg-red-500"}`}
+                />
+                {isRecording ? t("player.stopRecording") : t("player.record")}
+              </button>
+            )}
             {isLive && (
               <div
                 className="flex items-center gap-0.5 bg-black/40 backdrop-blur rounded-full p-0.5 shrink-0"

@@ -1,15 +1,25 @@
 import { useTranslation } from "react-i18next";
 import type { Account } from "@iptv/contracts";
 
-const SECTION_KEYS = ["favorites", "live", "movies", "series", "downloads", "accounts"];
+const SECTION_KEYS = [
+  "favorites",
+  "live",
+  "movies",
+  "series",
+  "recordings",
+  "downloads",
+  "accounts",
+];
 
 interface SidebarProps {
   view: string;
   onNavigate: (key: string) => void;
   account: Account | null;
+  /** Whether a live recording is currently in progress (shows a red dot). */
+  recordingActive?: boolean;
 }
 
-export default function Sidebar({ view, onNavigate, account }: SidebarProps) {
+export default function Sidebar({ view, onNavigate, account, recordingActive }: SidebarProps) {
   const { t } = useTranslation();
   const initials = account ? (account.name || account.host).slice(0, 2).toUpperCase() : "—";
 
@@ -57,6 +67,9 @@ export default function Sidebar({ view, onNavigate, account }: SidebarProps) {
             }`}
           >
             <span>{t(`nav.${key}`)}</span>
+            {key === "recordings" && recordingActive && (
+              <span className="h-1.5 w-1.5 rounded-full bg-destructive animate-pulse" />
+            )}
           </div>
         ))}
       </div>

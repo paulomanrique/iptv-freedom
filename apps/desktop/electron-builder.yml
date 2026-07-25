@@ -5,6 +5,10 @@ directories:
   output: dist
   buildResources: build
 
+# Bundles the arch-appropriate ffmpeg binary into Resources (used to remux live
+# recordings to MP4). See build/afterPack.cjs.
+afterPack: build/afterPack.cjs
+
 # A UI já é empacotada pelo electron-vite em out/. O main usa apenas módulos
 # nativos do Node/Electron, então não é preciso incluir node_modules.
 files:

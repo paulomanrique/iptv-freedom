@@ -7,12 +7,14 @@ import LanguageMenu from "./components/LanguageMenu";
 import LibraryView from "./components/LibraryView";
 import DownloadBar from "./components/DownloadBar";
 import DownloadsView from "./components/DownloadsView";
+import RecordingsView from "./components/RecordingsView";
 import PlayerModal from "./components/PlayerModal";
 import AccountsView from "./components/AccountsView";
 import AddAccountModal from "./components/AddAccountModal";
 import FavoritesView from "./components/FavoritesView";
 import SearchView from "./components/SearchView";
 import { useDownloads } from "./useDownloads";
+import { useRecordings } from "./useRecordings";
 import { useFavorites } from "./useFavorites";
 import { loadFavorites } from "./favorites";
 
@@ -40,6 +42,7 @@ export default function App() {
   const [activeMaxConn, setActiveMaxConn] = useState<number | null>(null);
 
   const dl = useDownloads();
+  const rec = useRecordings();
   const fav = useFavorites(activeId);
 
   const refreshAccounts = useCallback(async () => {
@@ -288,7 +291,12 @@ export default function App() {
 
       {/* Body */}
       <div className="flex min-h-0 flex-1">
-        <Sidebar view={mode} onNavigate={navigate} account={activeAccount} />
+        <Sidebar
+          view={mode}
+          onNavigate={navigate}
+          account={activeAccount}
+          recordingActive={rec.items.some((r) => r.status === "recording")}
+        />
 
         {mode === "favorites" &&
           (activeAccount ? (
@@ -377,6 +385,16 @@ export default function App() {
             onClearCompleted={dl.clearCompleted}
           />
         )}
+
+        {mode === "recordings" && (
+          <RecordingsView
+            recordings={rec.items}
+            onStop={rec.stop}
+            onOpen={rec.openFolder}
+            onRemove={rec.remove}
+            onClearStopped={rec.clearStopped}
+          />
+        )}
       </div>
 
       <DownloadBar
@@ -385,7 +403,12 @@ export default function App() {
         onOpen={() => navigate("downloads")}
       />
 
-      <PlayerModal item={player} onClose={() => setPlayer(null)} />
+      <PlayerModal
+        item={player}
+        onClose={() => setPlayer(null)}
+        recordings={rec.items}
+        notify={showToast}
+      />
       {accountModal && (
         <AddAccountModal
           account={accountModal.account}

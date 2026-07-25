@@ -4,6 +4,7 @@
     "live": "En direct",
     "movies": "Films",
     "series": "Séries",
+    "recordings": "Enregistrements",
     "downloads": "Téléchargements",
     "accounts": "Comptes",
     "search": "Recherche"
@@ -92,6 +93,16 @@
     "queued": "+{{count}} en file",
     "connectionLimit": "1 connexion (limite du fournisseur)"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} enregistrement",
+    "itemCount_other": "{{count}} enregistrements",
+    "empty": "Aucun enregistrement pour le moment. Ouvrez une chaîne en direct et appuyez sur REC dans le lecteur.",
+    "stop": "Arrêter l’enregistrement",
+    "openFolder": "Ouvrir le dossier",
+    "remove": "Supprimer",
+    "clearStopped": "Effacer les terminés",
+    "startFailed": "Impossible de démarrer l’enregistrement."
+  },
   "status": {
     "account": {
       "unknown": "Inconnu",
@@ -105,11 +116,18 @@
       "done": "Terminé",
       "error": "Erreur",
       "canceled": "Annulé"
+    },
+    "recording": {
+      "recording": "Enregistrement",
+      "stopped": "Enregistré",
+      "error": "Erreur"
     }
   },
   "player": {
     "onAir": "EN DIRECT",
     "auto": "Auto",
+    "record": "REC",
+    "stopRecording": "Arrêter",
     "close": "Fermer (Échap)",
     "cantPlay": "Lecture impossible",
     "oneConnHint": "Avec une limite d’1 connexion, fermez les autres streams/téléchargements actifs.",
@@ -132,7 +150,7 @@
     "download": "Télécharger",
     "addFav": "Ajouter aux favoris",
     "removeFav": "Retirer des favoris",
-    "liveNoDownload": "Le contenu en direct ne peut pas être téléchargé.",
+    "liveNoDownload": "Les chaînes en direct ne peuvent pas être téléchargées — ouvrez le lecteur et appuyez sur REC pour enregistrer.",
     "loadingEpisodes": "Chargement des épisodes…",
     "downloadSeason": "Télécharger la saison ({{count}})",
     "downloadAll": "Tout télécharger ({{count}})",
@@ -144,7 +162,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} ajouté à la file",
-    "activeUpdated": "Compte actif mis à jour"
+    "activeUpdated": "Compte actif mis à jour",
+    "recordingStarted": "● Enregistrement de {{name}}"
   },
   "errors": {
     "authFailed": "Identifiants invalides (échec de l’authentification)."

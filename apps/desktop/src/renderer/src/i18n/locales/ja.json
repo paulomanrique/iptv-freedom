@@ -4,6 +4,7 @@
     "live": "ライブ",
     "movies": "映画",
     "series": "シリーズ",
+    "recordings": "録画",
     "downloads": "ダウンロード",
     "accounts": "アカウント",
     "search": "検索"
@@ -91,6 +92,16 @@
     "queued": "+{{count}} 待機中",
     "connectionLimit": "1 接続（プロバイダーの制限）"
   },
+  "recordings": {
+    "itemCount_one": "{{count}} 件の録画",
+    "itemCount_other": "{{count}} 件の録画",
+    "empty": "録画はまだありません。ライブチャンネルを開き、プレーヤーで REC を押してください。",
+    "stop": "録画を停止",
+    "openFolder": "フォルダーを開く",
+    "remove": "削除",
+    "clearStopped": "完了分を消去",
+    "startFailed": "録画を開始できませんでした。"
+  },
   "status": {
     "account": {
       "unknown": "不明",
@@ -104,11 +115,18 @@
       "done": "完了",
       "error": "エラー",
       "canceled": "キャンセル"
+    },
+    "recording": {
+      "recording": "録画中",
+      "stopped": "保存済み",
+      "error": "エラー"
     }
   },
   "player": {
     "onAir": "ライブ配信中",
     "auto": "自動",
+    "record": "REC",
+    "stopRecording": "停止",
     "close": "閉じる（Esc）",
     "cantPlay": "再生できませんでした",
     "oneConnHint": "1 接続の制限があるため、他のアクティブなストリーム/ダウンロードを閉じてください。",
@@ -131,7 +149,7 @@
     "download": "ダウンロード",
     "addFav": "お気に入りに追加",
     "removeFav": "お気に入りから削除",
-    "liveNoDownload": "ライブ配信はダウンロードできません。",
+    "liveNoDownload": "ライブチャンネルはダウンロードできません。プレーヤーを開き、REC を押して録画してください。",
     "loadingEpisodes": "エピソードを読み込み中…",
     "downloadSeason": "シーズンをダウンロード（{{count}}）",
     "downloadAll": "すべてダウンロード（{{count}}）",
@@ -143,7 +161,8 @@
   },
   "toast": {
     "addedToQueue": "⬇︎ {{name}} をキューに追加しました",
-    "activeUpdated": "アクティブなアカウントを更新しました"
+    "activeUpdated": "アクティブなアカウントを更新しました",
+    "recordingStarted": "● {{name}} を録画中"
   },
   "errors": {
     "authFailed": "認証情報が無効です（認証に失敗しました）。"

@@ -3,6 +3,7 @@ import { join } from "path";
 import * as accountsStore from "./accounts";
 import * as xtream from "./xtream";
 import * as downloads from "./downloads";
+import * as live from "./live";
 import type { Account, AccountInput, Kind, StreamType } from "@iptv/contracts";
 
 let mainWindow: BrowserWindow | null = null;
@@ -35,8 +36,9 @@ function createWindow(): void {
 
   mainWindow.on("ready-to-show", () => mainWindow?.show());
 
-  // Forward download events to the renderer.
+  // Forward download + recording events to the renderer.
   downloads.setSender((channel, payload) => mainWindow?.webContents.send(channel, payload));
+  live.setSender((channel, payload) => mainWindow?.webContents.send(channel, payload));
 
   // Open external links in the default browser, never inside the app.
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
@@ -107,6 +109,18 @@ ipcMain.handle("download:resume", (_e, id: string) => downloads.resume(id));
 ipcMain.handle("download:cancel", (_e, id: string) => downloads.cancel(id));
 ipcMain.handle("download:openFolder", (_e, id: string) => downloads.openFolder(id));
 ipcMain.handle("download:clearCompleted", () => downloads.clearCompleted());
+
+// ---- Live sessions + recordings ----
+ipcMain.handle("live:open", (_e, account: Account, channelId: string | number) =>
+  live.openSession(account, channelId),
+);
+ipcMain.handle("live:close", (_e, sessionId: string) => live.closeSession(sessionId));
+ipcMain.handle("recording:list", () => live.list());
+ipcMain.handle("recording:start", (_e, item) => live.startRecording(item));
+ipcMain.handle("recording:stop", (_e, id: string) => live.stopRecording(id));
+ipcMain.handle("recording:openFolder", (_e, id: string) => live.openFolder(id));
+ipcMain.handle("recording:remove", (_e, id: string) => live.remove(id));
+ipcMain.handle("recording:clearStopped", () => live.clearStopped());
 
 app.whenReady().then(() => {
   createWindow();

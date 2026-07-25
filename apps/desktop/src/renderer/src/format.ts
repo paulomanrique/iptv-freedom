@@ -34,3 +34,17 @@ export function statusLabel(userInfo?: XtreamUserInfo): { label: string; ok: boo
 const DL_STATUSES = new Set(["queued", "downloading", "paused", "done", "error", "canceled"]);
 export const downloadLabel = (s: string): string =>
   DL_STATUSES.has(s) ? i18n.t(`status.download.${s}`) : s;
+
+const REC_STATUSES = new Set(["recording", "stopped", "error"]);
+export const recordingLabel = (s: string): string =>
+  REC_STATUSES.has(s) ? i18n.t(`status.recording.${s}`) : s;
+
+// Elapsed time in ms -> H:MM:SS (or M:SS under an hour).
+export function formatDuration(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const pad = (n: number): string => String(n).padStart(2, "0");
+  return h > 0 ? `${h}:${pad(m)}:${pad(s)}` : `${m}:${pad(s)}`;
+}

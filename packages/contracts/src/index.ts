@@ -80,6 +80,42 @@ export interface DownloadProgress {
   status: DownloadStatus;
 }
 
+export type RecordingStatus = "recording" | "stopped" | "error";
+
+/** A live-channel recording (unbounded — no total/percentage). */
+export interface RecordingItem {
+  id: string;
+  name: string;
+  icon: string | null;
+  filePath: string;
+  received: number;
+  startedAt: number;
+  status: RecordingStatus;
+  speed: number;
+  error: string | null;
+}
+
+export interface RecordingProgress {
+  id: string;
+  received: number;
+  speed: number;
+  duration: number;
+  status: RecordingStatus;
+}
+
+/** Handle returned when opening a live playback session in the main process. */
+export interface LiveSession {
+  url: string;
+  sessionId: string;
+}
+
+/** Item passed to recordings.start from the renderer. */
+export interface RecordingStartItem {
+  sessionId: string;
+  name: string;
+  icon?: string | null;
+}
+
 /** Item passed to downloads.add from the renderer. */
 export interface DownloadAddItem {
   id: string | number;
@@ -127,6 +163,20 @@ export interface WindowApi {
     clearCompleted: () => Promise<DownloadItem[]>;
     onProgress: (cb: (progress: DownloadProgress) => void) => () => void;
     onChanged: (cb: (list: DownloadItem[]) => void) => () => void;
+  };
+  live: {
+    open: (account: Account, channelId: string | number) => Promise<LiveSession>;
+    close: (sessionId: string) => Promise<void>;
+  };
+  recordings: {
+    list: () => Promise<RecordingItem[]>;
+    start: (item: RecordingStartItem) => Promise<{ id: string }>;
+    stop: (id: string) => Promise<RecordingItem[]>;
+    openFolder: (id: string) => Promise<void>;
+    remove: (id: string) => Promise<RecordingItem[]>;
+    clearStopped: () => Promise<RecordingItem[]>;
+    onProgress: (cb: (progress: RecordingProgress) => void) => () => void;
+    onChanged: (cb: (list: RecordingItem[]) => void) => () => void;
   };
 }
 
