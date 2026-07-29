@@ -91,3 +91,5 @@ jobs:
           files: artifacts/**/*
           generate_release_notes: true
           fail_on_unmatched_files: false
+          # Pre-release tags contain a hyphen (e.g. v0.2.0-rc.1); clean vX.Y.Z tags are full releases.
+          prerelease: ${{ contains(github.ref_name, '-') }}
