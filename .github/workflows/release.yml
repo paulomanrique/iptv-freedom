@@ -49,6 +49,10 @@ jobs:
       - name: Build renderer/main/preload
         run: pnpm --filter desktop build
 
+      - name: Install Linux packaging tools (rpm)
+        if: matrix.platform == 'linux'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends rpm
+
       - name: Package installers (x64 + arm64)
         working-directory: apps/desktop
         env:
@@ -66,6 +70,7 @@ jobs:
             apps/desktop/dist/*.zip
             apps/desktop/dist/*.AppImage
             apps/desktop/dist/*.deb
+            apps/desktop/dist/*.rpm
           if-no-files-found: ignore
           retention-days: 5
 

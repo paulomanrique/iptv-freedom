@@ -9,8 +9,8 @@ directories:
 # recordings to MP4). See build/afterPack.cjs.
 afterPack: build/afterPack.cjs
 
-# A UI já é empacotada pelo electron-vite em out/. O main usa apenas módulos
-# nativos do Node/Electron, então não é preciso incluir node_modules.
+# The UI is already bundled by electron-vite into out/. The main process uses
+# only native Node/Electron modules, so node_modules does not need to be included.
 files:
   - out/**
   - package.json
@@ -38,11 +38,20 @@ mac:
   artifactName: IPTV-Freedom-${version}-mac-${arch}.${ext}
 
 linux:
+  maintainer: Paulo Manrique <paulo.manrique@pm.me>
+  category: AudioVideo
+  synopsis: Desktop IPTV client for Xtream Codes providers
   target:
     - target: AppImage
       arch:
         - x64
         - arm64
-  category: AudioVideo
-  synopsis: Desktop IPTV client for Xtream Codes providers
+    - target: deb
+      arch:
+        - x64
+        - arm64
+    - target: rpm
+      arch:
+        - x64
+        - arm64
   artifactName: IPTV-Freedom-${version}-linux-${arch}.${ext}
