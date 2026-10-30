@@ -157,6 +157,20 @@
       "low": "Baixa latência",
       "balanced": "Equilibrado",
       "high": "Mais buffer"
+    },
+    "retry": "Tentar novamente",
+    "copyError": "Copiar erro",
+    "copied": "Copiado",
+    "copyFailed": "Não foi possível copiar o erro.",
+    "failures": {
+      "http": "O provedor rejeitou a solicitação do canal.",
+      "network": "Não foi possível receber o vídeo. Verifique a conexão e o provedor.",
+      "timeout": "O provedor não enviou dados por 20 segundos.",
+      "ended": "O provedor encerrou a transmissão ao vivo.",
+      "playbackTimeout": "A reprodução não avançou por 20 segundos. O canal pode estar indisponível ou usar um codec incompatível.",
+      "aborted": "A reprodução foi interrompida.",
+      "decode": "Não foi possível decodificar o vídeo. O canal pode estar corrompido ou usar um codec incompatível.",
+      "unsupported": "O formato ou codec do vídeo não é compatível."
     }
   },
   "previews": {

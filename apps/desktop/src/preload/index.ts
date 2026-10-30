@@ -59,6 +59,7 @@ const api: WindowApi = {
     open: (account: Account, channelId: string | number) =>
       ipcRenderer.invoke("live:open", account, channelId),
     close: (sessionId: string) => ipcRenderer.invoke("live:close", sessionId),
+    failure: (sessionId: string) => ipcRenderer.invoke("live:failure", sessionId),
   },
   recordings: {
     list: () => ipcRenderer.invoke("recording:list"),

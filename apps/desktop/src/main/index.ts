@@ -115,6 +115,7 @@ ipcMain.handle("live:open", (_e, account: Account, channelId: string | number) =
   live.openSession(account, channelId),
 );
 ipcMain.handle("live:close", (_e, sessionId: string) => live.closeSession(sessionId));
+ipcMain.handle("live:failure", (_e, sessionId: string) => live.sessionFailure(sessionId));
 ipcMain.handle("recording:list", () => live.list());
 ipcMain.handle("recording:start", (_e, item) => live.startRecording(item));
 ipcMain.handle("recording:stop", (_e, id: string) => live.stopRecording(id));

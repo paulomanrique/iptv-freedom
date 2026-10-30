@@ -157,6 +157,20 @@
       "low": "Low latency",
       "balanced": "Balanced",
       "high": "More buffer"
+    },
+    "retry": "Try again",
+    "copyError": "Copy error",
+    "copied": "Copied",
+    "copyFailed": "Could not copy the error.",
+    "failures": {
+      "http": "The provider rejected the stream request.",
+      "network": "Could not receive the stream. Check the connection and provider.",
+      "timeout": "The provider sent no data for 20 seconds.",
+      "ended": "The provider ended the live stream.",
+      "playbackTimeout": "Playback did not advance for 20 seconds. The stream may be unavailable or use an unsupported codec.",
+      "aborted": "Playback was interrupted.",
+      "decode": "The video could not be decoded. The stream may be damaged or use an unsupported codec.",
+      "unsupported": "The stream format or codec is not supported."
     }
   },
   "previews": {

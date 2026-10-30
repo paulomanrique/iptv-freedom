@@ -111,6 +111,11 @@ export interface LiveSession {
   sessionId: string;
 }
 
+export interface LiveSessionFailure {
+  code: "http" | "network" | "timeout" | "ended";
+  detail?: string;
+}
+
 /** Item passed to recordings.start from the renderer. */
 export interface RecordingStartItem {
   sessionId: string;
@@ -169,6 +174,7 @@ export interface WindowApi {
   live: {
     open: (account: Account, channelId: string | number) => Promise<LiveSession>;
     close: (sessionId: string) => Promise<void>;
+    failure: (sessionId: string) => Promise<LiveSessionFailure | null>;
   };
   recordings: {
     list: () => Promise<RecordingItem[]>;

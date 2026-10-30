@@ -19,7 +19,12 @@ import { spawn, type ChildProcessByStdio } from "child_process";
 import { Readable, type Writable } from "stream";
 import { randomUUID, randomBytes } from "crypto";
 import { streamUrl } from "./xtream";
-import type { Account, RecordingItem, RecordingProgress } from "@iptv/contracts";
+import type {
+  Account,
+  LiveSessionFailure,
+  RecordingItem,
+  RecordingProgress,
+} from "@iptv/contracts";
 
 type Sender = (channel: string, payload: unknown) => void;
 let send: Sender = () => {};
@@ -46,6 +51,8 @@ interface Session {
   players: Set<ServerResponse>; // attached HTTP player clients
   recordingId: string | null; // active recording bound to this session, if any
   closed: boolean;
+  failure: LiveSessionFailure | null;
+  released: boolean;
 }
 
 const sessions = new Map<string, Session>();
@@ -70,8 +77,8 @@ function ensureServer(): Promise<Server> {
       // Route: /live/<token>.ts
       const m = /^\/live\/([a-f0-9]+)\.ts$/.exec(req.url || "");
       const session = m ? findByToken(m[1]) : undefined;
-      if (!session || session.closed) {
-        res.writeHead(404).end();
+      if (!session || session.closed || session.failure) {
+        res.writeHead(session?.failure ? 502 : 404, { "Access-Control-Allow-Origin": "*" }).end();
         return;
       }
       res.writeHead(200, {
@@ -186,59 +193,90 @@ export async function openSession(
     players: new Set(),
     recordingId: null,
     closed: false,
+    failure: null,
+    released: false,
   };
   sessions.set(id, session);
   // Start pumping upstream bytes into the session's sinks. Runs detached; the
   // AbortController stops it when the last sink detaches.
-  pumpUpstream(session, streamUrl(account, "live", channelId, "ts")).catch(() => {
-    /* upstream errors are surfaced per-recording below and by the dead player socket */
-  });
+  void pumpUpstream(session, streamUrl(account, "live", channelId, "ts"));
   return { url: `http://127.0.0.1:${serverPort()}/live/${token}.ts`, sessionId: id };
 }
 
 // Reads the upstream .ts once and fans out each chunk to every attached sink.
 async function pumpUpstream(session: Session, url: string): Promise<void> {
-  const res = await fetch(url, { signal: session.controller.signal, redirect: "follow" });
-  if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
-  const body = Readable.fromWeb(res.body as Parameters<typeof Readable.fromWeb>[0]);
-  body.on("data", (chunk: Buffer) => {
-    // Deleting the current entry while iterating a Set is safe in JS.
-    for (const client of session.players) {
-      try {
-        client.write(chunk);
-      } catch {
-        session.players.delete(client);
-      }
+  // Bound both connection setup and gaps between chunks. Never retain provider
+  // URLs or fetch messages: Xtream URLs contain account credentials.
+  let timedOut = false;
+  const onTimeout = (): void => {
+    timedOut = true;
+    session.controller.abort();
+  };
+  let timer = setTimeout(onTimeout, 20000);
+  try {
+    const res = await fetch(url, { signal: session.controller.signal, redirect: "follow" });
+    if (!res.ok || !res.body) {
+      session.failure = { code: "http", detail: `HTTP ${res.status}` };
+      await res.body?.cancel();
+      return;
     }
-    const rec = session.recordingId ? recordings.find((r) => r.id === session.recordingId) : null;
-    if (rec) feedRecording(rec, chunk);
-  });
-  const finish = (err?: Error): void => {
+    const body = Readable.fromWeb(res.body as Parameters<typeof Readable.fromWeb>[0]);
+    for await (const chunk of body) {
+      clearTimeout(timer);
+      timer = setTimeout(onTimeout, 20000);
+      // Deleting the current entry while iterating a Set is safe in JS.
+      for (const client of session.players) {
+        try {
+          client.write(chunk);
+        } catch {
+          session.players.delete(client);
+        }
+      }
+      const rec = session.recordingId ? recordings.find((r) => r.id === session.recordingId) : null;
+      if (rec) feedRecording(rec, chunk);
+    }
+    if (!session.closed) session.failure = { code: "ended" };
+  } catch (err) {
+    if (session.closed) return;
+    if (timedOut) {
+      session.failure = { code: "timeout" };
+    } else if (!session.failure) {
+      const cause = (err as { cause?: { code?: unknown }; code?: unknown })?.cause;
+      const code = cause?.code ?? (err as { code?: unknown })?.code;
+      session.failure = {
+        code: "network",
+        detail: typeof code === "string" && /^[A-Z_0-9]+$/.test(code) ? code : undefined,
+      };
+    }
+  } finally {
+    clearTimeout(timer);
+    // Keep the failure until the renderer closes the session, including when
+    // the upstream fails before the loopback player has attached.
     for (const client of session.players) client.end();
     session.players.clear();
     const rec = session.recordingId ? recordings.find((r) => r.id === session.recordingId) : null;
     if (rec && rec.status === "recording") {
       // Flush ffmpeg so it writes the MP4 trailer; the proc 'close' handler
       // finalizes the entry ("error" if we recorded an upstream failure).
-      if (err) rec.error = String(err.message || err);
+      if (session.failure) rec.error = session.failure.detail || session.failure.code;
       try {
         rec.stdin?.end();
       } catch {
         /* the proc 'close' handler finalizes */
       }
     }
-    maybeCloseSession(session);
-  };
-  body.on("end", () => finish());
-  body.on("error", (err: Error) => {
-    if (session.controller.signal.aborted) return; // intentional close
-    finish(err);
-  });
+    if (!session.failure) maybeCloseSession(session);
+  }
+}
+
+export function sessionFailure(sessionId: string): LiveSessionFailure | null {
+  return sessions.get(sessionId)?.failure ?? null;
 }
 
 // Drops the session (and upstream) once nothing is attached to it.
 function maybeCloseSession(session: Session): void {
   if (session.closed) return;
+  if (session.failure && !session.released) return;
   if (session.players.size > 0) return;
   if (session.recordingId) return; // keep the upstream alive for the recording
   session.closed = true;
@@ -249,6 +287,7 @@ function maybeCloseSession(session: Session): void {
 export function closeSession(sessionId: string): void {
   const session = sessions.get(sessionId);
   if (!session) return;
+  session.released = true;
   // Detach every player socket; a live recording keeps the upstream alive.
   for (const res of session.players) {
     try {
@@ -353,7 +392,7 @@ export async function startRecording(item: {
   icon?: string | null;
 }): Promise<{ id: string }> {
   const session = sessions.get(item.sessionId);
-  if (!session || session.closed) throw new Error("session_closed");
+  if (!session || session.closed || session.failure) throw new Error("session_closed");
   if (session.recordingId) return { id: session.recordingId }; // already recording
 
   await mkdir(destDir(), { recursive: true });

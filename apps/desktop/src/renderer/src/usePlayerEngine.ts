@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { Account, StreamType } from "@iptv/contracts";
 import mpegts from "mpegts.js";
@@ -68,7 +68,9 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
   const rebufferTimes = useRef<number[]>([]);
   const loadStamp = useRef(0);
   const sessionIdRef = useRef<string | null>(null);
+  const sourceFailed = useRef(false);
 
+  const [attempt, setAttempt] = useState(0);
   const [stats, setStats] = useState<PlayerStats | null>(null);
   const [status, setStatus] = useState("loading"); // loading | playing | error
   const [error, setError] = useState<string | null>(null);
@@ -86,6 +88,23 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
   });
 
   const isLive = Boolean(item?.live || item?.type === "live" || item?.ext === "ts");
+
+  // Strip source URLs and credentials from diagnostics before showing/copying.
+  const describeError = useCallback(
+    (value: unknown): string => {
+      let message = String(value instanceof Error ? value.message : value).replace(
+        /(?:https?|file):\/\/[^\s"'<>]+/gi,
+        "[source]",
+      );
+      for (const secret of [item?.account?.password, item?.account?.username]) {
+        if (secret) message = message.split(String(secret)).join("[redacted]");
+      }
+      return message.slice(0, 1000);
+    },
+    [item],
+  );
+
+  const retry = (): void => setAttempt((previous) => previous + 1);
 
   // Manual buffer selection (turns off automatic mode)
   const pickBuffer = (key: BufferPreset): void => {
@@ -108,10 +127,11 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
 
   // Acquire the stream URL. Live goes through the main-process session proxy
   // (one upstream connection, shared with any recording); VOD uses the direct
-  // URL. Depends on `item` only — buffer changes must NOT reopen the session.
+  // URL. Reacquire on item changes or explicit retry, never on buffer changes.
   useEffect(() => {
     if (!item) return;
     let cancelled = false;
+    sourceFailed.current = false;
     setPlayUrl(null);
     setStatus("loading");
     setError(null);
@@ -141,7 +161,7 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
         }
       } catch (e: unknown) {
         if (!cancelled) {
-          setError(String(e instanceof Error ? e.message : e));
+          setError(`Source: ${describeError(e)}`);
           setStatus("error");
         }
       }
@@ -157,7 +177,42 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
       // upstream alive in the main process and continues in the background.
       if (sid) window.api.live.close(sid);
     };
-  }, [item]);
+  }, [item, attempt, isLive, describeError]);
+
+  // Polling preserves errors that happen before the renderer receives the
+  // session ID, unlike a one-shot IPC event during live.open().
+  useEffect(() => {
+    if (!sessionId) return;
+    let cancelled = false;
+    let pending = false;
+    const check = async (): Promise<void> => {
+      if (pending) return;
+      pending = true;
+      try {
+        const failure = await window.api.live.failure(sessionId);
+        if (!cancelled && failure) {
+          sourceFailed.current = true;
+          setError(
+            `${t(`player.failures.${failure.code}`)}${failure.detail ? ` (${failure.detail})` : ""}`,
+          );
+          setStatus("error");
+        }
+      } catch (e) {
+        if (!cancelled) {
+          setError(`Diagnostics: ${describeError(e)}`);
+          setStatus("error");
+        }
+      } finally {
+        pending = false;
+      }
+    };
+    void check();
+    const timer = setInterval(() => void check(), 1000);
+    return () => {
+      cancelled = true;
+      clearInterval(timer);
+    };
+  }, [sessionId, t, describeError]);
 
   // Build the player from the resolved URL. Rebuilds on buffer change WITHOUT
   // touching the live session, so changing the buffer never opens a 2nd
@@ -170,6 +225,59 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
     const video = videoRef.current;
     if (!video) return;
 
+    let failed = false;
+    let watchdog: ReturnType<typeof setTimeout>;
+    const fail = (message: string): void => {
+      if (cancelled || failed) return;
+      failed = true;
+      clearTimeout(watchdog);
+      setError(message);
+      setStatus("error");
+    };
+    const armWatchdog = (): void => {
+      clearTimeout(watchdog);
+      watchdog = setTimeout(() => fail(t("player.failures.playbackTimeout")), 20000);
+    };
+    const onPlaying = (): void => {
+      if (failed || cancelled || sourceFailed.current) return;
+      clearTimeout(watchdog);
+      setStatus("playing");
+    };
+    const onWaiting = (): void => {
+      if (failed || cancelled || sourceFailed.current) return;
+      setStatus("loading");
+      armWatchdog();
+    };
+    const onPause = (): void => clearTimeout(watchdog);
+    const onMediaError = (): void => {
+      const mediaError = video.error;
+      if (!mediaError) return;
+      const reason =
+        ["", "aborted", "network", "decode", "unsupported"][mediaError.code] || "network";
+      fail(
+        `MediaError ${mediaError.code}: ${t(`player.failures.${reason}`)}${mediaError.message ? ` (${describeError(mediaError.message)})` : ""}`,
+      );
+    };
+    const onEnded = (): void => {
+      clearTimeout(watchdog);
+      if (isLive) fail(t("player.failures.ended"));
+    };
+    video.addEventListener("playing", onPlaying);
+    video.addEventListener("waiting", onWaiting);
+    video.addEventListener("play", onWaiting);
+    video.addEventListener("pause", onPause);
+    video.addEventListener("error", onMediaError);
+    video.addEventListener("ended", onEnded);
+    setError(null);
+    setStatus("loading");
+    armWatchdog();
+
+    const play = (): void => {
+      video.play().catch((e: unknown) => {
+        if (e instanceof DOMException && e.name === "AbortError") return;
+        fail(`Playback: ${describeError(e)}`);
+      });
+    };
     try {
       if (isLive && mpegts.isSupported()) {
         const cfg = BUFFER_PRESETS[buffer] || BUFFER_PRESETS.balanced;
@@ -178,32 +286,35 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
           { lazyLoad: false, ...cfg },
         );
         mpegtsPlayer.attachMediaElement(video);
-        mpegtsPlayer.on(mpegts.Events.ERROR, (type, detail) => {
-          if (!cancelled) {
-            setError(`${type}: ${detail}`);
-            setStatus("error");
-          }
+        mpegtsPlayer.on(mpegts.Events.ERROR, (type, detail, info) => {
+          const extra = [info?.code, info?.msg].filter(Boolean).join(" · ");
+          fail(
+            `mpegts: ${describeError(type)} / ${describeError(detail)}${extra ? ` (${describeError(extra)})` : ""}`,
+          );
         });
         mpegtsPlayer.on(mpegts.Events.STATISTICS_INFO, (info) => {
           statsRef.current = info;
         });
         mpegtsPlayer.load();
-        video.play().catch(() => {});
+        play();
       } else {
         video.src = playUrl;
-        video.play().catch(() => {});
+        play();
       }
       loadStamp.current = Date.now();
-      if (!cancelled) setStatus("playing");
     } catch (e: unknown) {
-      if (!cancelled) {
-        setError(String(e instanceof Error ? e.message : e));
-        setStatus("error");
-      }
+      fail(`Player: ${describeError(e)}`);
     }
 
     return () => {
       cancelled = true;
+      clearTimeout(watchdog);
+      video.removeEventListener("playing", onPlaying);
+      video.removeEventListener("waiting", onWaiting);
+      video.removeEventListener("play", onWaiting);
+      video.removeEventListener("pause", onPause);
+      video.removeEventListener("error", onMediaError);
+      video.removeEventListener("ended", onEnded);
       if (mpegtsPlayer) {
         try {
           mpegtsPlayer.destroy();
@@ -211,7 +322,7 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
           /* noop */
         }
       }
-      const v = videoRef.current;
+      const v = video;
       if (v) {
         try {
           v.pause();
@@ -222,7 +333,7 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
         }
       }
     };
-  }, [item, playUrl, buffer]);
+  }, [item, playUrl, buffer, isLive, t, describeError, attempt]);
 
   // Live statistics (download speed + buffer ahead)
   useEffect(() => {
@@ -293,5 +404,6 @@ export function usePlayerEngine(item: PlayerItem | Record<string, any> | null) {
     auto,
     pickBuffer,
     toggleAuto,
+    retry,
   };
 }

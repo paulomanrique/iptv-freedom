@@ -36,12 +36,24 @@ export default function PlayerHost({
   const engine = usePlayerEngine(item);
   const { videoRef, status, error, stats, notice, isLive, sessionId, buffer, auto } = engine;
 
+  const [copied, setCopied] = useState(false);
   const [recordingId, setRecordingId] = useState<string | null>(null);
   const [now, setNow] = useState(() => Date.now());
 
   const full = mode === "full";
   const activeRecording = recordingId ? recordings.find((r) => r.id === recordingId) || null : null;
   const isRecording = activeRecording?.status === "recording";
+
+  useEffect(() => setCopied(false), [error, item]);
+
+  const copyError = async (): Promise<void> => {
+    try {
+      await navigator.clipboard.writeText(error || t("player.cantPlay"));
+      setCopied(true);
+    } catch {
+      notify?.(t("player.copyFailed"));
+    }
+  };
 
   // Forget the recording binding when the played item changes.
   useEffect(() => setRecordingId(null), [item]);
@@ -123,9 +135,29 @@ export default function PlayerHost({
                 </svg>
               </div>
               <div className="text-sm font-semibold text-white">{t("player.cantPlay")}</div>
+              {!full && <div className="mt-1 line-clamp-2 text-[10px] text-white/80">{error}</div>}
               {full && (
                 <>
-                  <div className="mx-auto mt-2 max-w-md text-2xs text-white/50">{error}</div>
+                  <div
+                    role="alert"
+                    className="mx-auto mt-2 max-h-32 max-w-md overflow-auto whitespace-pre-wrap break-words text-2xs text-white/80 select-text"
+                  >
+                    {error}
+                  </div>
+                  <div className="mt-4 flex justify-center gap-2">
+                    <button
+                      onClick={engine.retry}
+                      className="rounded-md bg-primary px-3 py-1.5 text-xs text-primary-foreground hover:opacity-90"
+                    >
+                      {t("player.retry")}
+                    </button>
+                    <button
+                      onClick={copyError}
+                      className="rounded-md border border-white/30 px-3 py-1.5 text-xs text-white hover:bg-white/10"
+                    >
+                      {t(copied ? "player.copied" : "player.copyError")}
+                    </button>
+                  </div>
                   <div className="mt-3 text-[10px] text-white/35">{t("player.oneConnHint")}</div>
                 </>
               )}
