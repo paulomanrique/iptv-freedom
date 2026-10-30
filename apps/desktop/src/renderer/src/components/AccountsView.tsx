@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import type { Account, AccountInfo } from "@iptv/contracts";
 import { Badge, Button, Progress } from "@iptv/ui";
 import { formatDate, daysLeft, statusLabel } from "../format";
+import ProxySettingsPanel from "./ProxySettingsPanel";
 
 interface DetailProps {
   account: Account;
@@ -160,6 +161,7 @@ export default function AccountsView({
   onEdit,
 }: AccountsViewProps) {
   const { t } = useTranslation();
+  const [proxyRevision, setProxyRevision] = useState(0);
   const selected = accounts.find((a) => a.id === selectedId) || accounts[0];
 
   return (
@@ -210,12 +212,14 @@ export default function AccountsView({
             </svg>
             {t("accounts.add")}
           </button>
+          <ProxySettingsPanel onSaved={() => setProxyRevision((previous) => previous + 1)} />
         </div>
       </section>
 
       <aside className="w-80 shrink-0  border-s border-border scroll overflow-y-auto">
         {selected ? (
           <Detail
+            key={`${selected.id}:${proxyRevision}`}
             account={selected}
             onRemove={onRemove}
             onSetActive={onSetActive}

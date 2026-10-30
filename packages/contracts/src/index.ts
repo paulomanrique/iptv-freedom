@@ -138,9 +138,23 @@ export interface SavedAccountResult {
   info: AccountInfo;
 }
 
+/** Global network settings shared by the renderer and main-process requests. */
+export interface ProxySettings {
+  mode: "direct" | "system" | "custom";
+  protocol: "http" | "https" | "socks5";
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+}
+
 /** The API exposed on window.api by the preload bridge. */
 export interface WindowApi {
   platform: NodeJS.Platform;
+  proxy: {
+    get: () => Promise<ProxySettings>;
+    set: (settings: ProxySettings) => Promise<ProxySettings>;
+  };
   accounts: {
     list: () => Promise<Account[]>;
     add: (account: AccountInput) => Promise<SavedAccountResult>;

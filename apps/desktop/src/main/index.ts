@@ -1,10 +1,11 @@
-import { app, shell, BrowserWindow, ipcMain, Menu } from "electron";
+import { app, shell, BrowserWindow, ipcMain, Menu, dialog } from "electron";
 import { join } from "path";
 import * as accountsStore from "./accounts";
 import * as xtream from "./xtream";
 import * as downloads from "./downloads";
 import * as live from "./live";
-import type { Account, AccountInput, Kind, StreamType } from "@iptv/contracts";
+import * as proxy from "./proxy";
+import type { Account, AccountInput, Kind, ProxySettings, StreamType } from "@iptv/contracts";
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -54,6 +55,8 @@ function createWindow(): void {
 }
 
 // ---- Accounts ----
+ipcMain.handle("proxy:get", () => proxy.getProxySettings());
+ipcMain.handle("proxy:set", (_e, settings: ProxySettings) => proxy.setProxySettings(settings));
 ipcMain.handle("accounts:list", () => accountsStore.load());
 ipcMain.handle("accounts:add", async (_e, account: AccountInput) => {
   // Validate the credentials before saving.
@@ -124,12 +127,22 @@ ipcMain.handle("recording:playUrl", (_e, id: string) => live.playUrl(id));
 ipcMain.handle("recording:remove", (_e, id: string) => live.remove(id));
 ipcMain.handle("recording:clearStopped", () => live.clearStopped());
 
-app.whenReady().then(() => {
-  createWindow();
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+app
+  .whenReady()
+  .then(async () => {
+    await proxy.initializeProxy();
+    createWindow();
+    app.on("activate", () => {
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  })
+  .catch(() => {
+    dialog.showErrorBox(
+      "IPTV Freedom",
+      "Could not load proxy settings. Check proxy.json in the application data folder.",
+    );
+    app.quit();
   });
-});
 
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();

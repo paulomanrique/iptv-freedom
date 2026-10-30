@@ -13,6 +13,26 @@ Desktop IPTV client built with **Electron + React + TypeScript + Tailwind CSS** 
 - 🎨 **Light and dark themes** (t3code design tokens: zinc + violet, DM Sans)
 - 🔒 Credentials stored locally only — no sign-up, no middle server
 
+## Proxy configuration
+
+Open **Accounts → Network proxy** to choose a direct connection, the system proxy,
+or a manual HTTP, HTTPS or SOCKS5 proxy. Manual HTTP/HTTPS proxies support optional
+username/password authentication; SOCKS5 supports unauthenticated proxies only.
+Enter the proxy host and port separately (for example, `127.0.0.1` and `8080`).
+
+The setting is shared by all accounts and covers provider API calls, live video,
+recordings, VOD playback, downloads and remote images. Local playback and the dev
+server bypass manual proxies. Settings are saved locally in `proxy.json` in the
+application data folder; proxy credentials use the same local storage model as
+account credentials. Saving applies immediately and closes existing connections:
+restart playback and resume interrupted downloads afterward.
+
+Run the networking regression tests without launching Electron:
+
+```bash
+node --test scripts/*.test.cjs
+```
+
 ## Translations
 
 The app and the landing page ship in the 20 most spoken languages in the world.

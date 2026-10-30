@@ -6,6 +6,7 @@ import type {
   DownloadItem,
   DownloadProgress,
   Kind,
+  ProxySettings,
   RecordingItem,
   RecordingProgress,
   RecordingStartItem,
@@ -16,6 +17,10 @@ import type {
 // Minimal, safe API exposed to the renderer.
 const api: WindowApi = {
   platform: process.platform,
+  proxy: {
+    get: () => ipcRenderer.invoke("proxy:get"),
+    set: (settings: ProxySettings) => ipcRenderer.invoke("proxy:set", settings),
+  },
   accounts: {
     list: () => ipcRenderer.invoke("accounts:list"),
     add: (account: AccountInput) => ipcRenderer.invoke("accounts:add", account),

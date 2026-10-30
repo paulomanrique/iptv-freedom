@@ -1,7 +1,7 @@
 // VOD download manager.
 // Respects the provider limit: one active download at a time (queue).
 // Supports resume via the Range header and follows the 302 redirect with token.
-import { app, shell } from "electron";
+import { app, shell, net } from "electron";
 import { join } from "path";
 import { createWriteStream } from "fs";
 import { stat, mkdir, unlink } from "fs/promises";
@@ -158,7 +158,11 @@ async function start(entry: DownloadEntry): Promise<void> {
 
     const headers: Record<string, string> =
       entry.received > 0 ? { Range: `bytes=${entry.received}-` } : {};
-    const res = await fetch(entry.url, { headers, signal: controller.signal, redirect: "follow" });
+    const res = await net.fetch(entry.url, {
+      headers,
+      signal: controller.signal,
+      redirect: "follow",
+    });
     if (!res.ok && res.status !== 206) throw new Error(`HTTP ${res.status}`);
 
     const append = res.status === 206;

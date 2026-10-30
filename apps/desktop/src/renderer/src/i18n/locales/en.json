@@ -202,5 +202,26 @@
   },
   "nowPlaying": {
     "empty": "Nothing playing. Pick a channel, movie or recording."
+  },
+  "proxy": {
+    "title": "Network proxy",
+    "description": "Applies to all accounts, live TV, movies, series and downloads.",
+    "mode": "Connection",
+    "direct": "Direct connection",
+    "system": "Use system proxy",
+    "custom": "Manual proxy",
+    "protocol": "Protocol",
+    "host": "Proxy host",
+    "port": "Port",
+    "username": "Username (optional)",
+    "password": "Password (optional)",
+    "reconnect": "Saving reconnects the network. Restart playback and resume any interrupted downloads.",
+    "save": "Save proxy",
+    "saving": "Saving…",
+    "saved": "Proxy settings saved.",
+    "loadFailed": "Could not load proxy settings.",
+    "saveFailed": "Could not save proxy settings.",
+    "invalid": "Enter a valid proxy host and port (1–65535). Use a host without a URL scheme or credentials.",
+    "socksAuth": "SOCKS5 supports proxies without authentication only."
   }
 }

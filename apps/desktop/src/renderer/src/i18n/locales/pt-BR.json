@@ -202,5 +202,26 @@
   },
   "nowPlaying": {
     "empty": "Nada tocando. Escolha um canal, filme ou gravação."
+  },
+  "proxy": {
+    "title": "Proxy de rede",
+    "description": "Aplicado a todas as contas, canais, filmes, séries e downloads.",
+    "mode": "Conexão",
+    "direct": "Conexão direta",
+    "system": "Usar proxy do sistema",
+    "custom": "Proxy manual",
+    "protocol": "Protocolo",
+    "host": "Servidor proxy",
+    "port": "Porta",
+    "username": "Usuário (opcional)",
+    "password": "Senha (opcional)",
+    "reconnect": "Salvar reconecta a rede. Reinicie a reprodução e retome os downloads interrompidos.",
+    "save": "Salvar proxy",
+    "saving": "Salvando…",
+    "saved": "Configurações de proxy salvas.",
+    "loadFailed": "Não foi possível carregar o proxy.",
+    "saveFailed": "Não foi possível salvar as configurações de proxy.",
+    "invalid": "Informe um servidor proxy e uma porta válida (1–65535). Use apenas o host, sem protocolo ou credenciais.",
+    "socksAuth": "SOCKS5 aceita apenas proxies sem autenticação."
   }
 }

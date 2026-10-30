@@ -1,5 +1,6 @@
 // Xtream Codes client (runs in the main process to avoid CORS and keep
 // credentials out of the renderer bundle).
+import { net } from "electron";
 import type {
   Account,
   AccountInfo,
@@ -28,7 +29,7 @@ async function callApi<T = unknown>(
   for (const [k, v] of Object.entries(params)) {
     if (v !== undefined && v !== null && v !== "") url.searchParams.set(k, String(v));
   }
-  const res = await fetch(url, { signal: AbortSignal.timeout(20000) });
+  const res = await net.fetch(url.toString(), { signal: AbortSignal.timeout(20000) });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json() as Promise<T>;
 }
