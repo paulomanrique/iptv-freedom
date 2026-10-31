@@ -22,7 +22,8 @@ async function fixture(t, handler, upstreamFetch = fetch) {
   const realRequire = createRequire(source);
   const module = { exports: {} };
   const requireMock = (name) => {
-    if (name === "electron") return { app: {}, shell: {}, net: { fetch: upstreamFetch } };
+    if (name === "electron") return { app: {}, shell: {} };
+    if (name === "./network") return { providerFetch: upstreamFetch };
     if (name === "./xtream") {
       return { streamUrl: () => `http://127.0.0.1:${provider.address().port}/user/password/1.ts` };
     }

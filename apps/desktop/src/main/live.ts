@@ -9,7 +9,8 @@
 // channel and recording it at the same time uses only ONE provider connection.
 // The upstream stays alive while any sink is attached, so a recording keeps
 // running after the player modal is closed.
-import { app, shell, net } from "electron";
+import { app, shell } from "electron";
+import { providerFetch } from "./network";
 import { join } from "path";
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from "http";
 import { AddressInfo } from "net";
@@ -214,7 +215,7 @@ async function pumpUpstream(session: Session, url: string): Promise<void> {
   };
   let timer = setTimeout(onTimeout, 20000);
   try {
-    const res = await net.fetch(url, { signal: session.controller.signal, redirect: "follow" });
+    const res = await providerFetch(url, { signal: session.controller.signal });
     if (!res.ok || !res.body) {
       session.failure = { code: "http", detail: `HTTP ${res.status}` };
       await res.body?.cancel();

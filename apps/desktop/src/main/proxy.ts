@@ -58,6 +58,23 @@ export function getProxySettings(): ProxySettings {
   return { ...current };
 }
 
+export function proxyCredentials(authInfo: Pick<Electron.AuthInfo, "isProxy" | "host" | "port">): {
+  username: string;
+  password: string;
+} | null {
+  const normalize = (host: string): string => host.replace(/^\[|\]$/g, "").toLowerCase();
+  if (
+    authInfo.isProxy &&
+    current.mode === "custom" &&
+    current.protocol !== "socks5" &&
+    normalize(authInfo.host) === normalize(current.host) &&
+    authInfo.port === current.port &&
+    (current.username || current.password)
+  )
+    return { username: current.username, password: current.password };
+  return null;
+}
+
 async function apply(settings: ProxySettings): Promise<void> {
   const previous = current;
   current = settings;
@@ -88,8 +105,8 @@ export async function initializeProxy(): Promise<void> {
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw new Error("proxy_load_failed");
   }
-  // Handle challenges for both native video and main-process net.fetch. Never
-  // send proxy credentials to a provider's origin authentication challenge.
+  // Native renderer requests use app.login; main-process requests attach their
+  // own ClientRequest.login listener in network.ts.
   app.on("login", (event, _contents, details, authInfo, callback) => {
     if (!authInfo.isProxy) return;
     event.preventDefault();
@@ -99,17 +116,10 @@ export async function initializeProxy(): Promise<void> {
     for (const [key, stamp] of authAttempts) if (now - stamp > 30000) authAttempts.delete(key);
     const key = `${details.pid}:${authInfo.host}:${authInfo.port}:${details.url}`;
     const attempted = authAttempts.has(key);
-    const host = current.host.replace(/^\[|\]$/g, "").toLowerCase();
-    if (
-      current.mode === "custom" &&
-      current.protocol !== "socks5" &&
-      authInfo.host.replace(/^\[|\]$/g, "").toLowerCase() === host &&
-      authInfo.port === current.port &&
-      !attempted &&
-      (current.username || current.password)
-    ) {
+    const credentials = proxyCredentials(authInfo);
+    if (credentials && !attempted) {
       authAttempts.set(key, now);
-      callback(current.username, current.password);
+      callback(credentials.username, credentials.password);
     } else {
       authAttempts.delete(key);
       callback();
