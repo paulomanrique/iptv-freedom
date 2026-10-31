@@ -222,6 +222,9 @@
     "loadFailed": "Could not load proxy settings.",
     "saveFailed": "Could not save proxy settings.",
     "invalid": "Enter a valid proxy host and port (1–65535). Use a host without a URL scheme or credentials.",
-    "socksAuth": "SOCKS5 supports proxies without authentication only."
+    "socksAuth": "SOCKS5 supports proxies without authentication only.",
+    "httpProtocol": "HTTP (supports HTTPS destinations)",
+    "httpsProtocol": "HTTPS (TLS to the proxy)",
+    "protocolHint": "This is the connection protocol to the proxy. HTTP also supports HTTPS destinations through CONNECT. Select HTTPS only if the proxy server itself accepts TLS."
   }
 }

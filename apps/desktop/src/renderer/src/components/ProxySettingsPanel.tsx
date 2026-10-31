@@ -90,11 +90,14 @@ export default function ProxySettingsPanel({ onSaved }: { onSaved: () => void })
                     setError(null);
                   }}
                 >
-                  <option value="http">HTTP</option>
-                  <option value="https">HTTPS</option>
+                  <option value="http">{t("proxy.httpProtocol")}</option>
+                  <option value="https">{t("proxy.httpsProtocol")}</option>
                   <option value="socks5">SOCKS5</option>
                 </Select>
               </label>
+              {settings.protocol !== "socks5" && (
+                <p className="text-xs text-muted-foreground">{t("proxy.protocolHint")}</p>
+              )}
               <div className="flex gap-3">
                 <label className="min-w-0 flex-1 space-y-1 text-xs text-muted-foreground">
                   <span>{t("proxy.host")}</span>

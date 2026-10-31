@@ -222,6 +222,9 @@
     "loadFailed": "Não foi possível carregar o proxy.",
     "saveFailed": "Não foi possível salvar as configurações de proxy.",
     "invalid": "Informe um servidor proxy e uma porta válida (1–65535). Use apenas o host, sem protocolo ou credenciais.",
-    "socksAuth": "SOCKS5 aceita apenas proxies sem autenticação."
+    "socksAuth": "SOCKS5 aceita apenas proxies sem autenticação.",
+    "httpProtocol": "HTTP (aceita destinos HTTPS)",
+    "httpsProtocol": "HTTPS (TLS até o proxy)",
+    "protocolHint": "Este é o protocolo da conexão com o proxy. HTTP também aceita destinos HTTPS via CONNECT. Selecione HTTPS apenas se o próprio servidor proxy aceitar TLS."
   }
 }

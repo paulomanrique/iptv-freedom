@@ -242,7 +242,10 @@ async function pumpUpstream(session: Session, url: string): Promise<void> {
       session.failure = { code: "timeout" };
     } else if (!session.failure) {
       const cause = (err as { cause?: { code?: unknown }; code?: unknown })?.cause;
-      const code = cause?.code ?? (err as { code?: unknown })?.code;
+      const message = (err as { message?: unknown })?.message;
+      const chromiumCode =
+        typeof message === "string" ? /net::(ERR_[A-Z_0-9]+)/.exec(message)?.[1] : undefined;
+      const code = cause?.code ?? (err as { code?: unknown })?.code ?? chromiumCode;
       session.failure = {
         code: "network",
         detail: typeof code === "string" && /^[A-Z_0-9]+$/.test(code) ? code : undefined,

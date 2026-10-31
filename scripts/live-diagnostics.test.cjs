@@ -14,7 +14,7 @@ const compiled = ts.transpileModule(readFileSync(source, "utf8"), {
 
 // Exercise the real session proxy against a local provider. Only Electron and
 // credential URL construction are replaced; no real account is required.
-async function fixture(t, handler) {
+async function fixture(t, handler, upstreamFetch = fetch) {
   const provider = http.createServer(handler);
   await new Promise((done) => provider.listen(0, "127.0.0.1", done));
   const servers = [provider];
@@ -22,7 +22,7 @@ async function fixture(t, handler) {
   const realRequire = createRequire(source);
   const module = { exports: {} };
   const requireMock = (name) => {
-    if (name === "electron") return { app: {}, shell: {}, net: { fetch } };
+    if (name === "electron") return { app: {}, shell: {}, net: { fetch: upstreamFetch } };
     if (name === "./xtream") {
       return { streamUrl: () => `http://127.0.0.1:${provider.address().port}/user/password/1.ts` };
     }
@@ -116,6 +116,23 @@ void test("network failures expose a safe code without the credential URL", asyn
   const result = await failure(api, session.sessionId);
   assert.equal(result.code, "network");
   assert.doesNotMatch(JSON.stringify(result), /password|\/user|http:/);
+});
+
+void test("Chromium proxy error codes survive without exposing the request URL", async (t) => {
+  const { api, open } = await fixture(
+    t,
+    (_req, res) => res.end(),
+    async () => {
+      throw new Error(
+        "net::ERR_PROXY_CONNECTION_FAILED for http://provider.test/user/password/1.ts",
+      );
+    },
+  );
+  const session = await open();
+  assert.deepEqual(await failure(api, session.sessionId), {
+    code: "network",
+    detail: "ERR_PROXY_CONNECTION_FAILED",
+  });
 });
 
 void test("connection setup and stalled response bodies time out", async (t) => {

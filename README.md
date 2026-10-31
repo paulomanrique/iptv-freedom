@@ -19,6 +19,9 @@ Open **Accounts → Network proxy** to choose a direct connection, the system pr
 or a manual HTTP, HTTPS or SOCKS5 proxy. Manual HTTP/HTTPS proxies support optional
 username/password authentication; SOCKS5 supports unauthenticated proxies only.
 Enter the proxy host and port separately (for example, `127.0.0.1` and `8080`).
+Choose **HTTP** for an HTTP proxy that supports HTTPS destinations through CONNECT.
+Choose **HTTPS** only when the connection to the proxy itself uses TLS. Selecting
+HTTPS for a plain HTTP proxy causes TLS handshake and proxy connection errors.
 
 The setting is shared by all accounts and covers provider API calls, live video,
 recordings, VOD playback, downloads and remote images. Local playback and the dev
