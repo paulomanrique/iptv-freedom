@@ -1,6 +1,6 @@
 {
   "name": "desktop",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "IPTV client (Xtream Codes) built with Electron — IPTV Freedom",
   "homepage": "https://github.com/paulomanrique/iptv-freedom",
   "license": "MIT",
